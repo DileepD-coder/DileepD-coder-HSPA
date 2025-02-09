@@ -1,20 +1,19 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { CommonModule } from '@angular/common'; // ✅ Import CommonModule
 
 @Component({
   selector: 'app-property-card',
-
-  //template: `<h2>I am card</h2>`  // ✅ Fix: Inline template added
-  templateUrl:'property-card.component.html',
+  standalone: true, // ✅ Mark as standalone
+  imports: [CommonModule], // ✅ Add CommonModule here
+  templateUrl: 'property-card.component.html',
   styleUrls: ['property-card.component.css']
-
 })
 export class PropertyCardComponent {
-   property: any ={
-   "Id":1,
-   "Name": "Dee House",
-   "Type":"House",
-   "Price":12000
+  @Input() property: any;
+
+  ngOnInit() {
+    console.log(this.property); // Log the received property object
   }
-   
-  
- }
+}
+
+

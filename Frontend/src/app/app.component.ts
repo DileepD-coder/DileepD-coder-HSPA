@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { PropertyCardComponent } from "./property/property-card/property-card.component";
 import { PropertyListComponent } from "./property/property-list/property-list.component";
 import { NavBarComponent } from "./nav-bar/nav-bar.component";
+import { CommonModule } from '@angular/common';  // Import CommonModule for standalones
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PropertyCardComponent, PropertyListComponent, NavBarComponent],
+  standalone: true,  // Mark as standalone component
+  imports: [CommonModule, PropertyListComponent, NavBarComponent],  // Import components
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'my-first-app';
