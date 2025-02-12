@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { CommonModule } from '@angular/common'; // ✅ Import CommonModule
+import { IProperty } from "../iproperty.interface";
 
 @Component({
   selector: 'app-property-card',
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common'; // ✅ Import CommonModule
   styleUrls: ['property-card.component.css']
 })
 export class PropertyCardComponent {
-  @Input() property: any;
+  @Input() property!: IProperty;
 
   ngOnInit() {
     console.log(this.property); // Log the received property object

@@ -1,25 +1,31 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'; // Import map operator
-import { IProperty } from './IProperty.interface';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PropertyCardComponent } from '../property-card/property-card.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HousingService } from '../../Services/housing.service';
+import { IProperty } from '../iproperty.interface';
 
-@Injectable({
-  providedIn: 'root'
+@Component({
+  selector: 'app-property-list',
+  templateUrl: './property-list.component.html',
+  styleUrls: ['./property-list.component.css'],
+  standalone: true,
+  imports: [CommonModule, PropertyCardComponent, HttpClientModule],
 })
-export class HousingService {
+export class PropertyListComponent implements OnInit {
+  properties: Array<IProperty> = [];
 
-  private propertiesUrl = 'data/properties.json';  // Ensure the path is correct
+  constructor(private housingService: HousingService) {}
 
-  constructor(private http: HttpClient) { }
-
-  // Correct method name with pipe and map operator
-  getAllProperties(): Observable<IProperty[]> {
-    return this.http.get<IProperty[]>(this.propertiesUrl).pipe(
-      map(properties => {
-        // Directly return the properties as is (if the response is already in array format)
-        return properties;
-      })
+  ngOnInit(): void {
+    // Correct method name: getAllProperties()
+    this.housingService.getAllProperties().subscribe(
+      (data: any) => {  // Specify type for data
+        this.properties = data;
+      },
+      (error: any) => {  // Specify type for error
+        console.error('Error fetching properties:', error);
+      }
     );
   }
 }
