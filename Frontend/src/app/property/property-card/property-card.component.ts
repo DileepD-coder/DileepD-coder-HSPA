@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { CommonModule } from '@angular/common'; // ✅ Import CommonModule
-import { IProperty } from "../iproperty.interface";
+import { IProperty } from "../IProperty.interface";
 
 @Component({
   selector: 'app-property-card',

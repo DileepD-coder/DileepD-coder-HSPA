@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IProperty } from '../property/iproperty.interface';
+import { IProperty } from '../property/IProperty.interface';
 
 export interface Property extends IProperty { }  // Property now extends IProperty
 

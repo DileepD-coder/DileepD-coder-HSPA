@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HousingService } from '../../Services/housing.service';
-import { IProperty } from '../iproperty.interface';
+import { IProperty } from '../IProperty.interface';
 
 @Component({
   selector: 'app-property-list',
