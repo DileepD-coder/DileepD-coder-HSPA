@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Import CommonModule for standalone components
 import { FormsModule } from '@angular/forms';  // Import FormsModule for two-way data binding
+import { Location } from '@angular/common'; // ✅ Import Location for Back Navigation
 
 @Component({
   selector: 'app-add-property',
@@ -13,10 +14,16 @@ export class AddPropertyComponent {
   propertyName: string = ''; // Property name model
   propertyPrice: number = 0;  // Property price model
 
+  constructor(private location: Location) {} // ✅ Inject Location for Back Navigation
+
   submitForm() {
     // Add form submission logic here
     console.log('Property Name:', this.propertyName);
     console.log('Property Price:', this.propertyPrice);
     // Add logic to send this data to a service or backend
+  }
+
+  goBack() {
+    this.location.back(); // ✅ Navigates back to the previous page
   }
 }
