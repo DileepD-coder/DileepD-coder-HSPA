@@ -1,13 +1,9 @@
+// src/app/property/housing.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Property {
-  Id: number;
-  Name: string;
-  Type: string;
-  Price: number;
-}
+import { map } from 'rxjs/operators';
+import { IProperty } from './IProperty.interface';  // Correct path to IProperty.interface.ts
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +14,12 @@ export class HousingService {
 
   constructor(private http: HttpClient) { }
 
-  // Correct method name
-  getAllProperties(): Observable<Property[]> {
-    return this.http.get<Property[]>(this.propertiesUrl);
+  getAllProperties(): Observable<IProperty[]> {
+    return this.http.get<IProperty[]>(this.propertiesUrl).pipe(
+      map(properties => {
+        // Directly return the properties as is (if the response is already in array format)
+        return properties;
+      })
+    );
   }
 }
