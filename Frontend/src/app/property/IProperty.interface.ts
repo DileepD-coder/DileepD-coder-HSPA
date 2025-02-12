@@ -1,5 +1,5 @@
 export interface IProperty{
-    id:number;
+    id:string;
     Name:string;
     Type:string;
     Price:number;
