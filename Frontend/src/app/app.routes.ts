@@ -8,5 +8,6 @@ export const routes: Routes = [
   { path: '', component: PropertyListComponent },  // Default route
   { path: 'add-property', component: AddPropertyComponent },  // Add Property route
   { path: 'rent-property', component: RentPropertyComponent },  // Rent Property route
-  { path: 'property-detail/:id', component: PropertyDetailComponent }  // Property Detail route with dynamic ID
+  { path: 'property-detail/:id', component: PropertyDetailComponent },  // Property Detail route with dynamic ID
+  { path: '**', redirectTo: '/property-list' }  // Default route or page when not found
 ];

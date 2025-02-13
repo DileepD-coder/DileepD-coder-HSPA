@@ -1,1 +1,26 @@
-<p>property-detail works! Property ID: {{ propertyId }}</p>
+<div>
+    <!-- Display Property ID -->
+    <div><strong>{{ propertyId }}</strong></div>
+    <br/>
+    <br/>
+    <br/>
+
+  
+    <!-- Pagination Controls (Prev, Page Numbers, Next) -->
+    <div class="pagination-container">
+      <!-- Prev Button -->
+      <button class="btn btn-secondary" (click)="goToPrevPage()" [disabled]="currentPage === 1">Prev</button>
+  
+      <!-- Page Number Buttons -->
+      <span *ngFor="let page of visiblePages" 
+            (click)="router.navigate(['/property-detail', page])" 
+            class="pagination-number" 
+            [class.active]="page === currentPage">
+        {{ page }}
+      </span>
+  
+      <!-- Next Button -->
+      <button class="btn btn-secondary" (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+  </div>
+  

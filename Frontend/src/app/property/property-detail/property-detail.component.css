@@ -1,0 +1,26 @@
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-number {
+    margin: 0 4px;
+    padding: 5px;
+    font-weight: bold;
+    color: #555;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.3s, color 0.3s;
+}
+
+.pagination-number:hover {
+    color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+}
+
+.pagination-number:active {
+    color: #0056b3;
+    box-shadow: 0 0 10px rgba(0, 56, 147, 0.6);
+}
