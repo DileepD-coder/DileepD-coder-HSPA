@@ -19,51 +19,52 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   visiblePages: number[] = [];
   private routeSub: Subscription | undefined;
 
-  // Change router to public
   constructor(public router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // Initialize the pagination pages
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
     this.updateVisiblePages();
 
-    // Subscribe to route changes to detect page number change
     this.routeSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        const url = event.urlAfterRedirects;
-        const pageMatch = url.match(/property-detail\/(\d+)/);
-        if (pageMatch) {
-          this.currentPage = +pageMatch[1];
-          this.updateVisiblePages();
-          this.fetchPropertyDetails(this.currentPage); // Fetch property details based on the page number
-        }
+        this.handleRouteChange();
       }
     });
 
-    // Set the initial page if the route contains a page ID
-    const initialPage = this.route.snapshot.paramMap.get('id');
-    if (initialPage) {
-      this.currentPage = +initialPage;
-      this.fetchPropertyDetails(this.currentPage); // Fetch property details based on the page number
-    }
+    this.handleRouteChange(); // Handle route on initial load
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from route changes when component is destroyed
     if (this.routeSub) {
       this.routeSub.unsubscribe();
     }
   }
 
+  handleRouteChange(): void {
+    let id = this.route.snapshot.paramMap.get('id');
+
+    // If no ID is provided, redirect to property 1
+    if (!id) {
+      this.router.navigate(['/property-detail', 1]);
+      return;
+    }
+
+    // Check if ID is a valid number and within range
+    if (isNaN(+id) || +id < 1 || +id > this.totalPages) {
+      this.router.navigate(['/']); // Redirect to home if invalid
+      return;
+    }
+
+    this.currentPage = +id;
+    this.fetchPropertyDetails(this.currentPage);
+    this.updateVisiblePages();
+  }
+
   updateVisiblePages(): void {
-    // Show the pages 1, 2, 3, 4 only. You can expand this to display more pages.
-    const firstFourPages = this.pages.slice(0, 4);
-    this.visiblePages = [...firstFourPages];
+    this.visiblePages = this.pages.slice(0, 4);
   }
 
   fetchPropertyDetails(page: number): void {
-    // Simulate fetching the property details for the given page number.
-    // You can replace this with a real service call to get property data from an API or a mock data source.
     this.propertyId = `Property ID: ${page}`;
   }
 
@@ -73,15 +74,13 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
 
   goToPrevPage() {
     if (this.currentPage > 1) {
-      this.currentPage--;
-      this.router.navigate(['/property-detail', this.currentPage]);
+      this.router.navigate(['/property-detail', this.currentPage - 1]);
     }
   }
 
   goToNextPage() {
     if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.router.navigate(['/property-detail', this.currentPage]);
+      this.router.navigate(['/property-detail', this.currentPage + 1]);
     }
   }
 }

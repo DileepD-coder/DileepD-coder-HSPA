@@ -8,6 +8,7 @@ export const routes: Routes = [
   { path: '', component: PropertyListComponent },  // Default route
   { path: 'add-property', component: AddPropertyComponent },  // Add Property route
   { path: 'rent-property', component: RentPropertyComponent },  // Rent Property route
+  { path: 'property-detail', redirectTo: '/property-detail/1', pathMatch: 'full' },  // Redirect '/property-detail' to '/property-detail/1'
   { path: 'property-detail/:id', component: PropertyDetailComponent },  // Property Detail route with dynamic ID
-  { path: '**', redirectTo: '/property-list' }  // Default route or page when not found
+  { path: '**', redirectTo: '/' }  // Redirect to home page if route is not found
 ];
