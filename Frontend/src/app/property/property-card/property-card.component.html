@@ -13,9 +13,9 @@
       </li>
     </ul>
   </div>
-  <div class="card-body p-2">
-    <h1>{{ property.Name }}</h1>
-    <h2>{{ property.Type }}</h2>
-    <h3>${{ property.Price }}</h3>
+  <div class="card-body p-3 text-center">
+    <h1 class="h5 font-weight-bold mb-2">{{ property.Name }}</h1>
+    <h2 class="h6 text-muted">{{ property.Type }}</h2>
+    <h3 class="text-success font-weight-bold">${{ property.Price | number:'1.0-2' }}</h3>
   </div>
 </div>
