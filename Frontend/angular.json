@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/HSPA",  
+            "outputPath": "dist/HSPA",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -66,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "HSPA:build:production"  
+              "buildTarget": "HSPA:build:production"
             },
             "development": {
-              "buildTarget": "HSPA:build:development"  
+              "buildTarget": "HSPA:build:development"
             }
           },
           "defaultConfiguration": "development"

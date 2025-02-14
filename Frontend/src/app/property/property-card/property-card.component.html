@@ -1,6 +1,7 @@
 <div class="card" *ngIf="property">
   <div class="card-img-wrapper">
-    <img class="card-img-top" src="https://cdn.pixabay.com/photo/2020/01/03/05/36/house-4737447_960_720.png" alt="House Image">
+    <!-- Dynamically display images from the assets folder -->
+    <img class="card-img-top" src="assets/Hou/img{{ property.id }}.jpg" alt="{{ property.Name }} Image">
     <ul class="list-inline text-center member-icons animate">
       <li class="list-inline-item">
         <!-- Correct routerLink syntax to '/property-detail' -->
