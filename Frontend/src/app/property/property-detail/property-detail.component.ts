@@ -12,26 +12,28 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./property-detail.component.css']
 })
 export class PropertyDetailComponent implements OnInit, OnDestroy {
-  propertyId: string | null = null;
+  propertyId!: number;
+  SellRent!: number;  // Track whether it's Rent (2) or Buy (1)
   currentPage: number = 1;
   totalPages: number = 50;
   pages: number[] = [];
   visiblePages: number[] = [];
   private routeSub: Subscription | undefined;
 
-  constructor(public router: Router, private route: ActivatedRoute) { }
+  constructor(public router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
     this.updateVisiblePages();
 
+    // Listen for route changes
     this.routeSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.handleRouteChange();
       }
     });
 
-    this.handleRouteChange(); // Handle route on initial load
+    this.handleRouteChange(); // Handle initial route
   }
 
   ngOnDestroy(): void {
@@ -41,46 +43,44 @@ export class PropertyDetailComponent implements OnInit, OnDestroy {
   }
 
   handleRouteChange(): void {
-    let id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
+    const sellRentParam = this.route.snapshot.queryParamMap.get('type');
 
-    // If no ID is provided, redirect to property 1
-    if (!id) {
-      this.router.navigate(['/property-detail', 1]);
+    if (!id || isNaN(+id)) {
+      this.router.navigate(['/property-detail', 1], { queryParams: { type: 1 } });
       return;
     }
 
-    // Check if ID is a valid number and within range
-    if (isNaN(+id) || +id < 1 || +id > this.totalPages) {
-      this.router.navigate(['/']); // Redirect to home if invalid
-      return;
-    }
-
-    this.currentPage = +id;
-    this.fetchPropertyDetails(this.currentPage);
+    this.propertyId = +id;
+    this.SellRent = sellRentParam ? +sellRentParam : 1; // Default to Buy if missing
+    this.fetchPropertyDetails(this.propertyId);
     this.updateVisiblePages();
+
+    console.log(`Navigated to Property Detail: ID=${this.propertyId}, SellRent=${this.SellRent}`);
   }
 
   updateVisiblePages(): void {
     this.visiblePages = this.pages.slice(0, 4);
   }
 
-  fetchPropertyDetails(page: number): void {
-    this.propertyId = `Property ID: ${page}`;
+  fetchPropertyDetails(propertyId: number): void {
+    this.propertyId = propertyId;
   }
 
   onBack() {
-    this.router.navigate(['/']);
+    const returnUrl = this.SellRent === 2 ? '/rent-property' : '/';
+    this.router.navigate([returnUrl]); // Go back to correct listing page
   }
 
   goToPrevPage() {
-    if (this.currentPage > 1) {
-      this.router.navigate(['/property-detail', this.currentPage - 1]);
+    if (this.propertyId > 1) {
+      this.router.navigate(['/property-detail', this.propertyId - 1], { queryParams: { type: this.SellRent } });
     }
   }
 
   goToNextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.router.navigate(['/property-detail', this.currentPage + 1]);
+    if (this.propertyId < this.totalPages) {
+      this.router.navigate(['/property-detail', this.propertyId + 1], { queryParams: { type: this.SellRent } });
     }
   }
 }

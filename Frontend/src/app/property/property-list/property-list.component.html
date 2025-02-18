@@ -1,7 +1,8 @@
-<div class="container">
-<div class="row">
-  <div *ngFor="let property of properties" class="col-md-4">
-    <app-property-card [property]="property"></app-property-card>
+<div class="container mt-5">
+  <div class="row">
+    <!-- Loop through filtered properties based on SellRent value -->
+    <div *ngFor="let property of filteredProperties" class="col-md-4 mb-4">
+      <app-property-card [property]="property"></app-property-card>  <!-- Pass filtered properties to the card component -->
+    </div>
   </div>
-</div>
 </div>

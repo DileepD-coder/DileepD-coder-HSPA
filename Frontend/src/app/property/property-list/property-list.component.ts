@@ -1,33 +1,51 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PropertyCardComponent } from '../property-card/property-card.component';
-import { HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
 import { IProperty } from '../IProperty.interface';
-import { RouterModule } from '@angular/router';
+import { PropertyCardComponent } from '../property-card/property-card.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-property-list',
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.css'],
   standalone: true,
-  imports: [CommonModule, PropertyCardComponent, HttpClientModule, RouterModule], 
+  imports: [CommonModule, PropertyCardComponent]
 })
 export class PropertyListComponent implements OnInit {
+  SellRent: number = 1;  // Default to "Buy"
   properties: IProperty[] = [];
+  filteredProperties: IProperty[] = [];
 
-  constructor(private housingService: HousingService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private housingService: HousingService
+  ) {}
 
   ngOnInit(): void {
+    this.route.url.subscribe(urlSegments => {
+      this.SellRent = urlSegments[0]?.path === 'rent-property' ? 2 : 1;
+      this.loadProperties();
+    });
+  }
+
+  loadProperties(): void {
     this.housingService.getAllProperties().subscribe(
       (data: any) => {
-        // Map 'Id' to 'id' to prevent undefined values
         this.properties = data.map((property: any) => ({
-          id: property.Id,  // ✅ Fixing case issue
+          id: property.Id,
           Name: property.Name,
           Type: property.Type,
-          Price: property.Price
+          Price: property.Price,
+          ImageUrl: property.ImageUrl,
+          SellRent: property.SellRent
         }));
+
+        this.filteredProperties = this.properties.filter(
+          (property) => property.SellRent === this.SellRent
+        );
+
+        console.log('Filtered Properties:', this.filteredProperties);
       },
       (error: any) => {
         console.error('Error fetching properties:', error);

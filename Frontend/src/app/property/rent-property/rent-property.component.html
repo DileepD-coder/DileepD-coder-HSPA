@@ -1,1 +1,13 @@
-<p>rent-property works!</p>
+<div class="container mt-5">
+    <div *ngIf="rentProperties.length > 0; else noProperties" class="row">
+      <div *ngFor="let property of rentProperties" class="col-md-4 mb-4">
+        <app-property-card [property]="property"></app-property-card>
+      </div>
+    </div>
+  
+    <!-- Fallback template when no rent properties are found -->
+    <ng-template #noProperties>
+      <p>No rent properties available.</p>
+    </ng-template>
+  </div>
+  
