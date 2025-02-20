@@ -1,16 +1,15 @@
 <div class="card" *ngIf="property">
   <div class="card-img-wrapper">
-    <!-- Corrected Image Path -->
     <img class="card-img-top" [src]="'assets/Hou/' + property.ImageUrl" alt="{{ property.Name }} Image" />
 
     <ul class="list-inline text-center member-icons animate">
       <li class="list-inline-item">
-        <button class="btn btn-primary" [routerLink]="['/property-detail', property.id]">
+        <button class="btn btn-primary" (click)="navigateToProperty()">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
       </li>
       <li class="list-inline-item">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" (click)="navigateToProperty()">
           <i class="fa-regular fa-address-book"></i>
         </button>
       </li>

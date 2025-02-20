@@ -1,26 +1,19 @@
 <div>
-    <!-- Display Property ID -->
-    <div><strong>{{ propertyId }}</strong></div>
-    <br/>
-    <br/>
-    <br/>
+  <!-- Display Property ID -->
+  <div><strong>Property ID: {{ propertyId }}</strong></div>
 
-  
-    <!-- Pagination Controls (Prev, Page Numbers, Next) -->
-    <div class="pagination-container">
-      <!-- Prev Button -->
-      <button class="btn btn-secondary" (click)="goToPrevPage()" [disabled]="currentPage === 1">Prev</button>
-  
-      <!-- Page Number Buttons -->
-      <span *ngFor="let page of visiblePages" 
-            (click)="router.navigate(['/property-detail', page])" 
-            class="pagination-number" 
-            [class.active]="page === currentPage">
-        {{ page }}
-      </span>
-  
-      <!-- Next Button -->
-      <button class="btn btn-secondary" (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
-    </div>
+  <!-- Spacing -->
+  <br/><br/>
+
+  <!-- Navigation Controls for Rent and Buy -->
+  <div class="navigation-container">
+    <!-- Prev Button (for Rent or Buy properties) -->
+    <button class="btn btn-secondary" (click)="goToPrevProperty()" [disabled]="!hasPrevProperty()">Prev</button>
+
+    <!-- Space between buttons and property ID -->
+    &nbsp;&nbsp;&nbsp;
+
+    <!-- Next Button (for Rent or Buy properties) -->
+    <button class="btn btn-secondary" (click)="goToNextProperty()" [disabled]="!hasNextProperty()">Next</button>
   </div>
-  
+</div>

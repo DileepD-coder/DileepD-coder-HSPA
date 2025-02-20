@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
 import { IProperty } from '../IProperty.interface';
-import { PropertyCardComponent } from '../property-card/property-card.component';
 import { CommonModule } from '@angular/common';
+import { PropertyCardComponent } from '../property-card/property-card.component';
 
 @Component({
   selector: 'app-property-list',
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, PropertyCardComponent]
 })
 export class PropertyListComponent implements OnInit {
-  SellRent: number = 1;  // Default to "Buy"
+  SellRent: number = 1; // Default to "Buy"
   properties: IProperty[] = [];
   filteredProperties: IProperty[] = [];
 
@@ -31,9 +31,9 @@ export class PropertyListComponent implements OnInit {
 
   loadProperties(): void {
     this.housingService.getAllProperties().subscribe(
-      (data: any) => {
-        this.properties = data.map((property: any) => ({
-          id: property.Id,
+      (data: IProperty[]) => {
+        this.properties = data.map(property => ({
+          Id: property.Id,
           Name: property.Name,
           Type: property.Type,
           Price: property.Price,
@@ -42,12 +42,12 @@ export class PropertyListComponent implements OnInit {
         }));
 
         this.filteredProperties = this.properties.filter(
-          (property) => property.SellRent === this.SellRent
+          property => property.SellRent === this.SellRent
         );
 
         console.log('Filtered Properties:', this.filteredProperties);
       },
-      (error: any) => {
+      error => {
         console.error('Error fetching properties:', error);
       }
     );
