@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col-6 m-auto">
+      <div class="card m-auto shadow-none" style="border-radius: 15px;">
+        <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #007bff, #0056b3); border-radius: 15px 15px 0 0;">
+          <h4>Register</h4>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+            <div class="form-group col-12 mb-3">
+              <label for="name" class="form-label">Name</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control rounded-pill" id="name" formControlName="username" required placeholder="Enter your name">
+              </div>
+            </div>
+  
+            <div class="form-group col-12 mb-3">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" class="form-control rounded-pill" id="email" formControlName="email" required placeholder="Enter your email">
+              </div>
+              <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched" class="text-danger">
+                Invalid email address.
+              </div>
+            </div>
+  
+            <div class="form-group col-12 mb-3">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control rounded-pill" id="password" formControlName="password" required placeholder="Enter your password">
+              </div>
+            </div>
+            <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched" class="text-danger">
+              Password must be at least 6 characters long.
+            </div>
+        
+  
+            <div class="form-group col-12 mb-3">
+              <label for="cpassword" class="form-label">Confirm Password</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control rounded-pill" id="cpassword" formControlName="cpassword" required placeholder="Confirm your password">
+              </div>
+              <div *ngIf="registrationForm.errors?.['mismatch'] && registrationForm.get('cpassword')?.touched" class="text-danger">
+                Passwords do not match.
+              </div>
+            </div>
+  
+            <div class="form-group col-12 mb-3">
+              <label for="mobile" class="form-label">Mobile</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <input type="tel" class="form-control rounded-pill" id="mobile" formControlName="mobile" required placeholder="Enter your mobile number" maxlength="10">
+              </div>
+              <div *ngIf="registrationForm.get('mobile')?.invalid && registrationForm.get('mobile')?.touched" class="text-danger">
+                Mobile number must be 10 digits.
+              </div>
+            </div>
+  
+            <div class="form-group col-12 mb-3 text-center">
+                <button type="submit" 
+                        class="btn btn-primary shadow-sm px-4 py-2 rounded-pill btn-animate me-3" 
+                        [ngClass]="{'disabled': registrationForm.invalid || registrationForm.errors?.['mismatch']}" 
+                        [disabled]="registrationForm.invalid || registrationForm.errors?.['mismatch']">
+                    Save
+                </button>
+                <button type="reset" class="btn btn-secondary shadow-sm px-4 py-2 rounded-pill btn-animate">Cancel</button>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+</div>

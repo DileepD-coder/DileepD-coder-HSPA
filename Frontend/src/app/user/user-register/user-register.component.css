@@ -1,0 +1,70 @@
+/* 🎬 Fade-in animation on load */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+  
+.animate-fade-in {
+    animation: fadeIn 0.1s ease-in-out;
+}
+  
+/* 🎯 Input focus animation */
+.input-animate {
+    transition: border 0.3s ease-in-out; /* Increased duration for smoother transition */
+}
+  
+/* Input focus effect */
+.input-animate:focus {
+    border: 2px solid #28a745; /* Green border for focus */
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+}
+  
+/* Highlight invalid inputs */
+.ng-invalid.ng-touched {
+    border-color: red; /* Red border for invalid inputs */
+}
+
+.error-block {
+    color: rgb(211, 40, 40); /* Error message color */
+}
+  
+/* 🔘 Button hover animation */
+.btn-animate {
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+}
+
+/* Button hover effect */
+.btn-animate:not(:disabled):hover {
+    background-color: #0056b3; /* Darker background color on hover */
+    transform: translateY(-2px); /* Lift button on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+/* Styles for disabled button */
+.btn:disabled {
+    background-color: #ccc; /* Grey background to indicate it's disabled */
+    color: #666; /* Dimmed text color */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    box-shadow: none; /* Remove box shadow */
+}
+
+/* Card styles */
+.card {
+    transition: transform 0.3s, box-shadow 0.3s; /* Transition for the card */
+}
+
+
+/* ❌ Shake animation on invalid form submission */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}

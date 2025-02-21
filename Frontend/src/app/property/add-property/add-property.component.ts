@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Import CommonModule for standalone components
-import { FormsModule } from '@angular/forms';  // Import FormsModule for two-way data binding
+import { FormsModule, NgForm } from '@angular/forms'; // Import FormsModule for two-way data binding
 import { Location } from '@angular/common'; // ✅ Import Location for Back Navigation
 
 @Component({
   selector: 'app-add-property',
-  standalone: true,  // Mark as standalone component
-  imports: [CommonModule, FormsModule],  // Include FormsModule to handle forms
+  standalone: true, // Mark as standalone component
+  imports: [CommonModule, FormsModule], // Include FormsModule to handle forms
   templateUrl: './add-property.component.html',
   styleUrls: ['./add-property.component.css']
 })
 export class AddPropertyComponent {
   propertyName: string = ''; // Property name model
-  propertyPrice: number = 0;  // Property price model
+  propertyPrice: number = 0; // Property price model
+
+  @ViewChild('Form') addPropertyForm!: NgForm; // Access the form instance
 
   constructor(private location: Location) {} // ✅ Inject Location for Back Navigation
 
@@ -25,5 +27,10 @@ export class AddPropertyComponent {
 
   goBack() {
     this.location.back(); // ✅ Navigates back to the previous page
+  }
+
+  onSubmit(Form: NgForm) {
+    console.log('Congrats! Form Submitted');
+    console.log(this.addPropertyForm.value); // Access the form values using addPropertyForm
   }
 }
