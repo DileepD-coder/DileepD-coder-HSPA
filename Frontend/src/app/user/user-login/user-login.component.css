@@ -1,0 +1,93 @@
+/* 🎬 Fade-in animation on load */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* 🎯 Input focus animation */
+  .input-animate {
+    transition: border 0.3s ease-in-out;
+  }
+  
+  /* Input focus effect */
+  .input-animate:focus {
+    border: 2px solid #28a745;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+  }
+  
+  /* Highlight invalid inputs */
+  .ng-invalid.ng-touched {
+    border-color: red;
+  }
+  
+  /* Error message styling */
+  .error-block {
+    color: rgb(211, 40, 40);
+  }
+  
+  /* 🔘 Button hover animation */
+  .btn-animate {
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  
+  /* Button hover effect */
+  .btn-animate:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Card styles */
+  .card {
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  /* ❌ Shake animation on invalid form submission */
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+  
+  .shake {
+    animation: shake 0.3s ease-in-out;
+  }
+  
+  
+  .bg-video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+  }
+  
+  .bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Add a semi-transparent overlay */
+  .video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Adjust transparency here */
+    z-index: -1;
+  }
