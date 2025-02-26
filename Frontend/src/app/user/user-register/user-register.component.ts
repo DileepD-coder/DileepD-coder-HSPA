@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../Services/user-service.service';
+import { UserService } from '../../Services/user-service';
 import { User } from '../../models/user';
 import { AlertfyService } from '../../Services/alertfy.service'; // Ensure the path is correct
 
@@ -57,10 +57,10 @@ export class UserRegisterComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+   onSubmit() {
     if (this.registrationForm.invalid) {
       this.errorMessage = 'Please enter required fields to submit';
-      this.alertify.error(this.errorMessage); // Use alertify service for error messages
+      this.alertify.error(this.errorMessage);
 
       // Validate each control and set error messages accordingly
       if (this.registrationForm.controls['username'].invalid) {
@@ -83,7 +83,7 @@ export class UserRegisterComponent implements OnInit {
       if (this.registrationForm.controls['password'].value !== this.registrationForm.controls['cpassword'].value) {
         this.errorMessages['cpassword'] = 'Passwords do not match.';
       } else {
-        this.errorMessages['cpassword'] = ''; // Clear the error message if passwords match
+        this.errorMessages['cpassword'] = '';
       }
 
       // Add shake animation for invalid fields
@@ -91,13 +91,16 @@ export class UserRegisterComponent implements OnInit {
         const inputElement = document.getElementById(control);
         if (inputElement) {
           if (this.registrationForm.controls[control].invalid) {
-            inputElement.classList.add('shake');
-            inputElement.classList.remove('valid'); // Ensure valid class is removed
-            inputElement.classList.add('invalid'); // Add invalid class
+            inputElement.classList.add('shake', 'invalid');
+            inputElement.classList.remove('valid');
+
+            // Remove the shake effect after animation completes (adjust time as per CSS animation duration)
+            setTimeout(() => {
+              inputElement.classList.remove('shake');
+            }, 500); // Assuming the shake animation lasts 500ms
           } else {
-            inputElement.classList.remove('shake');
-            inputElement.classList.add('valid'); // Add valid class
-            inputElement.classList.remove('invalid'); // Ensure invalid class is removed
+            inputElement.classList.remove('invalid', 'shake');
+            inputElement.classList.add('valid');
           }
         }
       }
@@ -105,10 +108,10 @@ export class UserRegisterComponent implements OnInit {
       return;
     }
 
-    // If the form is valid and passwords match, proceed with registration
+    // If form is valid, proceed with registration
     const userData: User = this.registrationForm.value;
     this.userService.addUser(userData);
-    this.alertify.success("User registered successfully!"); // Use alertify service for success messages
+    this.alertify.success("User registered successfully!");
 
     this.registrationForm.reset();
     this.errorMessage = '';
@@ -118,6 +121,6 @@ export class UserRegisterComponent implements OnInit {
       password: '',
       cpassword: '',
       mobile: '',
-    }; // Reset error messages
+    };
   }
 }

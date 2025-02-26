@@ -1,62 +1,69 @@
+<div class="video-container">
+    <video autoplay loop muted>
+        <source src="assets/videos/registerpage.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
 <div class="row">
-  <div class="col-6 m-auto">
-      <div class="card m-auto shadow-none" style="border-radius: 15px;">
-          <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #007bff, #0056b3); border-radius: 15px 15px 0 0;">
-              <h4>Register</h4>
-          </div>
-          <div class="card-body">
-              <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
-                  <div class="form-group col-12 mb-3">
-                      <label for="username" class="form-label">Name</label>
-                      <div class="input-group">
-                          <span class="input-group-text"><i class="fas fa-user"></i></span>
-                          <input type="text" class="form-control rounded-pill input-animate" id="username" formControlName="username" placeholder="Enter your name">
-                      </div>
-                      <div *ngIf="errorMessages['username']" class="text-danger">{{ errorMessages['username'] }}</div>
-                  </div>
+    <div class="col-6 m-auto">
+        <div class="card m-auto shadow-none" style="border-radius: 15px;">
+            <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #007bff, #0056b3); border-radius: 15px 15px 0 0;">
+                <h4>Register</h4>
+            </div>
+            <div class="card-body">
+                <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
+                    <div class="form-group col-12 mb-3">
+                        <label for="username" class="form-label">Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control rounded-pill input-animate" id="username" formControlName="username" placeholder="Enter your name">
+                        </div>
+                        <div *ngIf="errorMessages['username']" class="text-danger">{{ errorMessages['username'] }}</div>
+                    </div>
 
-                  <div class="form-group col-12 mb-3">
-                      <label for="email" class="form-label">Email</label>
-                      <div class="input-group">
-                          <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                          <input type="email" class="form-control rounded-pill input-animate" id="email" formControlName="email" placeholder="Enter your email">
-                      </div>
-                      <div *ngIf="errorMessages['email']" class="text-danger">{{ errorMessages['email']}}</div>
-                  </div>
+                    <div class="form-group col-12 mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control rounded-pill input-animate" id="email" formControlName="email" placeholder="Enter your email">
+                        </div>
+                        <div *ngIf="errorMessages['email']" class="text-danger">{{ errorMessages['email']}}</div>
+                    </div>
 
-                  <div class="form-group col-12 mb-3">
-                      <label for="password" class="form-label">Password</label>
-                      <div class="input-group">
-                          <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                          <input type="password" class="form-control rounded-pill input-animate" id="password" formControlName="password" placeholder="Enter your password">
-                      </div>
-                      <div *ngIf="errorMessages['password']" class="text-danger">{{ errorMessages['password']}}</div>
-                  </div>
+                    <div class="form-group col-12 mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control rounded-pill input-animate" id="password" formControlName="password" placeholder="Enter your password">
+                        </div>
+                        <div *ngIf="errorMessages['password']" class="text-danger">{{ errorMessages['password']}}</div>
+                    </div>
 
-                  <div class="form-group col-12 mb-3">
-                      <label for="cpassword" class="form-label">Confirm Password</label>
-                      <div class="input-group">
-                          <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                          <input type="password" class="form-control rounded-pill input-animate" id="cpassword" formControlName="cpassword" placeholder="Confirm your password">
-                      </div>
-                      <div *ngIf="errorMessages['cpassword']" class="text-danger">{{ errorMessages['cpassword'] }}</div>
-                  </div>
+                    <div class="form-group col-12 mb-3">
+                        <label for="cpassword" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control rounded-pill input-animate" id="cpassword" formControlName="cpassword" placeholder="Confirm your password">
+                        </div>
+                        <div *ngIf="errorMessages['cpassword']" class="text-danger">{{ errorMessages['cpassword'] }}</div>
+                    </div>
 
-                  <div class="form-group col-12 mb-3">
-                      <label for="mobile" class="form-label">Mobile</label>
-                      <div class="input-group">
-                          <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                          <input type="tel" class="form-control rounded-pill input-animate" id="mobile" formControlName="mobile" placeholder="Enter your mobile number" maxlength="10">
-                      </div>
-                      <div *ngIf="errorMessages['mobile']" class="text-danger">{{ errorMessages['mobile'] }}</div>
-                  </div>
+                    <div class="form-group col-12 mb-3">
+                        <label for="mobile" class="form-label">Mobile</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="tel" class="form-control rounded-pill input-animate" id="mobile" formControlName="mobile" placeholder="Enter your mobile number" maxlength="10">
+                        </div>
+                        <div *ngIf="errorMessages['mobile']" class="text-danger">{{ errorMessages['mobile'] }}</div>
+                    </div>
 
-                  <div class="form-group col-12 mb-3 text-center">
-                      <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 rounded-pill btn-animate me-3">Save</button>
-                      <button type="reset" class="btn btn-secondary shadow-sm px-4 py-2 rounded-pill btn-animate">Cancel</button>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
+                    <div class="form-group col-12 mb-3 text-center">
+                        <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 rounded-pill btn-animate me-3">Save</button>
+                        <button type="reset" class="btn btn-secondary shadow-sm px-4 py-2 rounded-pill btn-animate">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

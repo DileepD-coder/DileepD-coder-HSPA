@@ -3,6 +3,7 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
 input.invalid {
     border: 2px solid red;
 }
@@ -10,6 +11,7 @@ input.invalid {
 input.valid {
     border: 2px solid green;
 }
+
 .animate-fade-in {
     animation: fadeIn 0.1s ease-in-out;
 }
@@ -61,7 +63,6 @@ input.valid {
     transition: transform 0.3s, box-shadow 0.3s; /* Transition for the card */
 }
 
-
 /* ❌ Shake animation on invalid form submission */
 @keyframes shake {
     0% { transform: translateX(0); }
@@ -74,3 +75,23 @@ input.valid {
 .shake {
     animation: shake 0.3s ease-in-out;
 }
+
+/* 🎥 Video background styling */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+video {
+    opacity: 0.3; /* Adjust the opacity value as needed */
+  }
