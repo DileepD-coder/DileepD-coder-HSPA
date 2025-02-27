@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'; // Import Router for navigation
-import { CommonModule } from '@angular/common'; // Import CommonModule for directives like ngIf
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; // Import RouterModule
-
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule] // Include RouterModule here
+  imports: [CommonModule, RouterModule] // Include CommonModule here, RouterModule not needed for standalone components
 })
 export class NavBarComponent implements OnInit {
   constructor(private router: Router) { } // Inject Router
