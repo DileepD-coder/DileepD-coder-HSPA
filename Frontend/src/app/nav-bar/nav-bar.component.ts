@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { AlertfyService } from '../Services/alertfy.service'; // Corrected path
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,7 +15,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 export class NavBarComponent implements OnInit {
   username: string | null = null;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private alertify: AlertfyService) { }
 
   ngOnInit(): void {
     this.username = localStorage.getItem('username');
@@ -27,6 +28,7 @@ export class NavBarComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    this.alertify.success('You have been logged out successfully!');
     this.router.navigate(['/login']);
   }
 
