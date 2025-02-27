@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../Services/user-service';
 import { User } from '../../models/user';
-import { AlertfyService } from '../../Services/alertfy.service'; // Ensure the path is correct
+import { AlertfyService } from '../../Services/alertfy.service';
 
 @Component({
   selector: 'app-user-register',
@@ -12,7 +12,7 @@ import { AlertfyService } from '../../Services/alertfy.service'; // Ensure the p
   styleUrls: ['./user-register.component.css'],
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
-  providers: [UserService, AlertfyService] // Provide the AlertfyService here
+  providers: [UserService, AlertfyService]
 })
 export class UserRegisterComponent implements OnInit {
   registrationForm: FormGroup;
@@ -28,14 +28,14 @@ export class UserRegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private alertify: AlertfyService // Inject AlertfyService
+    private alertify: AlertfyService
   ) {
     this.registrationForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       cpassword: ['', [Validators.required]],
-      mobile: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]*$')]],
+      mobile: ['', [Validators.required, Validators.maxLength(10), Validators.pattern('^[0-9]*$')]]
     }, { validators: this.passwordMatchValidator });
   }
 
@@ -51,18 +51,17 @@ export class UserRegisterComponent implements OnInit {
     this.registrationForm.valueChanges.subscribe(() => {
       for (const control in this.registrationForm.controls) {
         if (this.registrationForm.controls[control].valid) {
-          this.errorMessages[control] = ''; // Clear the error message if the control is valid
+          this.errorMessages[control] = '';
         }
       }
     });
   }
 
-   onSubmit() {
+  onSubmit(): void {
     if (this.registrationForm.invalid) {
       this.errorMessage = 'Please enter required fields to submit';
       this.alertify.error(this.errorMessage);
 
-      // Validate each control and set error messages accordingly
       if (this.registrationForm.controls['username'].invalid) {
         this.errorMessages['username'] = 'Please enter your name.';
       }
@@ -78,41 +77,20 @@ export class UserRegisterComponent implements OnInit {
       if (this.registrationForm.controls['mobile'].invalid) {
         this.errorMessages['mobile'] = 'Please enter a valid mobile number.';
       }
-
-      // Check if passwords match
       if (this.registrationForm.controls['password'].value !== this.registrationForm.controls['cpassword'].value) {
         this.errorMessages['cpassword'] = 'Passwords do not match.';
       } else {
         this.errorMessages['cpassword'] = '';
       }
 
-      // Add shake animation for invalid fields
-      for (const control in this.registrationForm.controls) {
-        const inputElement = document.getElementById(control);
-        if (inputElement) {
-          if (this.registrationForm.controls[control].invalid) {
-            inputElement.classList.add('shake', 'invalid');
-            inputElement.classList.remove('valid');
-
-            // Remove the shake effect after animation completes (adjust time as per CSS animation duration)
-            setTimeout(() => {
-              inputElement.classList.remove('shake');
-            }, 500); // Assuming the shake animation lasts 500ms
-          } else {
-            inputElement.classList.remove('invalid', 'shake');
-            inputElement.classList.add('valid');
-          }
-        }
-      }
+      // Optional: Add visual feedback (shake animation) for invalid fields
 
       return;
     }
 
-    // If form is valid, proceed with registration
     const userData: User = this.registrationForm.value;
     this.userService.addUser(userData);
     this.alertify.success("User registered successfully!");
-
     this.registrationForm.reset();
     this.errorMessage = '';
     this.errorMessages = {

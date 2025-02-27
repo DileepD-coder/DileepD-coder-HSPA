@@ -1,25 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // Import RouterModule
+import { RouterModule } from '@angular/router';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule] // Include CommonModule here, RouterModule not needed for standalone components
+  imports: [CommonModule, RouterModule, BsDropdownModule]
 })
 export class NavBarComponent implements OnInit {
-  constructor(private router: Router) { } // Inject Router
+  username: string | null = null;
 
-  ngOnInit(): void { }
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.username = localStorage.getItem('username');
+  }
 
   loggedin(): boolean {
-    return localStorage.getItem('token') !== null; // Return true if token exists
+    return localStorage.getItem('token') !== null;
   }
 
   logout(): void {
-    localStorage.removeItem('token'); // Remove token on logout
-    this.router.navigate(['/login']); // Navigate to login page after logout
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    this.router.navigate(['/login']);
+  }
+
+  viewDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  myProfile(): void {
+    this.router.navigate(['/profile']);
+  }
+
+  changePassword(): void {
+    this.router.navigate(['/change-password']);
   }
 }

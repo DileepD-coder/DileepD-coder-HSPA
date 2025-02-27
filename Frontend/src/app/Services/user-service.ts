@@ -12,18 +12,18 @@ export class UserService {
     this.loadUsers();
   }
 
-  addUser(user: User) {
+  addUser(user: User): void {
     this.users.push(user);  // Add user to the array
     localStorage.setItem('Users', JSON.stringify(this.users)); // Save to local storage
     console.log("User registered:", user);
-    console.log("All users:", this.getUsers()); // Log all users to check
+    console.log("All users:", this.getUsers());
   }
 
   getUsers(): User[] {
     return this.users; // Return the users from the service
   }
 
-  loadUsers() {
+  loadUsers(): void {
     const storedUsers = localStorage.getItem('Users');
     if (storedUsers) {
       this.users = JSON.parse(storedUsers); // Load users from local storage
@@ -31,7 +31,14 @@ export class UserService {
   }
 
   login(email: string, password: string): boolean {
-    // Check if the email and password match any user in the stored users
-    return this.users.some(user => user.email === email && user.password === password);
+    // Find a matching user by email and password
+    const user = this.users.find(user => user.email === email && user.password === password);
+    if (user) {
+      // Store token and username on successful login
+      localStorage.setItem('token', 'your-auth-token');
+      localStorage.setItem('username', user.username);
+      return true;
+    }
+    return false;
   }
 }
