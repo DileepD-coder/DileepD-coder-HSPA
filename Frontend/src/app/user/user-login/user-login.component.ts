@@ -7,7 +7,7 @@ import { AlertfyService } from '../../Services/alertfy.service'; // Correct impo
 @Component({
   selector: 'app-user-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule], // Make sure ReactiveFormsModule is included here
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.css']
 })
