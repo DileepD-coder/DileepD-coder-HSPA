@@ -1,36 +1,40 @@
 import { Component, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule for standalone components
-import { FormsModule, NgForm } from '@angular/forms'; // Import FormsModule for two-way data binding
-import { Location } from '@angular/common'; // ✅ Import Location for Back Navigation
+import { CommonModule } from '@angular/common'; 
+import { FormsModule, NgForm } from '@angular/forms';
+import { Location } from '@angular/common';
+import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs'; // ✅ Correct import
 
 @Component({
   selector: 'app-add-property',
-  standalone: true, // Mark as standalone component
-  imports: [CommonModule, FormsModule], // Include FormsModule to handle forms
+  standalone: true, 
+  imports: [CommonModule, FormsModule, TabsetComponent, TabDirective], // ✅ Import TabsetComponent & TabDirective
   templateUrl: './add-property.component.html',
   styleUrls: ['./add-property.component.css']
 })
 export class AddPropertyComponent {
-  propertyName: string = ''; // Property name model
-  propertyPrice: number = 0; // Property price model
+  propertyName: string = '';
+  propertyPrice: number = 0;
 
-  @ViewChild('Form') addPropertyForm!: NgForm; // Access the form instance
+  @ViewChild('Form') addPropertyForm!: NgForm;
+  @ViewChild('formTabs') formTabs!: TabsetComponent; // ✅ Fixed ViewChild name
 
-  constructor(private location: Location) {} // ✅ Inject Location for Back Navigation
+  constructor(private location: Location) {}
 
-  submitForm() {
-    // Add form submission logic here
+  submitForm(): void {
     console.log('Property Name:', this.propertyName);
     console.log('Property Price:', this.propertyPrice);
-    // Add logic to send this data to a service or backend
   }
 
-  goBack() {
-    this.location.back(); // ✅ Navigates back to the previous page
+  goBack(): void {
+    this.location.back();
   }
 
-  onSubmit(Form: NgForm) {
+  onSubmit(Form: NgForm): void {
     console.log('Congrats! Form Submitted');
-    console.log(this.addPropertyForm.value); // Access the form values using addPropertyForm
+    console.log(this.addPropertyForm.value);
+  }
+
+  selectTab(tabId: number): void {
+    this.formTabs.tabs[tabId].active = true; // ✅ Corrected logic
   }
 }

@@ -1,53 +1,59 @@
-<div class="card shadow-lg rounded-lg border-0 p-4 animate-fade-in" 
-     style="max-width: 500px; margin: auto; background: #f8f9fa;">
-
+<div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in" 
+     style="max-width: 700px; margin: auto; background: #f8f9fa;">
   <div class="card-header text-white text-center fw-bold" 
        style="background: linear-gradient(135deg, #28a745, #218838); 
               border-radius: 10px 10px 0 0; font-size: 20px;">
-    🏠 Add New Property
+    🏠 List your Property
   </div>
-
   <div class="card-body">
     <form (ngSubmit)="onSubmit(Form)" #Form="ngForm" [class.shake]="!Form.valid">
-      
-      <!-- Name Field -->
-      <div class="form-group mb-3">
-        <label for="name" class="fw-semibold">🏡 Property Name</label>
-        <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
-               #propName="ngModel" ngModel name="Name" required minlength="5" placeholder="Enter property name">
-        <span *ngIf="propName.invalid && propName.touched" class="error-block text-danger">
-          <span *ngIf="propName.errors?.['required']">Please Provide a Name</span>
-          <span *ngIf="propName.errors?.['minlength']">Name must be at least 5 characters long</span>
-        </span>
-      </div>
+      <tabset #formTabs>
+        <tab heading="Basic Info">
+          <div class="form-group mb-3">
+            <label for="name" class="fw-semibold">🏡 Property Name</label>
+            <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
+                   #propName="ngModel" ngModel name="Name" required minlength="5" placeholder="Enter property name">
+            <span *ngIf="propName.invalid && propName.touched" class="error-block text-danger">
+              <span *ngIf="propName.errors?.['required']">Please Provide a Name</span>
+              <span *ngIf="propName.errors?.['minlength']">Name must be at least 5 characters long</span>
+            </span>
+          </div>
 
-      <!-- Type Field -->
-      <div class="form-group mb-3">
-        <label for="type" class="fw-semibold">📌 Property Type</label>
-        <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
-               ngModel name="Type" placeholder="e.g., Apartment, Villa">
-      </div>
+          <div class="form-group mb-3">
+            <label for="type" class="fw-semibold">📌 Property Type</label>
+            <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
+                   ngModel name="Type" placeholder="e.g., Apartment, Villa">
+          </div>
 
-      <!-- Price Field -->
-      <div class="form-group mb-3">
-        <label for="price" class="fw-semibold">💲 Price ($)</label>
-        <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
-               ngModel name="Price" placeholder="Enter property price">
-      </div>
+          <div class="form-group mb-3">
+            <label for="price" class="fw-semibold">💲 Price ($)</label>
+            <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
+                   ngModel name="Price" placeholder="Enter property price">
+          </div>
 
-      <!-- Buttons -->
-      <div class="text-center mt-4">
-        <button [disabled]="!Form.valid" type="submit" 
-                class="btn btn-success me-3 shadow-sm px-4 py-2 rounded-pill btn-animate" 
-                style="background: linear-gradient(45deg, #28a745, #218838);">
-          Save
-        </button>
-        <button type="reset" class="btn btn-danger shadow-sm px-4 py-2 rounded-pill btn-animate" 
-                style="background: linear-gradient(45deg, #dc3545, #c82333);">
-          Cancel
-        </button>
-      </div>
+          <div class="text-center mt-4">
+            <button [disabled]="!Form.valid" type="button" 
+                    class="btn btn-success me-3 shadow-sm px-4 py-3 rounded-pill btn-animate btn-block" 
+                    (click)="selectTab(1)"
+                    style="background: linear-gradient(45deg, #28a745, #218838); font-size: 25px; padding: 15px 40px; min-width: 250px;">
+              Next
+            </button>
+          </div>
+        </tab>
 
+        <tab heading="Pricing & Area">
+          Pricing Information
+        </tab>
+        <tab heading="Address">
+          Address
+        </tab>
+        <tab heading="Other Details">
+          Other Details
+        </tab>
+        <tab heading="Photos">
+          Upload photos
+        </tab>
+      </tabset>
     </form>
   </div>
 </div>

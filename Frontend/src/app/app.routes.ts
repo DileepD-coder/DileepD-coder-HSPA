@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TabsModule } from 'ngx-bootstrap/tabs';  // Import TabsModule from ngx-bootstrap
+
 import { PropertyListComponent } from './property/property-list/property-list.component';
 import { RentPropertyComponent } from './property/rent-property/rent-property.component';
 import { AddPropertyComponent } from './property/add-property/add-property.component';
@@ -18,7 +20,10 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes),
+    TabsModule.forRoot() // This initializes the TabsModule from ngx-bootstrap
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
