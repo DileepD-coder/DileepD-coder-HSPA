@@ -1,17 +1,22 @@
-<div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in" 
-     style="max-width: 700px; margin: auto; background: #f8f9fa;">
-  <div class="card-header text-white text-center fw-bold" 
-       style="background: linear-gradient(135deg, #28a745, #218838); 
-              border-radius: 10px 10px 0 0; font-size: 20px;">
-    🏠 List your Property
+<div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
+     style="max-width: 700px; margin: auto; background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+  <div class="card-header text-white text-center fw-bold"
+       style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
+    🏠 List Your Property
   </div>
+  <div class="progress mt-3" style="height: 8px; border-radius: 50px;">
+    <div class="progress-bar" role="progressbar" [style.width.%]="progress"
+         style="background: linear-gradient(90deg, #28a745, #218838);"></div>
+  </div>
+
   <div class="card-body">
     <form (ngSubmit)="onSubmit(Form)" #Form="ngForm" [class.shake]="!Form.valid">
-      <tabset #formTabs>
+      <tabset #formTabs class="modern-tabs">
+        <!-- Basic Info Tab -->
         <tab heading="Basic Info">
           <div class="form-group mb-3">
             <label for="name" class="fw-semibold">🏡 Property Name</label>
-            <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
+            <input type="text" class="form-control shadow-sm input-animate"
                    #propName="ngModel" ngModel name="Name" required minlength="5" placeholder="Enter property name">
             <span *ngIf="propName.invalid && propName.touched" class="error-block text-danger">
               <span *ngIf="propName.errors?.['required']">Please Provide a Name</span>
@@ -21,37 +26,169 @@
 
           <div class="form-group mb-3">
             <label for="type" class="fw-semibold">📌 Property Type</label>
-            <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
+            <input type="text" class="form-control shadow-sm input-animate"
                    ngModel name="Type" placeholder="e.g., Apartment, Villa">
           </div>
 
           <div class="form-group mb-3">
-            <label for="price" class="fw-semibold">💲 Price ($)</label>
-            <input type="text" class="form-control rounded-pill shadow-sm input-animate" 
-                   ngModel name="Price" placeholder="Enter property price">
+            <label for="price" class="fw-semibold">💲 Price</label>
+            <div class="input-group">
+              <input type="text" class="form-control shadow-sm input-animate"
+                     ngModel name="Price" placeholder="Enter property price">
+              <span class="input-group-text shadow-sm">USD</span>
+            </div>
           </div>
 
           <div class="text-center mt-4">
-            <button [disabled]="!Form.valid" type="button" 
-                    class="btn btn-success me-3 shadow-sm px-4 py-3 rounded-pill btn-animate btn-block" 
-                    (click)="selectTab(1)"
-                    style="background: linear-gradient(45deg, #28a745, #218838); font-size: 25px; padding: 15px 40px; min-width: 250px;">
-              Next
+            <button [disabled]="!Form.valid" type="button"
+            class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+            (click)="selectTab(1)"
+            style="border-radius: 50px;">
+      Next <i class="fas fa-arrow-right"></i>
+    </button>
+          </div>
+        </tab>
+
+        <!-- Pricing & Area Tab -->
+        <tab heading="Pricing & Area">
+          <div class="form-group col-12">
+            <label class="fw-semibold">💰 Price</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🔒 Security</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🛠️ Maintenance</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">📏 Built Area</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">📐 Carpet Area</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate me-3"
+                    (click)="selectTab(0)">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate"
+                    (click)="selectTab(2)">
+              Next <i class="fas fa-arrow-right"></i>
             </button>
           </div>
         </tab>
 
-        <tab heading="Pricing & Area">
-          Pricing Information
-        </tab>
+        <!-- Address Tab -->
         <tab heading="Address">
-          Address
+          <div class="form-group col-12">
+            <label class="fw-semibold">📍 Address</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏠 Landmark</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏢 Floor</label>
+            <input type="text" class="form-control" placeholder="Enter floor number">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏢 Total Floors</label>
+            <input type="text" class="form-control" placeholder="Enter total number of floors">
+          </div>
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate me-3"
+                    (click)="selectTab(1)">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate"
+                    (click)="selectTab(3)">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
         </tab>
+
+        <!-- Other Details Tab -->
         <tab heading="Other Details">
-          Other Details
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏡 Age of Property</label>
+            <input type="text" class="form-control" placeholder="Enter age of the property in years">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏘️ Gated Community</label>
+            <div class="btn-group d-block">
+              <button type="button" class="btn btn-outline-success gated-btn"
+                      [ngClass]="{'btn-success': gatedCommunity === 'yes', 'selected': gatedCommunity === 'yes'}"
+                      (click)="gatedCommunity = 'yes'">Yes</button>
+              <button type="button" class="btn btn-outline-danger gated-btn"
+                      [ngClass]="{'btn-danger': gatedCommunity === 'no', 'selected': gatedCommunity === 'no'}"
+                      (click)="gatedCommunity = 'no'">No</button>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🚪 Main Entrance</label>
+            <input type="text" class="form-control" placeholder="Enter main entrance details">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">📝 Description (Optional)</label>
+            <textarea class="form-control" placeholder="Enter any additional description about the property"></textarea>
+          </div>
+          <div class="form-group col-12">
+            <label>✅ Ready to Move</label>
+            <div class="btn-group d-block">
+              <button type="button" class="btn btn-outline-success gated-btn"
+                      [ngClass]="{'btn-success': readyToMove === 'yes', 'selected': readyToMove === 'yes'}"
+                      (click)="readyToMove = 'yes'">Yes</button>
+              <button type="button" class="btn btn-outline-danger gated-btn"
+                      [ngClass]="{'btn-danger': readyToMove === 'no', 'selected': readyToMove === 'no'}"
+                      (click)="readyToMove = 'no'">No</button>
+            </div>
+          </div>
+          
+          <div *ngIf="readyToMove === 'yes'" class="form-group col-12 mt-2">
+            <label>📅 Ready to Move Date</label>
+            <input type="date" class="form-control" [(ngModel)]="readyToMoveDate" name="readyToMoveDate">
+          </div>
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate me-3"
+                    (click)="selectTab(2)">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="submit" class="btn btn-success shadow-sm px-4 py-2 btn-animate"
+            (click)="selectTab(4)">
+              Next<i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
         </tab>
+        <!-- Photos Tab -->
         <tab heading="Photos">
-          Upload photos
+          <div class="form-group col-12">
+            <label class="fw-semibold">📸 Upload Photos</label>
+            <input type="file" class="form-control" multiple>
+          </div>
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate me-3"
+                    (click)="selectTab(3)">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="submit" class="btn btn-success shadow-sm px-4 py-2 btn-animate">
+              Submit
+            </button>
+          </div>
         </tab>
       </tabset>
     </form>

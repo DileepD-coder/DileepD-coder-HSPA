@@ -3,17 +3,14 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-in {
   animation: fadeIn 0.1s ease-in-out;
 }
 
 /* 🎯 Input focus animation */
 .input-animate {
-  transition: border 0.3s ease-in-out; /* Increased duration for smoother transition */
+  transition: border 0.3s ease-in-out;
 }
-
-/* Input focus effect */
 .input-animate:focus {
   border: 2px solid #28a745;
   box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
@@ -21,32 +18,28 @@
 
 /* Highlight invalid inputs */
 .ng-invalid.ng-touched {
-  border-color: red; /* Red border for invalid inputs */
+  border-color: red;
 }
 .error-block {
   color: rgb(211, 40, 40);
 }
 
-/* 🔘 Button hover animation */
+/* 🔘 Button hover animation for normal buttons */
 .btn-animate {
   position: relative;
   overflow: hidden;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
-
-/* Button hover effect */
 .btn-animate:hover {
-  background-color: #0056b3; /* Darker background color on hover */
-  transform: translateY(-2px); /* Lift button on hover */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Card styles */
 .card {
-  transition: transform 0.3s, box-shadow 0.3s; /* Transition for the card */
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-
-
 
 /* ❌ Shake animation on invalid form submission */
 @keyframes shake {
@@ -56,7 +49,74 @@
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
-
 .shake {
   animation: shake 0.3s ease-in-out;
+}
+
+/* Additional styling for small inline buttons for Gated Community and Ready to Move */
+.gated-btn, .move-btn {
+  font-size: 14px;       /* Increase text size to 14px */
+  padding: 4px 8px;      /* Adjust padding to reduce extra gap */
+  border-radius: 5px;    /* Slight rounding at edges */
+  margin: 2px;
+  /* Remove fixed min-width so that the width fits the text */
+  color: #000 !important;
+  background-color: transparent;
+  border: 1px solid #28a745;
+}
+
+/* When selected as Yes */
+.gated-btn.btn-success, .move-btn.btn-success {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  border-color: #28a745;
+}
+
+/* When selected as No */
+.gated-btn.btn-danger, .move-btn.btn-danger {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  border-color: #dc3545;
+}
+
+/* Override hover for these inline buttons so they remain the same */
+.gated-btn:hover, .move-btn:hover {
+  background-color: inherit !important;
+  color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Optional: Tweak input-group text styling */
+.input-group-text {
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 5px; /* Slight rounding at edges */
+}
+
+/* Selected state styles */
+.selected {
+  border-color: #28a745 !important; /* Green for selected "Yes" button */
+  color: #fff !important; /* White text */
+  background-color: #28a745 !important; /* Green background */
+}
+
+.selected.btn-danger {
+  border-color: #dc3545 !important; /* Red for selected "No" button */
+  color: #fff !important;
+  background-color: #dc3545 !important; /* Red background */
+}
+
+.gated-btn, .move-btn {
+  width: 10%; /* Ensure buttons are full width */
+}
+
+/* General input field styling with slight border-radius */
+.form-control {
+  border-radius: 5px !important;  /* Slight rounding at edges for all input fields */
+}
+
+/* General button styles */
+.btn {
+  border-radius: 5px !important;  /* Slight rounding at edges for all buttons */
 }
