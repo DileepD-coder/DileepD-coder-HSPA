@@ -1,19 +1,23 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs'; // Import TabsModule
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker'; // <-- New import
+import { IProperty } from '../IProperty.interface'; // Add this import
 
 
 @Component({
   selector: 'app-add-property',
   standalone: true,
-  imports: [CommonModule, FormsModule, TabsModule , ButtonsModule], // Include TabsModule here
+  imports: [CommonModule, FormsModule, TabsModule, ButtonsModule, BsDatepickerModule], // Added BsDatepickerModule here
   templateUrl: './add-property.component.html',
   styleUrls: ['./add-property.component.css']
 })
 export class AddPropertyComponent implements AfterViewInit {
+  @Input() property!: IProperty; // Accept property input
+
   propertyName: string = '';
   propertyPrice: number = 0;
   progress: number = 0;
@@ -31,8 +35,8 @@ export class AddPropertyComponent implements AfterViewInit {
   propertyTypes: Array<string> = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment', 
                                  'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
 
-// Furnishing Types
-furnishTypes: Array<string> = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
+  // Furnishing Types
+  furnishTypes: Array<string> = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
 
   // Store selected property type and furnishing type
   selectedPropertyType: string = '';
@@ -71,6 +75,7 @@ furnishTypes: Array<string> = ['Fully Furnished', 'Semi Furnished', 'Unfurnished
       console.log('Form is invalid');
     }
   }
+  mainEntrance: string = '';
 
   selectTab(tabId: number): void {
     this.formTabs.tabs[tabId].active = true;

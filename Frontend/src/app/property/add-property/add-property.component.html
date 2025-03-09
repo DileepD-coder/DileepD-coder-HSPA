@@ -1,3 +1,6 @@
+
+<div class="row">
+  <div class="col-8">
 <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
      style="max-width: 700px; margin: auto; background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
   <div class="card-header text-white text-center fw-bold"
@@ -99,7 +102,163 @@
           </div>
         </tab>
 
-        <!-- Additional Tabs go here -->
+        <!-- Pricing & Area Tab -->
+        <tab heading="Pricing & Area">
+          <div class="form-group col-12">
+            <label class="fw-semibold">💰 Price</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🔒 Security</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🛠️ Maintenance</label>
+            <div class="input-group">
+              <input type="text" class="form-control">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">📏 Built Area</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">📐 Carpet Area</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                    (click)="selectTab(0)"
+                    style="border-radius: 50px;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                    (click)="selectTab(2)"
+                    style="border-radius: 50px;">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </tab>
+
+        <!-- Address Tab -->
+        <tab heading="Address">
+          <div class="form-group col-12">
+            <label class="fw-semibold">📍 Address</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏠 Landmark</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏢 Floor</label>
+            <input type="text" class="form-control" placeholder="Enter floor number">
+          </div>
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏢 Total Floors</label>
+            <input type="text" class="form-control" placeholder="Enter total number of floors">
+          </div>
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                    (click)="selectTab(1)"
+                    style="border-radius: 50px;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                    (click)="selectTab(3)"
+                    style="border-radius: 50px;">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </tab>
+
+        <!-- Other Details Tab -->
+        <tab heading="Other Details">
+          <!-- Ready to Move (Already exists) -->
+          <div class="form-group col-12 mb-2" >
+            <label>✅ Ready to Move</label>
+            <div class="btn-group d-block">
+              <button type="button" class="btn btn-outline-success move-btn"
+                      [ngClass]="{'btn-success': readyToMove === 'yes', 'selected': readyToMove === 'yes'}"
+                      (click)="readyToMove = (readyToMove==='yes' ? '' : 'yes')">Yes</button>
+              <button type="button" class="btn btn-outline-danger move-btn"
+                      [ngClass]="{'btn-danger': readyToMove === 'no', 'selected': readyToMove === 'no'}"
+                      (click)="readyToMove = (readyToMove==='no' ? '' : 'no')">No</button>
+            </div>
+          </div>
+          
+          
+          <!-- Possession/Available Date (New) -->
+          <div class="form-group col-12">
+            <label class="fw-semibold">📅 Possession/Available Date</label>
+            <input type="text" placeholder="Select Date" class="form-control" bsDatepicker>
+          </div>
+
+          <!-- Age of Property -->
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏡 Age of Property</label>
+            <input type="text" class="form-control" placeholder="Enter age of the property in years">
+          </div>
+
+          <!-- Gated Community (Already exists) -->
+          <div class="form-group col-12">
+            <label class="fw-semibold">🏘️ Gated Community</label>
+            <div class="btn-group d-block">
+              <button type="button" class="btn btn-outline-success gated-btn"
+                      [ngClass]="{'btn-success': gatedCommunity === 'yes', 'selected': gatedCommunity === 'yes'}"
+                      (click)="gatedCommunity = (gatedCommunity==='yes' ? '' : 'yes')">Yes</button>
+              <button type="button" class="btn btn-outline-danger gated-btn"
+                      [ngClass]="{'btn-danger': gatedCommunity === 'no', 'selected': gatedCommunity === 'no'}"
+                      (click)="gatedCommunity = (gatedCommunity==='no' ? '' : 'no')">No</button>
+            </div>
+          </div>
+
+          <!-- Main Entrance (New: Four Buttons) -->
+          <div class="form-group col-12 mb-2">
+            <label class="fw-semibold">🚪 Main Entrance</label>
+            <br>
+            <div class="btn-group" role="group" aria-label="Main Entrance">
+              <button type="button" class="btn btn-outline-secondary"
+                      [ngClass]="{'selected': mainEntrance === 'East'}"
+                      (click)="mainEntrance = 'East'">East</button>
+              <button type="button" class="btn btn-outline-secondary"
+                      [ngClass]="{'selected': mainEntrance === 'West'}"
+                      (click)="mainEntrance = 'West'">West</button>
+              <button type="button" class="btn btn-outline-secondary"
+                      [ngClass]="{'selected': mainEntrance === 'North'}"
+                      (click)="mainEntrance = 'North'">North</button>
+              <button type="button" class="btn btn-outline-secondary"
+                      [ngClass]="{'selected': mainEntrance === 'South'}"
+                      (click)="mainEntrance = 'South'">South</button>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group col-12">
+            <label class="fw-semibold">📝 Description (Optional)</label>
+            <textarea class="form-control" placeholder="Enter any additional description about the property"></textarea>
+          </div>
+
+          <div class="text-center mt-4">
+            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                    (click)="selectTab(2)"
+                    style="border-radius: 50px;">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                    (click)="selectTab(4)"
+                    style="border-radius: 50px;">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </tab>
 
         <!-- Photos Tab -->
         <tab heading="Photos">
@@ -123,3 +282,14 @@
     </form>
   </div>
 </div>
+</div>
+<div class="col-4">
+  <div class="card-header">
+  <p class="extra-bold-large">Your Property Preview</p>
+  <div>
+  
+  </div>
+</div>
+</div>
+</div>
+ 
