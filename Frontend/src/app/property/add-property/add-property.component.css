@@ -178,3 +178,72 @@ button {
 button:hover {
   cursor: pointer;
 }
+
+/* ------------------------------------------
+   Next and Back Button Overrides
+   ------------------------------------------ */
+
+/* Next Button: Light green default, full green on hover */
+button.btn-animate.next {
+  border-radius: 50px;
+  padding: 5px 20px;  /* Adjusted padding */
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #28a745 !important;  /* Light Green border */
+  background-color: #d6f7d1 !important;      /* Light Green background */
+  color: #28a745 !important;                 /* Light Green text */
+}
+
+button.btn-animate.next:hover {
+  background-color: #28a745 !important;  /* Full Green background on hover */
+  border-color: #218838 !important;       /* Dark Green border on hover */
+  color: white !important;                /* White text on hover */
+  cursor: pointer;
+}
+
+/* Back Button: Light gray default, full gray on hover */
+button.btn-animate.back {
+  border-radius: 50px;
+  padding: 5px 20px;  /* Adjusted padding */
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #6c757d !important;  /* Light Gray border */
+  background-color: #f1f3f5 !important;     /* Light Gray background */
+  color: #6c757d !important;                /* Light Gray text */
+}
+
+button.btn-animate.back:hover {
+  background-color: #6c757d !important;  /* Full Gray background on hover */
+  border-color: #5a6268 !important;       /* Dark Gray border on hover */
+  color: white !important;                /* White text on hover */
+  cursor: pointer;
+}
+
+/* Card styles */
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Ensure no blur effect and apply desired styles to the card header */
+.card-header {
+  filter: none !important; /* Remove any potential blur effect */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Optional: Add depth effect */
+  background: linear-gradient(135deg, #28a745, #218838) !important; /* Ensure gradient is applied */
+  border-radius: 5px 5px 0 0 !important; /* Ensure border-radius stays */
+  font-size: 2rem !important; /* Ensure font size stays */
+  color: white !important; /* Set text color to white */
+  font-weight: bold !important; /* Make text bold */
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center; /* Ensure the text is centered */
+  padding: 20px; /* Optional: Add some padding around the text */
+}
+
+/* Additional style for the "Your Property Preview" text */
+.card-header p {
+  margin: 0; /* Remove default margins */
+}
+

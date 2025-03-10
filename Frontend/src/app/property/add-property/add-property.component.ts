@@ -2,88 +2,89 @@ import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
-import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs'; // Import TabsModule
+import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker'; // <-- New import
-import { IProperty } from '../IProperty.interface'; // Add this import
-
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { IProperty } from '../IProperty.interface';
 
 @Component({
-  selector: 'app-add-property',
-  standalone: true,
-  imports: [CommonModule, FormsModule, TabsModule, ButtonsModule, BsDatepickerModule], // Added BsDatepickerModule here
-  templateUrl: './add-property.component.html',
-  styleUrls: ['./add-property.component.css']
+    selector: 'app-add-property',
+    standalone: true,
+    imports: [CommonModule, FormsModule, TabsModule, ButtonsModule, BsDatepickerModule],
+    templateUrl: './add-property.component.html',
+    styleUrls: ['./add-property.component.css']
 })
 export class AddPropertyComponent implements AfterViewInit {
-  @Input() property!: IProperty; // Accept property input
+    @Input() property!: IProperty;
 
-  propertyName: string = '';
-  propertyPrice: number = 0;
-  progress: number = 0;
-  selectedBhk: number | null = null;
+    propertyName: string = '';
+    propertyPrice: number = 0;
+    progress: number = 0;
+    selectedBhk: number | null = null;
+    possessionDate: Date | undefined; // Add this line
 
-  // Initialized properties
-  gatedCommunity: string = '';  // For gated community selection
-  readyToMove: string = '';  // For ready to move selection
-  readyToMoveDate: string = '';  // For ready to move date selection
+    bsConfig = {
+        showWeekNumbers: false,
+        containerClass: 'theme-green'
+    };
 
-  @ViewChild('Form') addPropertyForm!: NgForm;
-  @ViewChild('formTabs') formTabs!: TabsetComponent;
+    gatedCommunity: string = '';
+    readyToMove: string = '';
+    readyToMoveDate: string = '';
 
-  // Property Types from the data
-  propertyTypes: Array<string> = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment', 
-                                 'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
+    @ViewChild('Form') addPropertyForm!: NgForm;
+    @ViewChild('formTabs') formTabs!: TabsetComponent;
 
-  // Furnishing Types
-  furnishTypes: Array<string> = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
+    propertyTypes: Array<string> = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment',
+        'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
 
-  // Store selected property type and furnishing type
-  selectedPropertyType: string = '';
-  selectedFurnishingType: string = '';
+    furnishTypes: Array<string> = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
 
-  constructor(private location: Location) {}
+    selectedPropertyType: string = '';
+    selectedFurnishingType: string = '';
 
-  ngAfterViewInit() {
-    // Update the progress after view initialization to ensure tabs are available
-    this.updateProgress(0);
-  }
+    constructor(private location: Location) { }
 
-  submitForm(): void {
-    console.log('Property Name:', this.propertyName);
-    console.log('Property Price:', this.propertyPrice);
-    console.log('Property Type:', this.selectedPropertyType);
-    console.log('Furnishing Type:', this.selectedFurnishingType);
-  }
-
-  goBack(): void {
-    this.location.back();
-  }
-
-  selectedOption: string = '';
-  onBhkSelect(bhk: number): void {
-    this.selectedBhk = bhk;
-    console.log('Selected BHK:', bhk); // Optional: you can use this value for further logic
-  }
-
-  onSubmit(Form: NgForm): void {
-    if (Form.valid) {
-      console.log('Congrats! Form Submitted');
-      console.log(this.addPropertyForm.value);
-      // Add backend call here to submit the data
-    } else {
-      console.log('Form is invalid');
+    ngAfterViewInit() {
+        this.updateProgress(0);
     }
-  }
-  mainEntrance: string = '';
 
-  selectTab(tabId: number): void {
-    this.formTabs.tabs[tabId].active = true;
-    this.updateProgress(tabId);
-  }
+    submitForm(): void {
+        console.log('Property Name:', this.propertyName);
+        console.log('Property Price:', this.propertyPrice);
+        console.log('Property Type:', this.selectedPropertyType);
+        console.log('Furnishing Type:', this.selectedFurnishingType);
+    }
 
-  updateProgress(tabId: number): void {
-    const totalTabs = this.formTabs.tabs.length;
-    this.progress = ((tabId + 1) / totalTabs) * 100;
-  }
+    goBack(): void {
+        this.location.back();
+    }
+
+    selectedOption: string = '';
+    onBhkSelect(bhk: number): void {
+        this.selectedBhk = bhk;
+        console.log('Selected BHK:', bhk);
+    }
+
+    onSubmit(Form: NgForm): void {
+        if (Form.valid) {
+            console.log('Congrats! Form Submitted');
+            console.log(this.addPropertyForm.value);
+            console.log('Possession Date:', this.possessionDate); // Log the selected date
+            // Add backend call here to submit the data
+        } else {
+            console.log('Form is invalid');
+        }
+    }
+    mainEntrance: string = '';
+
+    selectTab(tabId: number): void {
+        this.formTabs.tabs[tabId].active = true;
+        this.updateProgress(tabId);
+    }
+
+    updateProgress(tabId: number): void {
+        const totalTabs = this.formTabs.tabs.length;
+        this.progress = ((tabId + 1) / totalTabs) * 100;
+    }
 }
