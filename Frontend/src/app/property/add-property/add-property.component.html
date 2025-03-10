@@ -196,13 +196,19 @@
           
           
           <!-- Possession/Available Date (New) -->
-          <div class="form-group col-12">
-            <label class="fw-semibold">📅 Possession/Available Date</label>
-              <input type="text" 
-                     placeholder="Datepicker" 
-                     class="form-control custom-datepicker" 
-                     bsDatepicker>
-            </div>
+          <div class="form-group">
+            <label for="possessionDate">📅 Possession Date</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              bsDatepicker 
+              [(ngModel)]="possessionDate" 
+              name="possessionDate"
+              [bsConfig]="bsConfig"
+              required
+            />
+          </div>
+          
             
 
           <!-- Age of Property -->

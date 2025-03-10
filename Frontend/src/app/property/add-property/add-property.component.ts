@@ -22,11 +22,13 @@ export class AddPropertyComponent implements AfterViewInit {
     progress: number = 0;
     selectedBhk: number | null = null;
     possessionDate: Date | undefined; // Add this line
-
+    
     bsConfig = {
+        dateInputFormat: 'MM/DD/YYYY', // Ensure correct date format
         showWeekNumbers: false,
         containerClass: 'theme-green'
-    };
+      };
+      
 
     gatedCommunity: string = '';
     readyToMove: string = '';
