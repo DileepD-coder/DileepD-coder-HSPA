@@ -203,6 +203,7 @@
               class="form-control" 
               bsDatepicker 
               [(ngModel)]="possessionDate" 
+              placeholder="Datepicker"
               name="possessionDate"
               [bsConfig]="bsConfig"
               required
@@ -297,7 +298,7 @@
   <div class="card-header">
   <p class="extra-bold-large">Your Property Preview</p>
   <div>
-  
+    <app-property-card [property]="propertyview"></app-property-card>
   </div>
 </div>
 </div>
