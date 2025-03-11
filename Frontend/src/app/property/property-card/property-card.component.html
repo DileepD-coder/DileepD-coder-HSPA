@@ -1,6 +1,16 @@
 <div class="card" *ngIf="property">
   <div class="card-img-wrapper">
-    <img class="card-img-top" [src]="'assets/Hou/' + property.ImageUrl" alt="{{ property.Name }} Image" />
+    <!-- Display GIF loading animation if no image is provided -->
+    <img *ngIf="!property.ImageUrl" 
+         src="assets/videos/construct.gif" 
+         alt="Loading..." 
+         class="card-img-top" />
+
+    <!-- Display the actual property image if available -->
+    <img *ngIf="property.ImageUrl" 
+         [src]="'assets/Hou/' + property.ImageUrl" 
+         alt="{{ property.Name }} Image" 
+         class="card-img-top" />
 
     <ul class="list-inline text-center member-icons animate">
       <li class="list-inline-item">
@@ -19,6 +29,10 @@
   <div class="card-body p-3 text-center">
     <h1 class="h5 font-weight-bold mb-2">{{ property.Name }}</h1>
     <h2 class="h6 text-muted">{{ property.Type }}</h2>
-    <h3 class="text-success font-weight-bold">${{ property.Price | number:'1.0-2' }}</h3>
+    
+    <!-- Display the price only if it's available and greater than 0 -->
+    <h3 *ngIf="property.Price && property.Price > 0" class="text-success font-weight-bold">
+      ${{ property.Price | number:'1.0-2' }}
+    </h3>
   </div>
 </div>

@@ -52,10 +52,11 @@
 
           <div class="form-group">
             <label for="propertyType" class="fw-semibold">Property Type</label>
-            <select [(ngModel)]="selectedPropertyType" name="propertyType" class="form-control" id="propertyType">
+            <select [(ngModel)]="propertyview.Type" name="propertyType" class="form-control" id="propertyType">
               <option *ngFor="let type of propertyTypes" [value]="type">{{ type }}</option>
             </select>
           </div>
+          
           
           <div class="form-group">
             <label for="furnishingType" class="fw-semibold mb-2">Furnishing Type</label>
@@ -73,10 +74,12 @@
             </div>
           </div>
           <br>
-          <div class="form-group mb-3">
+           <!-- Property Name (Binding Field) -->
+           <div class="form-group mb-3">
             <label for="name" class="fw-semibold">🏡 in Building/Socity/Project</label>
-            <input type="text" class="form-control shadow-sm input-animate"
-                   #propName="ngModel" ngModel name="Name" required minlength="5" placeholder="Enter name">
+            <input type="text" id="name" class="form-control shadow-sm input-animate"
+                   #propName="ngModel" ngModel name="Name" required minlength="5" placeholder="Enter name"
+                   [(ngModel)]="binding" (ngModelChange)="updatePreview()">
             <span *ngIf="propName.invalid && propName.touched" class="error-block text-danger">
               <span *ngIf="propName.errors?.['required']">Please Provide a Name</span>
               <span *ngIf="propName.errors?.['minlength']">Name must be at least 5 characters long</span>
@@ -84,16 +87,15 @@
           </div>
 
           <div class="form-group mb-3">
-            <label for="price" class="fw-semibold"> 🌆 City</label>
+            <label class="fw-semibold"> 🌆 City</label>
             <div class="input-group">
               <input type="text" class="form-control shadow-sm input-animate"
                      placeholder="Enter City">
-              <span class="input-group-text shadow-sm">USD</span>
             </div>
           </div>
 
           <div class="text-center mt-4">
-            <button [disabled]="!Form.valid" type="button"
+            <button  type="button"
                     class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
                     (click)="selectTab(1)"
                     style="border-radius: 50px;">
@@ -107,7 +109,7 @@
           <div class="form-group col-12">
             <label class="fw-semibold">💰 Price</label>
             <div class="input-group">
-              <input type="text" class="form-control">
+              <input type="number" class="form-control" name="Price" [(ngModel)]="propertyview.Price">
               <span class="input-group-text">USD</span>
             </div>
           </div>
@@ -294,13 +296,36 @@
   </div>
 </div>
 </div>
+<!-- Preview Property Card (Right Column) -->
+<!-- Preview Property Card (Right Column) -->
 <div class="col-4">
-  <div class="card-header">
-  <p class="extra-bold-large">Your Property Preview</p>
-  <div>
-    <app-property-card [property]="propertyview"></app-property-card>
+  <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
+       style="background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+    <div class="card-header text-white text-center fw-bold"
+         style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
+      <p class="extra-bold-large">Your Property Preview</p>
+    </div>
+    <div class="card-body">
+      <!-- Show spinner if loading -->
+      <div *ngIf="loading" class="spinner-container">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+  
+      <!-- Show Property Card if not loading and a match is found -->
+      <div *ngIf="!loading && propertyview">
+        <app-property-card [property]="propertyview"></app-property-card>
+      </div>
+  
+      <!-- Show message if not loading and no match is found -->
+      <div *ngIf="!loading && !propertyview" class="text-center">
+        <p>No matching property found. Please check your details.</p>
+      </div>
+    </div>
   </div>
 </div>
 </div>
-</div>
+
+
  
