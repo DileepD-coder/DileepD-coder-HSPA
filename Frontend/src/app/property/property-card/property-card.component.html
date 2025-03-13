@@ -12,7 +12,7 @@
          alt="{{ property.Name }} Image" 
          class="card-img-top" />
 
-    <ul class="list-inline text-center member-icons animate">
+    <ul *ngIf="!hideIcons" class="list-inline text-center member-icons animate">
       <li class="list-inline-item">
         <button class="btn btn-primary" (click)="navigateToProperty()">
           <i class="fa-regular fa-pen-to-square"></i>
