@@ -52,7 +52,7 @@
 
           <div class="form-group">
             <label for="propertyType" class="fw-semibold">Property Type</label>
-            <select [(ngModel)]="propertyview.Type" name="propertyType" class="form-control" id="propertyType">
+            <select [(ngModel)]="propertyview.PType" name="propertyType" class="form-control" id="propertyType">
               <option *ngFor="let type of propertyTypes" [value]="type">{{ type }}</option>
             </select>
           </div>
@@ -78,13 +78,16 @@
            <div class="form-group mb-3">
             <label for="name" class="fw-semibold">🏡 in Building/Socity/Project</label>
             <input type="text" id="name" class="form-control shadow-sm input-animate"
-                   #propName="ngModel" ngModel name="Name" required minlength="5" placeholder="Enter name"
-                   [(ngModel)]="binding" (ngModelChange)="updatePreview()">
+                   #propName="ngModel" [(ngModel)]="binding" name="Name"
+                   required minlength="5" placeholder="Enter name"
+                   (ngModelChange)="updatePreview()">
+          
             <span *ngIf="propName.invalid && propName.touched" class="error-block text-danger">
               <span *ngIf="propName.errors?.['required']">Please Provide a Name</span>
               <span *ngIf="propName.errors?.['minlength']">Name must be at least 5 characters long</span>
             </span>
           </div>
+          
 
           <div class="form-group mb-3">
             <label class="fw-semibold"> 🌆 City</label>
@@ -296,7 +299,7 @@
   </div>
 </div>
 </div>
-<!-- Preview Property Card (Right Column) -->
+
 <!-- Preview Property Card (Right Column) -->
 <div class="col-4">
   <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
@@ -312,10 +315,10 @@
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-  
+  </div>
       <!-- Show Property Card if not loading and a match is found -->
       <div *ngIf="!loading && propertyview">
-        <app-property-card [property]="propertyview"></app-property-card>
+        <app-property-card [property]="propertyview" [hideIcons]="true"></app-property-card>
       </div>
   
       <!-- Show message if not loading and no match is found -->
@@ -323,7 +326,7 @@
         <p>No matching property found. Please check your details.</p>
       </div>
     </div>
-  </div>
+  
 </div>
 </div>
 

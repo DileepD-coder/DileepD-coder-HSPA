@@ -6,7 +6,7 @@ import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PropertyCardComponent } from '../property-card/property-card.component';
-import { IProperty } from '../IProperty.interface';
+import { IPropertybase } from '../../models/Ipropertybase';  // Note: file is named Ipropertybase.ts
 
 @Component({
   selector: 'app-add-property',
@@ -23,20 +23,16 @@ import { IProperty } from '../IProperty.interface';
   styleUrls: ['./add-property.component.css']
 })
 export class AddPropertyComponent implements AfterViewInit {
-  @Input() property: IProperty | null = null;
+  @Input() property: IPropertybase | null = null;
 
   // Fields for List Property card
-  // (You may remove propertyName since we now use binding)
-  // propertyName: string = '';
-  //propertyPrice: number = 0;
   selectedBhk: number | null = null;
   possessionDate: Date | undefined;
   selectedPropertyType: string = '';
   selectedFurnishingType: string = '';
   selectedOption: string = '';
 
-  // This is the binding variable for the "in Building/Socity/Project" field.
-  binding: string = '';
+  binding: string = '';  // Binding variable for "in Building/Socity/Project" field
 
   // Datepicker configuration
   bsConfig = {
@@ -56,18 +52,25 @@ export class AddPropertyComponent implements AfterViewInit {
   propertyTypes: string[] = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment', 'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
   furnishTypes: string[] = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
 
-  // The preview property – initialize with default values so it always conforms to IProperty.
-  propertyview: IProperty = {
+  // The preview property – initialize with default values so it always conforms to IPropertybase.
+  propertyview: IPropertybase = {
     Id: 0,
     SellRent: 0,
     Name: '',
-    Type: '',
-    Price: null,  // Change from 0 to null
-    ImageUrl: ''
+    PType: '',
+    FType: '',
+    Price: null,
+    BHK: 0,
+    BuiltArea: 0,
+    City: '',
+    RTM: 0,
+    ImageUrl: '',
+    Type: ''
   };
 
-  // Loading flag for preview (if needed; here we set it false for live preview)
+  // Loading flag for preview
   loading: boolean = false;
+  hideIcons: boolean = true;
 
   constructor(private location: Location) { }
 
@@ -75,12 +78,32 @@ export class AddPropertyComponent implements AfterViewInit {
     this.updateProgress(0);
   }
 
-  // Called whenever the user types in the binding input
+  // Called when user types in the binding input
   updatePreview(): void {
-    // Update the preview property name to the entered binding value.
     this.propertyview.Name = this.binding;
+  
+    if (this.binding.trim().toLowerCase() === 'sunny villa') {
+      // Update preview with all details
+      this.propertyview = {
+        Id: 1,
+        SellRent: 1,
+        Name: "Sunny Villa",
+        PType: "House",
+        FType: "Semi Furnished",
+        Price: 12000,
+        BHK: 3,
+        BuiltArea: 2000,
+        City: 'New York',
+        RTM: 1,
+        ImageUrl: "img1.jpg",
+        Type: "House"
+      };
+      this.loading = false;
+    } else {
+      this.loading = true;
+    }
   }
-
+  
   submitForm(): void {
     console.log('Property Type:', this.selectedPropertyType);
     console.log('Furnishing Type:', this.selectedFurnishingType);

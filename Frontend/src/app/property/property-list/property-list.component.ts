@@ -32,13 +32,16 @@ export class PropertyListComponent implements OnInit {
   loadProperties(): void {
     this.housingService.getAllProperties().subscribe(
       (data: IProperty[]) => {
+        // Map each property so that it includes the required "PType" property.
+        // We assume the incoming data has a property PType.
         this.properties = data.map(property => ({
           Id: property.Id,
+          SellRent: property.SellRent,
           Name: property.Name,
-          Type: property.Type,
+          PType: property.PType,          // Added to satisfy the interface
+          Type: property.PType || '',       // For display purposes, we set Type equal to PType
           Price: property.Price,
-          ImageUrl: property.ImageUrl,
-          SellRent: property.SellRent
+          ImageUrl: property.ImageUrl
         }));
 
         this.filteredProperties = this.properties.filter(
