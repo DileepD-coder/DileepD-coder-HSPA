@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
-import { IProperty } from '../IProperty.interface';
 import { CommonModule } from '@angular/common';
 import { PropertyCardComponent } from '../property-card/property-card.component';
+import { IPropertybase } from '../../models/IPropertybase';
 
 @Component({
   selector: 'app-property-list',
@@ -14,8 +14,8 @@ import { PropertyCardComponent } from '../property-card/property-card.component'
 })
 export class PropertyListComponent implements OnInit {
   SellRent: number = 1; // Default to "Buy"
-  properties: IProperty[] = [];
-  filteredProperties: IProperty[] = [];
+  properties: IPropertybase[] = [];
+  filteredProperties: IPropertybase[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -31,19 +31,24 @@ export class PropertyListComponent implements OnInit {
 
   loadProperties(): void {
     this.housingService.getAllProperties().subscribe(
-      (data: IProperty[]) => {
-        // Map each property so that it includes the required "PType" property.
-        // We assume the incoming data has a property PType.
+      (data: IPropertybase[]) => {
+        // Ensure all required fields are included
         this.properties = data.map(property => ({
           Id: property.Id,
           SellRent: property.SellRent,
           Name: property.Name,
-          PType: property.PType,          // Added to satisfy the interface
-          Type: property.PType || '',       // For display purposes, we set Type equal to PType
+          PType: property.PType,         
+          Type: property.PType || '',    
           Price: property.Price,
-          ImageUrl: property.ImageUrl
+          ImageUrl: property.ImageUrl,
+          FType: property.FType || '',        // ✅ Ensure all required properties are included
+          BHK: property.BHK || 0,             // ✅ Provide default values if missing
+          BuiltArea: property.BuiltArea || 0, // ✅
+          City: property.City || '',          // ✅
+          RTM: property.RTM || 0              // ✅
         }));
 
+        // Filter properties based on SellRent value
         this.filteredProperties = this.properties.filter(
           property => property.SellRent === this.SellRent
         );

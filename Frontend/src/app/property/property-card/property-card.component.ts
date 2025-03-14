@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IProperty } from '../IProperty.interface';
-import { IPropertybase } from '../../models/Ipropertybase';
+import { IPropertybase } from '../../models/IPropertybase';
 
 
 @Component({
@@ -14,7 +13,7 @@ import { IPropertybase } from '../../models/Ipropertybase';
   styleUrls: ['./property-card.component.css']
 })
 export class PropertyCardComponent {
-  @Input() property!:IProperty | IPropertybase;
+  @Input() property!: IPropertybase;
   @Input() hideIcons: boolean = false;
 
   constructor(private router: Router) {}

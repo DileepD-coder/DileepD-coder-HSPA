@@ -6,7 +6,7 @@ import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PropertyCardComponent } from '../property-card/property-card.component';
-import { IPropertybase } from '../../models/Ipropertybase';  // Note: file is named Ipropertybase.ts
+import { IPropertybase } from '../../models/IPropertybase';
 
 @Component({
   selector: 'app-add-property',
