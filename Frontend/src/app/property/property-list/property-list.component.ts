@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule
 import { CommonModule } from '@angular/common';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { IPropertybase } from '../../models/IPropertybase';
@@ -10,21 +11,31 @@ import { IPropertybase } from '../../models/IPropertybase';
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.css'],
   standalone: true,
-  imports: [CommonModule, PropertyCardComponent]
+  imports: [CommonModule, ReactiveFormsModule, PropertyCardComponent] // Add ReactiveFormsModule here
+ // Add ReactiveFormsModule here
+ // Add ReactiveFormsModule here
 })
 export class PropertyListComponent implements OnInit {
-  SellRent: number = 1; // Default to "Buy"
+  propertyForm: FormGroup;
   properties: IPropertybase[] = [];
   filteredProperties: IPropertybase[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private housingService: HousingService
-  ) {}
+    private housingService: HousingService,
+    private fb: FormBuilder
+  ) {
+    this.propertyForm = this.fb.group({
+      SellRent: [1, Validators.required],  // Default value for SellRent
+    });
+  }
 
   ngOnInit(): void {
     this.route.url.subscribe(urlSegments => {
-      this.SellRent = urlSegments[0]?.path === 'rent-property' ? 2 : 1;
+      // Set the SellRent value based on the route, simplified
+      this.propertyForm.setValue({
+        SellRent: urlSegments[0]?.path === 'rent-property' ? 2 : 1,
+      });
       this.loadProperties();
     });
   }
@@ -32,27 +43,33 @@ export class PropertyListComponent implements OnInit {
   loadProperties(): void {
     this.housingService.getAllProperties().subscribe(
       (data: IPropertybase[]) => {
-        // Ensure all required fields are included
+        // Modify the properties mapping to ensure all required fields are present
         this.properties = data.map(property => ({
           Id: property.Id,
           SellRent: property.SellRent,
           Name: property.Name,
-          PType: property.PType,         
-          Type: property.PType || '',    
+          PType: property.PType,
+          Type: property.PType || '',
           Price: property.Price,
           ImageUrl: property.ImageUrl,
-          FType: property.FType || '',        // ✅ Ensure all required properties are included
-          BHK: property.BHK || 0,             // ✅ Provide default values if missing
-          BuiltArea: property.BuiltArea || 0, // ✅
-          City: property.City || '',          // ✅
-          RTM: property.RTM || 0              // ✅
+          FType: property.FType || '',
+          BHK: property.BHK || 0,
+          BuiltArea: property.BuiltArea || 0,
+          City: property.City || '',
+          RTM: property.RTM || 0,
+          Address: property.Address || '',  // Add Address (with fallback if missing)
+          Landmark: property.Landmark || '',  // Add Landmark (with fallback if missing)
+          Floor: property.Floor || 0,  // Add Floor (with fallback if missing)
+          TotalFloors: property.TotalFloors || 0,  // Add TotalFloors (with fallback if missing)
+          Age: property.Age || 0,  // Add Age (with fallback if missing)
+          Description: property.Description || ''  // Add Description (with fallback if missing)
         }));
-
-        // Filter properties based on SellRent value
+  
+        // Apply the filter based on the SellRent form control value
         this.filteredProperties = this.properties.filter(
-          property => property.SellRent === this.SellRent
+          property => property.SellRent === this.propertyForm.get('SellRent')?.value
         );
-
+  
         console.log('Filtered Properties:', this.filteredProperties);
       },
       error => {

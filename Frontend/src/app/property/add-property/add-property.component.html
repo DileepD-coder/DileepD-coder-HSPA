@@ -22,7 +22,7 @@
         <form (ngSubmit)="onSubmit(Form)" #Form="ngForm" [class.shake]="!Form.valid">
           <tabset #formTabs class="modern-tabs">
             <!-- Basic Info Tab -->
-            <tab heading="Basic Info" ngModelGroup="BasicInfo">
+            <tab heading="Basic Info" ngModelGroup="BasicInfo" #BasicInfo="ngModelGroup">
               <!-- Sell / Rent Selection in Basic Info Tab -->
               <div class="mb-2">
                 <br>
@@ -94,7 +94,7 @@
 
               <div class="text-center mt-4">
                 <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
-                  (click)="selectTab(1)" style="border-radius: 50px;">
+                  (click)="selectTab(1)"  [disabled]="!BasicInfo.valid" style="border-radius: 50px;">
                   Next <i class="fas fa-arrow-right"></i>
                 </button>
               </div>
@@ -298,9 +298,9 @@
                   (click)="selectTab(3)" style="border-radius: 50px;">
                   <i class="fas fa-arrow-left"></i> Back
                 </button>
-                <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
+                <button type="save" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
                   style="border-radius: 50px;">
-                  Submit <i class="fas fa-check-circle"></i>
+                  save <i class="fas fa-check-circle"></i>
                 </button>
               </div>
             </tab>
