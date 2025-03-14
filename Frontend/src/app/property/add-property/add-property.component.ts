@@ -29,7 +29,7 @@ export class AddPropertyComponent implements AfterViewInit {
   selectedBhk: number | null = null;
   possessionDate: Date | undefined;
   selectedPropertyType: string = '';
-  selectedFurnishingType: string = '';
+  selectedFurnishingType: string = '';  // The selected furnishing type
   selectedOption: string = '';
   selectedCity: string = ''; // City selection
   selectedBuiltArea: number | null = null; // Built Area selection
@@ -60,7 +60,7 @@ export class AddPropertyComponent implements AfterViewInit {
     SellRent: 0,
     Name: '',
     PType: '',
-    FType: '',
+    FType: '',  // Furnishing type in preview
     Price: null,
     BHK: 0,
     BuiltArea: 0,
@@ -77,10 +77,13 @@ export class AddPropertyComponent implements AfterViewInit {
   constructor(private location: Location) { }
 
   ngAfterViewInit() {
-    this.updateProgress(0);
+    setTimeout(() => {
+      this.updateProgress(0);
+    });
   }
+  
 
-  // Called when user types in the binding input or selects values
+  // Update preview method after each change
   updatePreview(): void {
     this.propertyview.Name = this.binding;
 
@@ -93,7 +96,7 @@ export class AddPropertyComponent implements AfterViewInit {
     }
 
     if (this.selectedFurnishingType) {
-      this.propertyview.FType = this.selectedFurnishingType;
+      this.propertyview.FType = this.selectedFurnishingType;  // Update furnishing type in the preview
     }
 
     if (this.selectedOption) {
@@ -110,6 +113,16 @@ export class AddPropertyComponent implements AfterViewInit {
 
     this.loading = false;
   }
+
+  // Method to update furnishing type
+  updateFurnishing(furnishing: string): void {
+    this.selectedFurnishingType = furnishing;
+    this.propertyview.FType = furnishing;  // Update propertyview's furnishing type
+    this.updatePreview();  // Ensure the preview is updated with the new furnishing type
+ 
+ 
+  }
+  
 
   onCityChange(city: string): void {
     this.selectedCity = city;
@@ -133,10 +146,13 @@ export class AddPropertyComponent implements AfterViewInit {
   }
 
   onBhkSelect(bhk: number): void {
-    this.selectedBhk = bhk;
-    console.log('Selected BHK:', bhk);
-    this.updatePreview();  // Update preview after BHK selection
+    if (this.propertyview.BHK !== bhk) {  // Prevent unnecessary updates
+      this.selectedBhk = bhk;
+      this.propertyview.BHK = bhk;  // Update BHK only if it's different
+      this.updatePreview();  // Ensure preview is updated only once
+    }
   }
+  
 
   onSubmit(Form: NgForm): void {
     if (Form.valid) {
