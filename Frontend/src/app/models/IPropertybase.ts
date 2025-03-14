@@ -9,6 +9,12 @@ export interface IPropertybase{
     BuiltArea:number;
     City:string;
     RTM:number;
+    Address:string;
     ImageUrl:string;
+    Landmark:string;
+    Floor:number;
+    TotalFloors:number;
+    Age:number;
+    Description:string;
     Type : string; 
 };

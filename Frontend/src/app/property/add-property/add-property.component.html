@@ -1,26 +1,33 @@
 <div class="row">
   <div class="col-8">
+    <!-- Main Card -->
     <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
       style="max-width: 700px; margin: auto; background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+
+      <!-- Card Header -->
       <div class="card-header text-white text-center fw-bold"
         style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
         🏠 List Your Property
       </div>
+
+      <!-- Progress Bar (indicates form steps) -->
       <div class="progress mt-3" style="height: 8px; border-radius: 50px;">
         <div class="progress-bar" role="progressbar" [style.width.%]="progress"
           style="background: linear-gradient(90deg, #28a745, #218838);"></div>
       </div>
 
+      <!-- Card Body (Form Content) -->
       <div class="card-body">
+         <!-- Form Start -->
         <form (ngSubmit)="onSubmit(Form)" #Form="ngForm" [class.shake]="!Form.valid">
           <tabset #formTabs class="modern-tabs">
             <!-- Basic Info Tab -->
-            <tab heading="Basic Info">
+            <tab heading="Basic Info" ngModelGroup="BasicInfo">
               <!-- Sell / Rent Selection in Basic Info Tab -->
               <div class="mb-2">
                 <br>
                 <p class="fw-semibold">I Want To:</p>
-                <div class="d-flex gap-2" btnradiogroup>
+                <div class="d-flex gap-2" btnradiogroup ngModel name="SellRent" required>
                   <label class="btn action-btn" btnradio="sell" role="button" name="SellRent"
                     [ngClass]="{'selected': selectedOption === 'sell', 'unselected': selectedOption !== 'sell'}"
                     (click)="selectedOption = 'sell'">
@@ -147,23 +154,37 @@
             <tab heading="Address">
               <div class="form-group col-12">
                 <label class="fw-semibold">📍 Address</label>
-                <input type="text" class="form-control" placeholder="Enter address">
+                <input type="text" class="form-control" placeholder="Enter address"[(ngModel)]="propertyview.Address" name="Address" #addressInput="ngModel" required>
+                <span *ngIf="addressInput.invalid && addressInput.touched" class="error-block text-danger">
+                    <span *ngIf="addressInput.errors?.['required']">Please provide an address.</span>
+                </span>
               </div>
 
               <div class="form-group col-12">
                 <label class="fw-semibold">🏠 Landmark</label>
-                <input type="text" class="form-control" placeholder="Enter nearby landmark">
-              </div>
+                <input type="text" class="form-control" placeholder="Enter nearby landmark"[(ngModel)]="propertyview.Landmark" name="Landmark" #landmarkInput="ngModel" required>
+                <span *ngIf="landmarkInput.invalid && landmarkInput.touched" class="error-block text-danger">
+                    <span *ngIf="landmarkInput.errors?.['required']">Please provide a landmark.</span>
+                </span>
+            </div>
 
               <div class="form-group col-12">
                 <label class="fw-semibold">🏢 Floor</label>
-                <input type="text" class="form-control" placeholder="Enter floor number">
-              </div>
+                <input type="text" class="form-control" placeholder="Enter floor number"[(ngModel)]="propertyview.Floor" name="Floor" #floorInput="ngModel" required min="1">
+                <span *ngIf="floorInput.invalid && floorInput.touched" class="error-block text-danger">
+                    <span *ngIf="floorInput.errors?.['required']">Please provide a floor number.</span>
+                    <span *ngIf="floorInput.errors?.['min']">Floor must be at least 1.</span>
+                </span>
+            </div>
 
               <div class="form-group col-12">
                 <label class="fw-semibold">🏢 Total Floors</label>
-                <input type="text" class="form-control" placeholder="Enter total number of floors">
-              </div>
+                <input type="text" class="form-control" placeholder="Enter total number of floors"[(ngModel)]="propertyview.TotalFloors" name="TotalFloors" #totalFloorsInput="ngModel" required min="1">
+                <span *ngIf="totalFloorsInput.invalid && totalFloorsInput.touched" class="error-block text-danger">
+                    <span *ngIf="totalFloorsInput.errors?.['required']">Please provide the total number of floors.</span>
+                    <span *ngIf="totalFloorsInput.errors?.['min']">Total floors must be at least 1.</span>
+                </span>
+            </div>
 
               <div class="text-center mt-4">
                 <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
@@ -198,16 +219,23 @@
               <div class="form-group">
                 <label for="possessionDate">📅 Possession Date</label>
                 <input type="text" class="form-control" bsDatepicker [(ngModel)]="possessionDate"
-                  placeholder="Datepicker" name="possessionDate" [bsConfig]="bsConfig" required />
-              </div>
+                  placeholder="Datepicker" name="possessionDate" [bsConfig]="bsConfig" required #possessionDateInput="ngModel" />
+                  <span *ngIf="possessionDateInput.invalid && possessionDateInput.touched" class="error-block text-danger">
+                    <span *ngIf="possessionDateInput.errors?.['required']">Please provide a possession date.</span>
+                </span>
+            </div>
 
 
 
               <!-- Age of Property -->
               <div class="form-group col-12">
                 <label class="fw-semibold">🏡 Age of Property</label>
-                <input type="text" class="form-control" placeholder="Enter age of the property in years">
-              </div>
+                <input type="text" class="form-control" placeholder="Enter age of the property in years"[(ngModel)]="propertyview.Age" name="Age" #ageInput="ngModel" required min="0">
+                <span *ngIf="ageInput.invalid && ageInput.touched" class="error-block text-danger">
+                    <span *ngIf="ageInput.errors?.['required']">Please provide the age of the property.</span>
+                    <span *ngIf="ageInput.errors?.['min']">Age must be a non-negative number.</span>
+                </span>
+            </div>
 
               <!-- Gated Community (Already exists) -->
               <div class="form-group col-12">
@@ -242,6 +270,7 @@
               <div class="form-group col-12">
                 <label class="fw-semibold">📝 Description (Optional)</label>
                 <textarea class="form-control"
+                [(ngModel)]="propertyview.Description" name="Description"
                   placeholder="Enter any additional description about the property"></textarea>
               </div>
 
@@ -261,7 +290,8 @@
             <tab heading="Photos">
               <div class="form-group col-12">
                 <label class="fw-semibold">📸 Upload Photos</label>
-                <input type="file" class="form-control" multiple>
+                <input type="file" class="form-control" multiple
+                (change)="onFileChange($event)" name="photos">
               </div>
               <div class="text-center mt-4">
                 <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"

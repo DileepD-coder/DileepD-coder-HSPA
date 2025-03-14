@@ -67,6 +67,12 @@ export class AddPropertyComponent implements AfterViewInit {
     City: '',
     RTM: 0,
     ImageUrl: '',
+    Address: '',
+    Landmark:'',
+    Floor:0,
+    TotalFloors:0,
+    Age:0,
+    Description:'',
     Type: ''
   };
 
@@ -134,6 +140,17 @@ export class AddPropertyComponent implements AfterViewInit {
     this.updatePreview();
   }
 
+  onFileChange(event: any) {
+    if (event.target.files && event.target.files.length) {
+      const files: FileList = event.target.files;
+      // Handle the selected files here
+      console.log('Selected files:', files);
+
+      // Example: store the files in a component property
+      // this.selectedFiles = files;
+    }
+  }
+
   submitForm(): void {
     console.log('Property Type:', this.selectedPropertyType);
     console.log('Furnishing Type:', this.selectedFurnishingType);
@@ -155,6 +172,7 @@ export class AddPropertyComponent implements AfterViewInit {
   
 
   onSubmit(Form: NgForm): void {
+    console.log('onSubmit called!');
     if (Form.valid) {
       console.log('Congrats! Form Submitted');
       console.log(this.addPropertyForm.value);
@@ -163,6 +181,7 @@ export class AddPropertyComponent implements AfterViewInit {
       console.log('Form is invalid');
     }
   }
+  
 
   mainEntrance: string = '';
 
