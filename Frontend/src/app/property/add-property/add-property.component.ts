@@ -31,8 +31,10 @@ export class AddPropertyComponent implements AfterViewInit {
   selectedPropertyType: string = '';
   selectedFurnishingType: string = '';
   selectedOption: string = '';
+  selectedCity: string = ''; // City selection
+  selectedBuiltArea: number | null = null; // Built Area selection
 
-  binding: string = '';  // Binding variable for "in Building/Socity/Project" field
+  binding: string = '';  // Binding variable for "in Building/Society/Project" field
 
   // Datepicker configuration
   bsConfig = {
@@ -78,35 +80,52 @@ export class AddPropertyComponent implements AfterViewInit {
     this.updateProgress(0);
   }
 
-  // Called when user types in the binding input
+  // Called when user types in the binding input or selects values
   updatePreview(): void {
     this.propertyview.Name = this.binding;
-  
-    if (this.binding.trim().toLowerCase() === 'sunny villa') {
-      // Update preview with all details
-      this.propertyview = {
-        Id: 1,
-        SellRent: 1,
-        Name: "Sunny Villa",
-        PType: "House",
-        FType: "Semi Furnished",
-        Price: 12000,
-        BHK: 3,
-        BuiltArea: 2000,
-        City: 'New York',
-        RTM: 1,
-        ImageUrl: "img1.jpg",
-        Type: "House"
-      };
-      this.loading = false;
-    } else {
-      this.loading = true;
+
+    if (this.selectedBhk) {
+      this.propertyview.BHK = this.selectedBhk;
     }
+
+    if (this.selectedPropertyType) {
+      this.propertyview.PType = this.selectedPropertyType;
+    }
+
+    if (this.selectedFurnishingType) {
+      this.propertyview.FType = this.selectedFurnishingType;
+    }
+
+    if (this.selectedOption) {
+      this.propertyview.RTM = this.selectedOption === 'Ready to Move' ? 1 : 0;
+    }
+
+    if (this.selectedCity) {
+      this.propertyview.City = this.selectedCity;
+    }
+
+    if (this.selectedBuiltArea !== null) {
+      this.propertyview.BuiltArea = this.selectedBuiltArea;
+    }
+
+    this.loading = false;
   }
-  
+
+  onCityChange(city: string): void {
+    this.selectedCity = city;
+    this.updatePreview();
+  }
+
+  onBuiltAreaChange(area: number): void {
+    this.selectedBuiltArea = area;
+    this.updatePreview();
+  }
+
   submitForm(): void {
     console.log('Property Type:', this.selectedPropertyType);
     console.log('Furnishing Type:', this.selectedFurnishingType);
+    console.log('City:', this.selectedCity);
+    console.log('Built Area:', this.selectedBuiltArea);
   }
 
   goBack(): void {
@@ -116,6 +135,7 @@ export class AddPropertyComponent implements AfterViewInit {
   onBhkSelect(bhk: number): void {
     this.selectedBhk = bhk;
     console.log('Selected BHK:', bhk);
+    this.updatePreview();  // Update preview after BHK selection
   }
 
   onSubmit(Form: NgForm): void {
@@ -123,7 +143,6 @@ export class AddPropertyComponent implements AfterViewInit {
       console.log('Congrats! Form Submitted');
       console.log(this.addPropertyForm.value);
       console.log('Possession Date:', this.possessionDate);
-      // Add backend submission logic here
     } else {
       console.log('Form is invalid');
     }

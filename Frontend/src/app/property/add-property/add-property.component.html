@@ -1,334 +1,310 @@
-
 <div class="row">
   <div class="col-8">
-<div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
-     style="max-width: 700px; margin: auto; background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-  <div class="card-header text-white text-center fw-bold"
-       style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
-    🏠 List Your Property
-  </div>
-  <div class="progress mt-3" style="height: 8px; border-radius: 50px;">
-    <div class="progress-bar" role="progressbar" [style.width.%]="progress"
-         style="background: linear-gradient(90deg, #28a745, #218838);"></div>
-  </div>
+    <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
+      style="max-width: 700px; margin: auto; background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+      <div class="card-header text-white text-center fw-bold"
+        style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
+        🏠 List Your Property
+      </div>
+      <div class="progress mt-3" style="height: 8px; border-radius: 50px;">
+        <div class="progress-bar" role="progressbar" [style.width.%]="progress"
+          style="background: linear-gradient(90deg, #28a745, #218838);"></div>
+      </div>
 
-  <div class="card-body">
-    <form (ngSubmit)="onSubmit(Form)" #Form="ngForm" [class.shake]="!Form.valid">
-      <tabset #formTabs class="modern-tabs">
-        <!-- Basic Info Tab -->
-        <tab heading="Basic Info">
-          <!-- Sell / Rent Selection in Basic Info Tab -->
-          <div class="mb-2">
-            <br>
-            <p class="fw-semibold">I Want To:</p>
-            <div class="d-flex gap-2" btnradiogroup>
-              <label class="btn action-btn" 
-                     btnradio="sell" role="button" name="SellRent" 
-                     [ngClass]="{'selected': selectedOption === 'sell', 'unselected': selectedOption !== 'sell'}"
-                     (click)="selectedOption = 'sell'">
-                Sell
-              </label>
-              <label class="btn action-btn" 
-                     btnradio="rent" role="button" name="SellRent" 
-                     [ngClass]="{'selected': selectedOption === 'rent', 'unselected': selectedOption !== 'rent'}"
-                     (click)="selectedOption = 'rent'">
-                Rent
-              </label>
-            </div>
-          </div>
+      <div class="card-body">
+        <form (ngSubmit)="onSubmit(Form)" #Form="ngForm" [class.shake]="!Form.valid">
+          <tabset #formTabs class="modern-tabs">
+            <!-- Basic Info Tab -->
+            <tab heading="Basic Info">
+              <!-- Sell / Rent Selection in Basic Info Tab -->
+              <div class="mb-2">
+                <br>
+                <p class="fw-semibold">I Want To:</p>
+                <div class="d-flex gap-2" btnradiogroup>
+                  <label class="btn action-btn" btnradio="sell" role="button" name="SellRent"
+                    [ngClass]="{'selected': selectedOption === 'sell', 'unselected': selectedOption !== 'sell'}"
+                    (click)="selectedOption = 'sell'">
+                    Sell
+                  </label>
+                  <label class="btn action-btn" btnradio="rent" role="button" name="SellRent"
+                    [ngClass]="{'selected': selectedOption === 'rent', 'unselected': selectedOption !== 'rent'}"
+                    (click)="selectedOption = 'rent'">
+                    Rent
+                  </label>
+                </div>
+              </div>
 
-          <div class="mb-2">
-            <p class="fw-semibold mb-2">BHK</p>
-            <div class="btn-group" role="group">
-              <button *ngFor="let bhk of [1, 2, 3, 4]"
-                      type="button"
-                      class="btn action-btn me-1"
-                      [class.selected]="selectedBhk === bhk"
-                      (click)="onBhkSelect(bhk)">
-                {{ bhk }}
-              </button>
-            </div>
-          </div>
+              <div class="mb-2">
+                <p class="fw-semibold mb-2">BHK</p>
+                <div class="btn-group" role="group" [(ngModel)]="propertyview.BHK" name="BHK">
+                  <button *ngFor="let bhk of [1, 2, 3, 4]" type="button" class="btn action-btn me-1"
+                    [class.selected]="propertyview.BHK === bhk" (click)="onBhkSelect(bhk)">
+                    {{ bhk }}
+                  </button>
+                </div>
+              </div>
 
-          <div class="form-group">
-            <label for="propertyType" class="fw-semibold">Property Type</label>
-            <select [(ngModel)]="propertyview.PType" name="propertyType" class="form-control" id="propertyType">
-              <option *ngFor="let type of propertyTypes" [value]="type">{{ type }}</option>
-            </select>
-          </div>
-          
-          
-          <div class="form-group">
-            <label for="furnishingType" class="fw-semibold mb-2">Furnishing Type</label>
-            <br>
-            <div class="btn-group" role="group" aria-label="Furnishing Types">
-              <button 
-                *ngFor="let furnish of furnishTypes" 
-                type="button" 
-                class="btn btn-outline-secondary"
-                [ngClass]="{'btn-success': selectedFurnishingType === furnish}" 
-                (click)="selectedFurnishingType = furnish" 
-                >
-                {{ furnish }}
-              </button>
-            </div>
-          </div>
-          <br>
-           <!-- Property Name (Binding Field) -->
-           <div class="form-group mb-3">
-            <label for="name" class="fw-semibold">🏡 in Building/Socity/Project</label>
-            <input type="text" id="name" class="form-control shadow-sm input-animate"
-                   #propName="ngModel" [(ngModel)]="binding" name="Name"
-                   required minlength="5" placeholder="Enter name"
-                   (ngModelChange)="updatePreview()">
-          
-            <span *ngIf="propName.invalid && propName.touched" class="error-block text-danger">
-              <span *ngIf="propName.errors?.['required']">Please Provide a Name</span>
-              <span *ngIf="propName.errors?.['minlength']">Name must be at least 5 characters long</span>
-            </span>
-          </div>
-          
+              <div class="form-group">
+                <label for="propertyType" class="fw-semibold">Property Type</label>
+                <select [(ngModel)]="propertyview.PType" name="propertyType" class="form-control" id="propertyType">
+                  <option *ngFor="let type of propertyTypes" [value]="type">{{ type }}</option>
+                </select>
+              </div>
 
-          <div class="form-group mb-3">
-            <label class="fw-semibold"> 🌆 City</label>
-            <div class="input-group">
-              <input type="text" class="form-control shadow-sm input-animate"
-                     placeholder="Enter City">
-            </div>
-          </div>
 
-          <div class="text-center mt-4">
-            <button  type="button"
-                    class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
-                    (click)="selectTab(1)"
-                    style="border-radius: 50px;">
-              Next <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </tab>
+              <div class="form-group">
+                <label for="furnishingType" class="fw-semibold mb-2">Furnishing Type</label>
+                <br>
+                <div class="btn-group" role="group" aria-label="Furnishing Types">
+                  <button *ngFor="let furnish of furnishTypes" type="button" class="btn btn-outline-secondary"
+                    [ngClass]="{'btn-success': selectedFurnishingType === furnish}"
+                    (click)="selectedFurnishingType = furnish">
+                    {{ furnish }}
+                  </button>
+                </div>
+              </div>
+              <br>
+              <div class="form-group mb-3">
+                <label for="name" class="fw-semibold">🏡 In Building/Society/Project</label>
+                <input type="text" id="name" class="form-control shadow-sm input-animate"
+                  [(ngModel)]="propertyview.Name" name="Name" #nameInput="ngModel" required minlength="5"
+                  placeholder="Enter name">
 
-        <!-- Pricing & Area Tab -->
-        <tab heading="Pricing & Area">
-          <div class="form-group col-12">
-            <label class="fw-semibold">💰 Price</label>
-            <div class="input-group">
-              <input type="number" class="form-control" name="Price" [(ngModel)]="propertyview.Price">
-              <span class="input-group-text">USD</span>
-            </div>
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">🔒 Security</label>
-            <div class="input-group">
-              <input type="text" class="form-control">
-              <span class="input-group-text">USD</span>
-            </div>
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">🛠️ Maintenance</label>
-            <div class="input-group">
-              <input type="text" class="form-control">
-              <span class="input-group-text">USD</span>
-            </div>
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">📏 Built Area</label>
-            <input type="text" class="form-control">
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">📐 Carpet Area</label>
-            <input type="text" class="form-control">
-          </div>
-          <div class="text-center mt-4">
-            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
-                    (click)="selectTab(0)"
-                    style="border-radius: 50px;">
-              <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
-                    (click)="selectTab(2)"
-                    style="border-radius: 50px;">
-              Next <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </tab>
+                <span *ngIf="nameInput.invalid && nameInput.touched" class="error-block text-danger">
+                  <span *ngIf="nameInput.errors?.['required']">Please Provide a Name</span>
+                  <span *ngIf="nameInput.errors?.['minlength']">Name must be at least 5 characters long</span>
+                </span>
+              </div>
 
-        <!-- Address Tab -->
-        <tab heading="Address">
-          <div class="form-group col-12">
-            <label class="fw-semibold">📍 Address</label>
-            <input type="text" class="form-control">
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">🏠 Landmark</label>
-            <input type="text" class="form-control">
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">🏢 Floor</label>
-            <input type="text" class="form-control" placeholder="Enter floor number">
-          </div>
-          <div class="form-group col-12">
-            <label class="fw-semibold">🏢 Total Floors</label>
-            <input type="text" class="form-control" placeholder="Enter total number of floors">
-          </div>
-          <div class="text-center mt-4">
-            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
-                    (click)="selectTab(1)"
-                    style="border-radius: 50px;">
-              <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
-                    (click)="selectTab(3)"
-                    style="border-radius: 50px;">
-              Next <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </tab>
+              <div class="form-group mb-3">
+                <label class="fw-semibold"> 🌆 City</label>
+                <div class="input-group">
+                  <input type="text" class="form-control shadow-sm input-animate" placeholder="Enter City"
+                    [(ngModel)]="selectedCity" name="City" (input)="updatePreview()">
+                </div>
+              </div>
 
-        <!-- Other Details Tab -->
-        <tab heading="Other Details">
-          <!-- Ready to Move (Already exists) -->
-          <div class="form-group col-12 mb-2" >
-            <label>✅ Ready to Move</label>
-            <div class="btn-group d-block">
-              <button type="button" class="btn btn-outline-success move-btn"
-                      [ngClass]="{'btn-success': readyToMove === 'yes', 'selected': readyToMove === 'yes'}"
-                      (click)="readyToMove = (readyToMove==='yes' ? '' : 'yes')">Yes</button>
-              <button type="button" class="btn btn-outline-danger move-btn"
-                      [ngClass]="{'btn-danger': readyToMove === 'no', 'selected': readyToMove === 'no'}"
-                      (click)="readyToMove = (readyToMove==='no' ? '' : 'no')">No</button>
-            </div>
-          </div>
-          
-          
-          <!-- Possession/Available Date (New) -->
-          <div class="form-group">
-            <label for="possessionDate">📅 Possession Date</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              bsDatepicker 
-              [(ngModel)]="possessionDate" 
-              placeholder="Datepicker"
-              name="possessionDate"
-              [bsConfig]="bsConfig"
-              required
-            />
-          </div>
-          
-            
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                  (click)="selectTab(1)" style="border-radius: 50px;">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </tab>
 
-          <!-- Age of Property -->
-          <div class="form-group col-12">
-            <label class="fw-semibold">🏡 Age of Property</label>
-            <input type="text" class="form-control" placeholder="Enter age of the property in years">
-          </div>
+            <!-- Pricing & Area Tab -->
+            <tab heading="Pricing & Area">
+              <div class="form-group col-12">
+                <label class="fw-semibold">💰 Price</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" name="Price" [(ngModel)]="propertyview.Price"
+                    placeholder="Enter price">
+                  <span class="input-group-text">USD</span>
+                </div>
+              </div>
 
-          <!-- Gated Community (Already exists) -->
-          <div class="form-group col-12">
-            <label class="fw-semibold">🏘️ Gated Community</label>
-            <div class="btn-group d-block">
-              <button type="button" class="btn btn-outline-success gated-btn"
-                      [ngClass]="{'btn-success': gatedCommunity === 'yes', 'selected': gatedCommunity === 'yes'}"
-                      (click)="gatedCommunity = (gatedCommunity==='yes' ? '' : 'yes')">Yes</button>
-              <button type="button" class="btn btn-outline-danger gated-btn"
-                      [ngClass]="{'btn-danger': gatedCommunity === 'no', 'selected': gatedCommunity === 'no'}"
-                      (click)="gatedCommunity = (gatedCommunity==='no' ? '' : 'no')">No</button>
-            </div>
-          </div>
+              <div class="form-group col-12">
+                <label class="fw-semibold">🔒 Security</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" placeholder="Enter security amount">
+                  <span class="input-group-text">USD</span>
+                </div>
+              </div>
 
-          <!-- Main Entrance (New: Four Buttons) -->
-          <div class="form-group col-12 mb-2">
-            <label class="fw-semibold">🚪 Main Entrance</label>
-            <br>
-            <div class="btn-group" role="group" aria-label="Main Entrance">
-              <button type="button" class="btn btn-outline-secondary"
-                      [ngClass]="{'selected': mainEntrance === 'East'}"
-                      (click)="mainEntrance = 'East'">East</button>
-              <button type="button" class="btn btn-outline-secondary"
-                      [ngClass]="{'selected': mainEntrance === 'West'}"
-                      (click)="mainEntrance = 'West'">West</button>
-              <button type="button" class="btn btn-outline-secondary"
-                      [ngClass]="{'selected': mainEntrance === 'North'}"
-                      (click)="mainEntrance = 'North'">North</button>
-              <button type="button" class="btn btn-outline-secondary"
-                      [ngClass]="{'selected': mainEntrance === 'South'}"
-                      (click)="mainEntrance = 'South'">South</button>
-            </div>
-          </div>
+              <div class="form-group col-12">
+                <label class="fw-semibold">🛠️ Maintenance</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" placeholder="Enter maintenance fee">
+                  <span class="input-group-text">USD</span>
+                </div>
+              </div>
 
-          <!-- Description -->
-          <div class="form-group col-12">
-            <label class="fw-semibold">📝 Description (Optional)</label>
-            <textarea class="form-control" placeholder="Enter any additional description about the property"></textarea>
-          </div>
+              <div class="form-group col-12">
+                <label class="fw-semibold">📏 Built Area</label>
+                <input type="number" class="form-control" [(ngModel)]="selectedBuiltArea" name="BuiltArea"
+                  (input)="updatePreview()" min="0" placeholder="Enter built area in sq. ft.">
+              </div>
 
-          <div class="text-center mt-4">
-            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
-                    (click)="selectTab(2)"
-                    style="border-radius: 50px;">
-              <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
-                    (click)="selectTab(4)"
-                    style="border-radius: 50px;">
-              Next <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </tab>
+              <div class="form-group col-12">
+                <label class="fw-semibold">📐 Carpet Area</label>
+                <input type="number" class="form-control" placeholder="Enter carpet area in sq. ft.">
+              </div>
 
-        <!-- Photos Tab -->
-        <tab heading="Photos">
-          <div class="form-group col-12">
-            <label class="fw-semibold">📸 Upload Photos</label>
-            <input type="file" class="form-control" multiple>
-          </div>
-          <div class="text-center mt-4">
-            <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
-                    (click)="selectTab(3)"
-                    style="border-radius: 50px;">
-              <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
-                    style="border-radius: 50px;">
-              Submit <i class="fas fa-check-circle"></i>
-            </button>
-          </div>
-        </tab>
-      </tabset>
-    </form>
-  </div>
-</div>
-</div>
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                  (click)="selectTab(0)" style="border-radius: 50px;">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                  (click)="selectTab(2)" style="border-radius: 50px;">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </tab>
 
-<!-- Preview Property Card (Right Column) -->
-<div class="col-4">
-  <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
-       style="background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-    <div class="card-header text-white text-center fw-bold"
-         style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
-      <p class="extra-bold-large">Your Property Preview</p>
+            <!-- Address Tab -->
+            <tab heading="Address">
+              <div class="form-group col-12">
+                <label class="fw-semibold">📍 Address</label>
+                <input type="text" class="form-control" placeholder="Enter address">
+              </div>
+
+              <div class="form-group col-12">
+                <label class="fw-semibold">🏠 Landmark</label>
+                <input type="text" class="form-control" placeholder="Enter nearby landmark">
+              </div>
+
+              <div class="form-group col-12">
+                <label class="fw-semibold">🏢 Floor</label>
+                <input type="text" class="form-control" placeholder="Enter floor number">
+              </div>
+
+              <div class="form-group col-12">
+                <label class="fw-semibold">🏢 Total Floors</label>
+                <input type="text" class="form-control" placeholder="Enter total number of floors">
+              </div>
+
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                  (click)="selectTab(1)" style="border-radius: 50px;">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                  (click)="selectTab(3)" style="border-radius: 50px;">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </tab>
+
+
+            <!-- Other Details Tab -->
+            <tab heading="Other Details">
+              <!-- Ready to Move (Already exists) -->
+              <div class="form-group col-12 mb-2">
+                <label>✅ Ready to Move</label>
+                <div class="btn-group d-block">
+                  <button type="button" class="btn btn-outline-success move-btn"
+                    [ngClass]="{'btn-success': readyToMove === 'yes', 'selected': readyToMove === 'yes'}"
+                    (click)="readyToMove = (readyToMove==='yes' ? '' : 'yes')">Yes</button>
+                  <button type="button" class="btn btn-outline-danger move-btn"
+                    [ngClass]="{'btn-danger': readyToMove === 'no', 'selected': readyToMove === 'no'}"
+                    (click)="readyToMove = (readyToMove==='no' ? '' : 'no')">No</button>
+                </div>
+              </div>
+
+
+              <!-- Possession/Available Date (New) -->
+              <div class="form-group">
+                <label for="possessionDate">📅 Possession Date</label>
+                <input type="text" class="form-control" bsDatepicker [(ngModel)]="possessionDate"
+                  placeholder="Datepicker" name="possessionDate" [bsConfig]="bsConfig" required />
+              </div>
+
+
+
+              <!-- Age of Property -->
+              <div class="form-group col-12">
+                <label class="fw-semibold">🏡 Age of Property</label>
+                <input type="text" class="form-control" placeholder="Enter age of the property in years">
+              </div>
+
+              <!-- Gated Community (Already exists) -->
+              <div class="form-group col-12">
+                <label class="fw-semibold">🏘️ Gated Community</label>
+                <div class="btn-group d-block">
+                  <button type="button" class="btn btn-outline-success gated-btn"
+                    [ngClass]="{'btn-success': gatedCommunity === 'yes', 'selected': gatedCommunity === 'yes'}"
+                    (click)="gatedCommunity = (gatedCommunity==='yes' ? '' : 'yes')">Yes</button>
+                  <button type="button" class="btn btn-outline-danger gated-btn"
+                    [ngClass]="{'btn-danger': gatedCommunity === 'no', 'selected': gatedCommunity === 'no'}"
+                    (click)="gatedCommunity = (gatedCommunity==='no' ? '' : 'no')">No</button>
+                </div>
+              </div>
+
+              <!-- Main Entrance (New: Four Buttons) -->
+              <div class="form-group col-12 mb-2">
+                <label class="fw-semibold">🚪 Main Entrance</label>
+                <br>
+                <div class="btn-group" role="group" aria-label="Main Entrance">
+                  <button type="button" class="btn btn-outline-secondary"
+                    [ngClass]="{'selected': mainEntrance === 'East'}" (click)="mainEntrance = 'East'">East</button>
+                  <button type="button" class="btn btn-outline-secondary"
+                    [ngClass]="{'selected': mainEntrance === 'West'}" (click)="mainEntrance = 'West'">West</button>
+                  <button type="button" class="btn btn-outline-secondary"
+                    [ngClass]="{'selected': mainEntrance === 'North'}" (click)="mainEntrance = 'North'">North</button>
+                  <button type="button" class="btn btn-outline-secondary"
+                    [ngClass]="{'selected': mainEntrance === 'South'}" (click)="mainEntrance = 'South'">South</button>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group col-12">
+                <label class="fw-semibold">📝 Description (Optional)</label>
+                <textarea class="form-control"
+                  placeholder="Enter any additional description about the property"></textarea>
+              </div>
+
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                  (click)="selectTab(2)" style="border-radius: 50px;">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
+                  (click)="selectTab(4)" style="border-radius: 50px;">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </tab>
+
+            <!-- Photos Tab -->
+            <tab heading="Photos">
+              <div class="form-group col-12">
+                <label class="fw-semibold">📸 Upload Photos</label>
+                <input type="file" class="form-control" multiple>
+              </div>
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-secondary shadow-sm px-4 py-2 btn-animate back me-3"
+                  (click)="selectTab(3)" style="border-radius: 50px;">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
+                  style="border-radius: 50px;">
+                  Submit <i class="fas fa-check-circle"></i>
+                </button>
+              </div>
+            </tab>
+          </tabset>
+        </form>
+      </div>
     </div>
-    <div class="card-body">
-      <!-- Show spinner if loading -->
-      <div *ngIf="loading" class="spinner-container">
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading...</span>
+  </div>
+
+  <!-- Preview Property Card (Right Column) -->
+  <div class="col-4">
+    <div class="card shadow-lg rounded-lg border-0 p-5 animate-fade-in"
+      style="background: #f8f9fa; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+      <div class="card-header text-white text-center fw-bold"
+        style="background: linear-gradient(135deg, #28a745, #218838); border-radius: 5px 5px 0 0; font-size: 20px;">
+        <p class="extra-bold-large">Your Property Preview</p>
+      </div>
+      <div class="card-body">
+        <!-- Show spinner if loading -->
+        <div *ngIf="loading" class="spinner-container">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
       </div>
-  </div>
       <!-- Show Property Card if not loading and a match is found -->
       <div *ngIf="!loading && propertyview">
         <app-property-card [property]="propertyview" [hideIcons]="true"></app-property-card>
       </div>
-  
+
       <!-- Show message if not loading and no match is found -->
       <div *ngIf="!loading && !propertyview" class="text-center">
         <p>No matching property found. Please check your details.</p>
       </div>
     </div>
-  
-</div>
-</div>
 
-
- 
+  </div>
+</div>
