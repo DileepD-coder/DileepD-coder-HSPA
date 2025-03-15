@@ -27,20 +27,23 @@
               <div class="mb-2">
                 <br>
                 <p class="fw-semibold">I Want To:</p>
-                <div class="d-flex gap-2" btnradiogroup ngModel name="SellRent" required>
-                  <label class="btn action-btn" btnradio="sell" role="button" name="SellRent"
-                    [ngClass]="{'selected': selectedOption === 'sell', 'unselected': selectedOption !== 'sell'}"
-                    (click)="selectedOption = 'sell'">
+                <div class="d-flex gap-2">
+                  <!-- Sell button -->
+                  <button type="button" class="btn action-btn"
+                    [ngClass]="{'selected': propertyview.SellRent === 1, 'unselected': propertyview.SellRent !== 1}"
+                    (click)="propertyview.SellRent = 1">
                     Sell
-                  </label>
-                  <label class="btn action-btn" btnradio="rent" role="button" name="SellRent"
-                    [ngClass]="{'selected': selectedOption === 'rent', 'unselected': selectedOption !== 'rent'}"
-                    (click)="selectedOption = 'rent'">
+                  </button>
+                  <!-- Rent button -->
+                  <button type="button" class="btn action-btn"
+                    [ngClass]="{'selected': propertyview.SellRent === 2, 'unselected': propertyview.SellRent !== 2}"
+                    (click)="propertyview.SellRent = 2">
                     Rent
-                  </label>
+                  </button>
                 </div>
               </div>
-
+              
+              
               <div class="mb-2">
                 <p class="fw-semibold mb-2">BHK</p>
                 <div class="btn-group" role="group">
@@ -94,7 +97,7 @@
 
               <div class="text-center mt-4">
                 <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
-                  (click)="selectTab(1)"  [disabled]="!BasicInfo.valid" style="border-radius: 50px;">
+                  (click)="selectTab(1)"  [disabled]="!selectedOption || !propertyview.Name || propertyview.Name.length < 5" style="border-radius: 50px;">
                   Next <i class="fas fa-arrow-right"></i>
                 </button>
               </div>
@@ -298,7 +301,7 @@
                   (click)="selectTab(3)" style="border-radius: 50px;">
                   <i class="fas fa-arrow-left"></i> Back
                 </button>
-                <button type="save" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
+                <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
                   style="border-radius: 50px;">
                   save <i class="fas fa-check-circle"></i>
                 </button>

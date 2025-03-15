@@ -7,6 +7,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { IPropertybase } from '../../models/IPropertybase';
+import { AlertfyService } from '../../Services/alertfy.service';  // Ensure correct path with case sensitivity
 
 @Component({
   selector: 'app-add-property',
@@ -57,7 +58,7 @@ export class AddPropertyComponent implements AfterViewInit {
   // The preview property – initialize with default values so it always conforms to IPropertybase.
   propertyview: IPropertybase = {
     Id: 0,
-    SellRent: 0,
+    SellRent: null,
     Name: '',
     PType: '',
     FType: '',  // Furnishing type in preview
@@ -80,14 +81,13 @@ export class AddPropertyComponent implements AfterViewInit {
   loading: boolean = false;
   hideIcons: boolean = true;
 
-  constructor(private location: Location) { }
+  constructor(private location: Location, private alertify: AlertfyService) { }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.updateProgress(0);
-    });
+    if (!this.addPropertyForm) {
+      console.warn('NgForm reference is not available in ngAfterViewInit');
+    }
   }
-  
 
   // Update preview method after each change
   updatePreview(): void {
@@ -125,10 +125,7 @@ export class AddPropertyComponent implements AfterViewInit {
     this.selectedFurnishingType = furnishing;
     this.propertyview.FType = furnishing;  // Update propertyview's furnishing type
     this.updatePreview();  // Ensure the preview is updated with the new furnishing type
- 
- 
   }
-  
 
   onCityChange(city: string): void {
     this.selectedCity = city;
@@ -145,17 +142,7 @@ export class AddPropertyComponent implements AfterViewInit {
       const files: FileList = event.target.files;
       // Handle the selected files here
       console.log('Selected files:', files);
-
-      // Example: store the files in a component property
-      // this.selectedFiles = files;
     }
-  }
-
-  submitForm(): void {
-    console.log('Property Type:', this.selectedPropertyType);
-    console.log('Furnishing Type:', this.selectedFurnishingType);
-    console.log('City:', this.selectedCity);
-    console.log('Built Area:', this.selectedBuiltArea);
   }
 
   goBack(): void {
@@ -169,19 +156,39 @@ export class AddPropertyComponent implements AfterViewInit {
       this.updatePreview();  // Ensure preview is updated only once
     }
   }
-  
 
   onSubmit(Form: NgForm): void {
     console.log('onSubmit called!');
-    if (Form.valid) {
-      console.log('Congrats! Form Submitted');
-      console.log(this.addPropertyForm.value);
-      console.log('Possession Date:', this.possessionDate);
-    } else {
-      console.log('Form is invalid');
+    console.log('SellRent:', this.propertyview.SellRent); 
+    if (!Form) {
+      console.error('Form reference is undefined.');
+      return;
     }
+
+    if (Form.invalid) {
+      console.log('Form is invalid. Please check required fields.', Form.controls);
+      this.alertify.error('Please fill out all required fields!');
+      return;
+    }
+
+    console.log('Congrats! Form Submitted');
+    console.log('Form Data:', Form.value);
+    console.log('Property Type:', this.selectedPropertyType);
+    console.log('Furnishing Type:', this.selectedFurnishingType);
+    console.log('City:', this.selectedCity);
+    console.log('Built Area:', this.selectedBuiltArea);
+
+    if (Form.value.BasicInfo?.SellRent !== undefined) {
+      console.log('SellRent:', Form.value.BasicInfo.SellRent);
+    } else {
+      console.warn('SellRent is not defined in the form model.');
+    }
+
+    console.log('Possession Date:', this.possessionDate);
+
+    // Display success notification on successful form submission
+    this.alertify.success('Property added successfully!');
   }
-  
 
   mainEntrance: string = '';
 
