@@ -3,12 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { IPropertybase } from '../../models/IPropertybase';
 import { AlertfyService } from '../../Services/alertfy.service';
+import { Property } from '../../models/property';
+import { HousingService } from '../../Services/housing.service';
 
 @Component({
   selector: 'app-add-property',
@@ -30,12 +33,13 @@ export class AddPropertyComponent implements AfterViewInit {
   @ViewChild('formTabs') formTabs!: TabsetComponent;
 
   addPropertyForm!: FormGroup;
+  propertySubmitted: Property = new Property();
   possessionDate: Date | undefined;
-  
+
   // Fields for List Property card
   propertyTypes: string[] = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment', 'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
   furnishTypes: string[] = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
-  
+
   // Datepicker configuration
   bsConfig = {
     dateInputFormat: 'DD-MM-YYYY',
@@ -73,7 +77,9 @@ export class AddPropertyComponent implements AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private location: Location,
-    private alertify: AlertfyService
+    private alertify: AlertfyService,
+    private housingService: HousingService,
+    private router: Router
   ) {
     this.initializeForm();
   }
@@ -90,8 +96,6 @@ export class AddPropertyComponent implements AfterViewInit {
       }),
       pricingInfo: this.fb.group({
         Price: [null, [Validators.required, Validators.min(0)]],
-        Security: [null, [Validators.required, Validators.min(0)]],
-        Maintenance: [null, [Validators.required, Validators.min(0)]],
         BuiltArea: [null, [Validators.required, Validators.min(0)]],
         CarpetArea: [null, [Validators.required, Validators.min(0)]]
       }),
@@ -104,21 +108,29 @@ export class AddPropertyComponent implements AfterViewInit {
       otherInfo: this.fb.group({
         RTM: [null, Validators.required],
         PossessionDate: [null],
-        Age: [null, [Validators.required, Validators.min(0)]],
+        Age: [null],
         GatedCommunity: [null, Validators.required],
         MainEntrance: ['', Validators.required],
         Description: ['']
       })
     });
 
-    // Add conditional validation for possession date
+    // Add conditional validation for Age and PossessionDate based on RTM
     this.addPropertyForm.get('otherInfo.RTM')?.valueChanges.subscribe(value => {
+      const ageControl = this.addPropertyForm.get('otherInfo.Age');
       const possessionDateControl = this.addPropertyForm.get('otherInfo.PossessionDate');
-      if (value === 'no') {
-        possessionDateControl?.setValidators([Validators.required]);
-      } else {
+      
+      if (value === 'yes') {
+        ageControl?.setValidators([Validators.required, Validators.min(0)]);
         possessionDateControl?.clearValidators();
+        possessionDateControl?.setValue(null);
+      } else if (value === 'no') {
+        possessionDateControl?.setValidators([Validators.required]);
+        ageControl?.clearValidators();
+        ageControl?.setValue(null);
       }
+      
+      ageControl?.updateValueAndValidity();
       possessionDateControl?.updateValueAndValidity();
     });
   }
@@ -154,79 +166,77 @@ export class AddPropertyComponent implements AfterViewInit {
     this.loading = false;
   }
 
-  onSubmit(): void {
-    // Log validation status of each form group
-    const basicInfo = this.addPropertyForm.get('basicInfo') as FormGroup;
-    const pricingInfo = this.addPropertyForm.get('pricingInfo') as FormGroup;
-    const addressInfo = this.addPropertyForm.get('addressInfo') as FormGroup;
-    const otherInfo = this.addPropertyForm.get('otherInfo') as FormGroup;
+  mapProperty(): void {
+    const basicInfo = this.addPropertyForm.get('basicInfo')?.value;
+    const pricingInfo = this.addPropertyForm.get('pricingInfo')?.value;
+    const addressInfo = this.addPropertyForm.get('addressInfo')?.value;
+    const otherInfo = this.addPropertyForm.get('otherInfo')?.value;
 
-    console.log('Basic Info validation:', {
-      valid: basicInfo?.valid,
-      errors: basicInfo?.errors,
-      controls: Object.keys(basicInfo?.controls || {}).map(key => ({
-        key,
-        valid: basicInfo?.get(key)?.valid,
-        errors: basicInfo?.get(key)?.errors
-      }))
-    });
-
-    console.log('Pricing Info validation:', {
-      valid: pricingInfo?.valid,
-      errors: pricingInfo?.errors,
-      controls: Object.keys(pricingInfo?.controls || {}).map(key => ({
-        key,
-        valid: pricingInfo?.get(key)?.valid,
-        errors: pricingInfo?.get(key)?.errors
-      }))
-    });
-
-    console.log('Address Info validation:', {
-      valid: addressInfo?.valid,
-      errors: addressInfo?.errors,
-      controls: Object.keys(addressInfo?.controls || {}).map(key => ({
-        key,
-        valid: addressInfo?.get(key)?.valid,
-        errors: addressInfo?.get(key)?.errors
-      }))
-    });
-
-    console.log('Other Info validation:', {
-      valid: otherInfo?.valid,
-      errors: otherInfo?.errors,
-      controls: Object.keys(otherInfo?.controls || {}).map(key => ({
-        key,
-        valid: otherInfo?.get(key)?.valid,
-        errors: otherInfo?.get(key)?.errors
-      }))
-    });
-
-    if (this.addPropertyForm.invalid) {
-      this.alertify.error('Please fill out all required fields correctly!');
-      this.markFormGroupTouched(this.addPropertyForm);
-      return;
-    }
-
-    console.log('Form Data:', this.addPropertyForm.value);
-    this.alertify.success('Property added successfully!');
+    this.propertySubmitted.Id = 0;
+    this.propertySubmitted.SellRent = +basicInfo.SellRent;
+    this.propertySubmitted.BHK = +basicInfo.BHK;
+    this.propertySubmitted.PType = basicInfo.PType;
+    this.propertySubmitted.Name = basicInfo.Name;
+    this.propertySubmitted.City = basicInfo.City;
+    this.propertySubmitted.FType = basicInfo.FType;
+    this.propertySubmitted.Price = +pricingInfo.Price;
+    this.propertySubmitted.BuiltArea = +pricingInfo.BuiltArea;
+    this.propertySubmitted.CarpetArea = +pricingInfo.CarpetArea;
+    this.propertySubmitted.Floor = +addressInfo.Floor;
+    this.propertySubmitted.TotalFloors = +addressInfo.TotalFloors;
+    this.propertySubmitted.Address = addressInfo.Address;
+    this.propertySubmitted.Landmark = addressInfo.Landmark;
+    this.propertySubmitted.RTM = otherInfo.RTM === 'yes' ? 1 : 0;
+    this.propertySubmitted.Age = otherInfo.RTM === 'yes' ? +otherInfo.Age : 0;
+    this.propertySubmitted.PossessionDate = otherInfo.RTM === 'no' ? otherInfo.PossessionDate : null;
+    this.propertySubmitted.GatedCommunity = otherInfo.GatedCommunity;
+    this.propertySubmitted.MainEntrance = otherInfo.MainEntrance;
+    this.propertySubmitted.Description = otherInfo.Description;
+    this.propertySubmitted.PostedOn = new Date().toString();
   }
 
-  selectTab(tabId: number): void {
-    // Only validate the first tab (Basic Info)
-    if (tabId === 1) {  // When moving from first to second tab
-      const basicInfoGroup = this.addPropertyForm.get('basicInfo') as FormGroup;
-      
-      if (basicInfoGroup && basicInfoGroup.invalid) {
-        Object.values(basicInfoGroup.controls).forEach(control => {
-          control.markAsTouched();
-          control.updateValueAndValidity();
-        });
-        this.alertify.error('Please complete all required fields in Basic Info.');
-        return;
+  onSubmit() {
+    if (this.addPropertyForm.invalid) {
+      // Find the first invalid group
+      const groups = ['basicInfo', 'pricingInfo', 'addressInfo', 'otherInfo'];
+      for (let i = 0; i < groups.length; i++) {
+        const group = this.addPropertyForm.get(groups[i]);
+        if (group?.invalid) {
+          // Switch to the tab with invalid fields
+          this.selectTab(i);
+          this.markFormGroupTouched(group as FormGroup);
+          this.alertify.error('Please complete all required fields in ' + groups[i].replace('Info', ''));
+          return;
+        }
       }
     }
     
-    // Allow navigation for all other tabs and update progress
+    // Map form values to property object
+    this.mapProperty();
+    
+    // Add property using housing service
+    this.housingService.addProperty(this.propertySubmitted);
+    
+    console.log('Property to submit:', this.propertySubmitted);
+    this.alertify.success('Congrats, your property has been listed!');
+    
+    // Navigate to the appropriate page based on SellRent value
+    const sellRent = this.propertySubmitted.SellRent;
+    if (sellRent === 1) {
+      this.router.navigate(['/sell-property']);
+    } else {
+      this.router.navigate(['/rent-property']);
+    }
+  }
+
+  selectTab(tabId: number): void {
+    const currentGroup = this.getFormGroupForTab(this.formTabs?.tabs.findIndex(t => t.active) ?? 0);
+    if (currentGroup && currentGroup.invalid) {
+      this.markFormGroupTouched(currentGroup);
+      this.alertify.error('Please complete all required fields in the current tab.');
+      return;
+    }
+    
     if (this.formTabs?.tabs[tabId]) {
       this.formTabs.tabs[tabId].active = true;
       this.updateProgress(tabId);

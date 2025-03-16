@@ -114,7 +114,6 @@
               <div class="text-center mt-4">
                 <button type="button" class="btn btn-success shadow-sm px-4 py-2 btn-animate next"
                   (click)="selectTab(1)"
-                  [disabled]="addPropertyForm.get('basicInfo')?.invalid"
                   style="border-radius: 50px;">
                   Next <i class="fas fa-arrow-right"></i>
                 </button>
@@ -137,42 +136,6 @@
                   </div>
                   <div *ngIf="addPropertyForm.get('pricingInfo.Price')?.errors?.['min']">
                     Price cannot be negative
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-12">
-                <label class="fw-semibold">🔒 Security</label>
-                <div class="input-group">
-                  <input type="number" class="form-control" formControlName="Security"
-                    placeholder="Enter security amount">
-                  <span class="input-group-text">USD</span>
-                </div>
-                <div *ngIf="addPropertyForm.get('pricingInfo.Security')?.touched && addPropertyForm.get('pricingInfo.Security')?.errors"
-                  class="error-block">
-                  <div *ngIf="addPropertyForm.get('pricingInfo.Security')?.errors?.['required']">
-                    Please provide a security amount
-                  </div>
-                  <div *ngIf="addPropertyForm.get('pricingInfo.Security')?.errors?.['min']">
-                    Security amount cannot be negative
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-12">
-                <label class="fw-semibold">🛠️ Maintenance</label>
-                <div class="input-group">
-                  <input type="number" class="form-control" formControlName="Maintenance"
-                    placeholder="Enter maintenance fee">
-                  <span class="input-group-text">USD</span>
-                </div>
-                <div *ngIf="addPropertyForm.get('pricingInfo.Maintenance')?.touched && addPropertyForm.get('pricingInfo.Maintenance')?.errors"
-                  class="error-block">
-                  <div *ngIf="addPropertyForm.get('pricingInfo.Maintenance')?.errors?.['required']">
-                    Please provide a maintenance fee
-                  </div>
-                  <div *ngIf="addPropertyForm.get('pricingInfo.Maintenance')?.errors?.['min']">
-                    Maintenance fee cannot be negative
                   </div>
                 </div>
               </div>
@@ -295,21 +258,8 @@
                 </div>
               </div>
 
-              <!-- Possession Date -->
-              <div class="form-group">
-                <label for="possessionDate">📅 Possession Date</label>
-                <input type="text" class="form-control" bsDatepicker
-                  formControlName="PossessionDate"
-                  [bsConfig]="bsConfig"
-                  placeholder="Select possession date">
-                <div *ngIf="addPropertyForm.get('otherInfo.PossessionDate')?.touched && addPropertyForm.get('otherInfo.PossessionDate')?.invalid"
-                  class="error-block">
-                  Please provide a possession date
-                </div>
-              </div>
-
-              <!-- Age of Property -->
-              <div class="form-group col-12">
+              <!-- Age of Property - Show only if RTM is Yes -->
+              <div class="form-group col-12" *ngIf="addPropertyForm.get('otherInfo.RTM')?.value === 'yes'">
                 <label class="fw-semibold">🏡 Age of Property</label>
                 <input type="number" class="form-control" formControlName="Age"
                   placeholder="Enter age of the property in years">
@@ -321,6 +271,19 @@
                   <div *ngIf="addPropertyForm.get('otherInfo.Age')?.errors?.['min']">
                     Age cannot be negative
                   </div>
+                </div>
+              </div>
+
+              <!-- Possession Date - Show only if RTM is No -->
+              <div class="form-group" *ngIf="addPropertyForm.get('otherInfo.RTM')?.value === 'no'">
+                <label for="possessionDate">📅 Possession Date</label>
+                <input type="text" class="form-control" bsDatepicker
+                  formControlName="PossessionDate"
+                  [bsConfig]="bsConfig"
+                  placeholder="Select possession date">
+                <div *ngIf="addPropertyForm.get('otherInfo.PossessionDate')?.touched && addPropertyForm.get('otherInfo.PossessionDate')?.invalid"
+                  class="error-block">
+                  Please provide a possession date
                 </div>
               </div>
 
@@ -390,10 +353,6 @@
                   <i class="fas fa-arrow-left"></i> Back
                 </button>
                 <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
-                  [disabled]="!addPropertyForm.get('basicInfo')?.valid || 
-                             !addPropertyForm.get('pricingInfo')?.valid || 
-                             !addPropertyForm.get('addressInfo')?.valid || 
-                             !addPropertyForm.get('otherInfo')?.valid"
                   style="border-radius: 50px;">
                   Save <i class="fas fa-check-circle"></i>
                 </button>

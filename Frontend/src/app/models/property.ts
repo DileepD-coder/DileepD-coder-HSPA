@@ -31,4 +31,3 @@ export class Property implements IPropertybase {
     PostedOn?: string;
     PostedBy?: number;
 }
-property= name Property();
