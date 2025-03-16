@@ -186,23 +186,42 @@ button:hover {
    Next and Back Button Overrides
    ------------------------------------------ */
 
-/* Next Button: Light green default, full green on hover */
-button.btn-animate.next {
-  border-radius: 50px;
-  padding: 5px 20px;  /* Adjusted padding */
-  font-weight: 600;
-  font-size: 15px;
-  transition: all 0.3s ease-in-out;
-  border: 2px solid #28a745 !important;  /* Light Green border */
-  background-color: #d6f7d1 !important;      /* Light Green background */
-  color: #28a745 !important;                 /* Light Green text */
+/* Next Button Styles - High Specificity Override */
+button.btn.btn-animate.next,
+.tab-panel button.btn.btn-animate.next,
+tab[heading="Basic Info"] button.btn.btn-animate.next,
+tab[heading="Pricing"] button.btn.btn-animate.next,
+tab[heading="Address"] button.btn.btn-animate.next,
+tab[heading="Other Details"] button.btn.btn-animate.next {
+  border-radius: 50px !important;
+  padding: 5px 20px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.3s ease-in-out !important;
+  border: 2px solid #28a745 !important;
+  background-color: #d6f7d1 !important;
+  color: #28a745 !important;
+  cursor: pointer !important;
+  margin: 10px 5px !important;
 }
 
-button.btn-animate.next:hover {
-  background-color: #28a745 !important;  /* Full Green background on hover */
-  border-color: #218838 !important;       /* Dark Green border on hover */
-  color: white !important;                /* White text on hover */
-  cursor: pointer;
+/* Next Button Hover State - High Specificity Override */
+button.btn.btn-animate.next:hover,
+.tab-panel button.btn.btn-animate.next:hover,
+tab[heading="Basic Info"] button.btn.btn-animate.next:hover,
+tab[heading="Pricing"] button.btn.btn-animate.next:hover,
+tab[heading="Address"] button.btn.btn-animate.next:hover,
+tab[heading="Other Details"] button.btn.btn-animate.next:hover {
+  background-color: #28a745 !important;
+  border-color: #218838 !important;
+  color: white !important;
+}
+
+/* Remove any tab-specific overrides */
+tab[heading="Basic Info"] .btn-animate.next {
+  /* Reset any specific styles */
+  font-size: 14px !important;
+  padding: 5px 20px !important;
 }
 
 /* Back Button: Light gray default, full gray on hover */
@@ -425,7 +444,7 @@ tab[heading="Basic Info"] .form-group {
   font-size: 1.1rem !important;
 }
 
-/* Next/Back button styles - Fixed */
+/* Next/Back button styles - Unified across all tabs */
 .btn-animate.next, .btn-animate.back {
   border-radius: 50px !important;
   padding: 5px 20px !important;
@@ -435,26 +454,24 @@ tab[heading="Basic Info"] .form-group {
   cursor: pointer !important;
 }
 
-.btn-animate.next {
-  background-color: #28a745 !important;
-  border: none !important;
-  color: white !important;
+/* Remove the tab-specific Next button override */
+/* Next button in Basic Info tab */
+tab[heading="Basic Info"] .btn-animate.next {
+  font-size: 14px !important;  /* Match the global Next button size */
+  padding: 5px 20px !important;
 }
 
-.btn-animate.next:hover:not(:disabled) {
-  background-color: #218838 !important;
-  transform: translateY(-2px);
+/* Buttons in Basic Info tab */
+tab[heading="Basic Info"] .btn-group .btn {
+  font-size: 0.95rem !important;
+  padding: 5px 12px !important;
 }
 
-.btn-animate.back {
-  background-color: #6c757d !important;
-  border: none !important;
-  color: white !important;
-}
-
-.btn-animate.back:hover:not(:disabled) {
-  background-color: #5a6268 !important;
-  transform: translateY(-2px);
+/* Action buttons in Basic Info tab */
+tab[heading="Basic Info"] .action-btn {
+  font-size: 0.95rem !important;
+  padding: 5px 12px !important;
+  border-radius: 50px;
 }
 
 .btn-animate:disabled {
@@ -492,14 +509,14 @@ tab[heading="Basic Info"] .form-group {
 
 /* First tab specific styles - match other tabs */
 tab[heading="Basic Info"] {
-  font-size: 1rem !important;
+  font-size: 1.15rem !important;
 }
 
 tab[heading="Basic Info"] .form-group label,
 tab[heading="Basic Info"] .form-control,
 tab[heading="Basic Info"] .btn,
 tab[heading="Basic Info"] .input-group-text {
-  font-size: 14px !important;
+  font-size: 1.15rem !important;
 }
 
 tab[heading="Basic Info"] h3,
@@ -520,8 +537,8 @@ tab[heading="Basic Info"] h4 {
 
 /* Button group styling consistency */
 .btn-group .btn {
-  font-size: 1rem !important;
-  padding: 5px 15px !important;
+  font-size: 1.15rem !important;
+  padding: 8px 15px !important;
 }
 
 /* Preview card alignment */
@@ -582,4 +599,80 @@ tab[heading="Basic Info"] h4 {
   margin-right: 10px !important;
   color: white !important;
   vertical-align: middle !important;
+}
+
+/* First tab (Basic Info) specific styles */
+tab[heading="Basic Info"] {
+  font-size: 1.15rem !important;
+}
+
+/* Labels in Basic Info tab */
+tab[heading="Basic Info"] label,
+tab[heading="Basic Info"] .fw-semibold {
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+  color: #333 !important;
+}
+
+/* Buttons in Basic Info tab */
+tab[heading="Basic Info"] .btn-group .btn {
+  font-size: 0.95rem !important;  /* Decreased from 1.15rem */
+  padding: 5px 12px !important;   /* Decreased from 8px 15px */
+}
+
+/* Action buttons in Basic Info tab */
+tab[heading="Basic Info"] .action-btn {
+  font-size: 0.95rem !important;
+  padding: 5px 12px !important;
+  border-radius: 50px;
+}
+
+/* Next button in Basic Info tab */
+tab[heading="Basic Info"] .btn-animate.next {
+  font-size: 1.15rem !important;
+}
+
+/* Unified style for Sell/Rent, BHK, and Other Details buttons */
+.btn-group .btn,
+tab[heading="Basic Info"] .btn-group .btn,
+tab[heading="Other Details"] .btn-group .btn {
+  border: 2px solid #28a745 !important;
+  border-radius: 50px !important; /* Changed to 50px for circular shape */
+  padding: 5px 20px !important;
+  font-size: 14px !important;
+  margin: 2px !important;
+  color: #000 !important;
+  background-color: transparent !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+}
+
+/* Selected state for all group buttons */
+.btn-group .btn.selected,
+tab[heading="Basic Info"] .btn-group .btn.selected,
+tab[heading="Other Details"] .btn-group .btn.selected,
+.btn-group .btn.btn-success {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  border-color: #28a745 !important;
+  box-shadow: 0px 2px 5px rgba(40, 167, 69, 0.3) !important;
+}
+
+/* Hover state for all group buttons */
+.btn-group .btn:hover,
+tab[heading="Basic Info"] .btn-group .btn:hover,
+tab[heading="Other Details"] .btn-group .btn:hover {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+  cursor: pointer !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0px 4px 8px rgba(40, 167, 69, 0.2) !important;
+}
+
+/* Remove any conflicting styles */
+.action-btn {
+  border-radius: 50px !important;
+  padding: 5px 20px !important;
 }
