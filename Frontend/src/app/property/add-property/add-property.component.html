@@ -185,7 +185,17 @@
 
               <div class="form-group col-12">
                 <label class="fw-semibold">📐 Carpet Area</label>
-                <input type="number" class="form-control" placeholder="Enter carpet area in sq. ft.">
+                <input type="number" class="form-control" formControlName="CarpetArea"
+                  placeholder="Enter carpet area in sq. ft.">
+                <div *ngIf="addPropertyForm.get('pricingInfo.CarpetArea')?.touched && addPropertyForm.get('pricingInfo.CarpetArea')?.errors"
+                  class="error-block">
+                  <div *ngIf="addPropertyForm.get('pricingInfo.CarpetArea')?.errors?.['required']">
+                    Please provide the carpet area
+                  </div>
+                  <div *ngIf="addPropertyForm.get('pricingInfo.CarpetArea')?.errors?.['min']">
+                    Carpet area cannot be negative
+                  </div>
+                </div>
               </div>
 
               <div class="text-center mt-4">
@@ -289,8 +299,8 @@
               <div class="form-group">
                 <label for="possessionDate">📅 Possession Date</label>
                 <input type="text" class="form-control" bsDatepicker
-                  [(ngModel)]="possessionDate" [ngModelOptions]="{standalone: true}"
-                  [bsConfig]="bsConfig" (bsValueChange)="addPropertyForm.get('otherInfo.PossessionDate')?.setValue($event)"
+                  formControlName="PossessionDate"
+                  [bsConfig]="bsConfig"
                   placeholder="Select possession date">
                 <div *ngIf="addPropertyForm.get('otherInfo.PossessionDate')?.touched && addPropertyForm.get('otherInfo.PossessionDate')?.invalid"
                   class="error-block">
@@ -380,7 +390,10 @@
                   <i class="fas fa-arrow-left"></i> Back
                 </button>
                 <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 btn-animate"
-                  [disabled]="addPropertyForm.invalid"
+                  [disabled]="!addPropertyForm.get('basicInfo')?.valid || 
+                             !addPropertyForm.get('pricingInfo')?.valid || 
+                             !addPropertyForm.get('addressInfo')?.valid || 
+                             !addPropertyForm.get('otherInfo')?.valid"
                   style="border-radius: 50px;">
                   Save <i class="fas fa-check-circle"></i>
                 </button>

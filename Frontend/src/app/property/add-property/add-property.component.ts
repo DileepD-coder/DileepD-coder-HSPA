@@ -155,6 +155,52 @@ export class AddPropertyComponent implements AfterViewInit {
   }
 
   onSubmit(): void {
+    // Log validation status of each form group
+    const basicInfo = this.addPropertyForm.get('basicInfo') as FormGroup;
+    const pricingInfo = this.addPropertyForm.get('pricingInfo') as FormGroup;
+    const addressInfo = this.addPropertyForm.get('addressInfo') as FormGroup;
+    const otherInfo = this.addPropertyForm.get('otherInfo') as FormGroup;
+
+    console.log('Basic Info validation:', {
+      valid: basicInfo?.valid,
+      errors: basicInfo?.errors,
+      controls: Object.keys(basicInfo?.controls || {}).map(key => ({
+        key,
+        valid: basicInfo?.get(key)?.valid,
+        errors: basicInfo?.get(key)?.errors
+      }))
+    });
+
+    console.log('Pricing Info validation:', {
+      valid: pricingInfo?.valid,
+      errors: pricingInfo?.errors,
+      controls: Object.keys(pricingInfo?.controls || {}).map(key => ({
+        key,
+        valid: pricingInfo?.get(key)?.valid,
+        errors: pricingInfo?.get(key)?.errors
+      }))
+    });
+
+    console.log('Address Info validation:', {
+      valid: addressInfo?.valid,
+      errors: addressInfo?.errors,
+      controls: Object.keys(addressInfo?.controls || {}).map(key => ({
+        key,
+        valid: addressInfo?.get(key)?.valid,
+        errors: addressInfo?.get(key)?.errors
+      }))
+    });
+
+    console.log('Other Info validation:', {
+      valid: otherInfo?.valid,
+      errors: otherInfo?.errors,
+      controls: Object.keys(otherInfo?.controls || {}).map(key => ({
+        key,
+        valid: otherInfo?.get(key)?.valid,
+        errors: otherInfo?.get(key)?.errors
+      }))
+    });
+
     if (this.addPropertyForm.invalid) {
       this.alertify.error('Please fill out all required fields correctly!');
       this.markFormGroupTouched(this.addPropertyForm);
