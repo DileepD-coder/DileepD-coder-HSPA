@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>HSPA House Icon</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Main house shape with gradient -->
+        <path d="M16,2 L2,16 L5,16 L5,30 L27,30 L27,16 L30,16 L16,2 Z" 
+              fill="#28a745" />
+        
+        <!-- Roof with darker shade -->
+        <path d="M16,2 L2,16 L30,16 L16,2 Z" 
+              fill="#218838" />
+        
+        <!-- Door -->
+        <path d="M13,30 L13,22 L19,22 L19,30" 
+              fill="#218838" />
+        
+        <!-- Window left -->
+        <rect x="8" y="18" width="3" height="3" 
+              fill="#ffffff" />
+        
+        <!-- Window right -->
+        <rect x="21" y="18" width="3" height="3" 
+              fill="#ffffff" />
+    </g>
+</svg> 
