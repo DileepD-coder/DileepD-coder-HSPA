@@ -38,7 +38,10 @@
 
 /* Card styles */
 .card {
-  transition: transform 0.3s, box-shadow 0.3s;
+  margin-top: 0 !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
 }
 
 /* ❌ Shake animation on invalid form submission */
@@ -226,25 +229,63 @@ button.btn-animate.back:hover {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* Ensure no blur effect and apply desired styles to the card header */
+/* Unified Card Header Style for both cards */
 .card-header {
-  filter: none !important; /* Remove any potential blur effect */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Optional: Add depth effect */
-  background: linear-gradient(135deg, #28a745, #218838) !important; /* Ensure gradient is applied */
-  border-radius: 5px 5px 0 0 !important; /* Ensure border-radius stays */
-  font-size: 2rem !important; /* Ensure font size stays */
-  color: white !important; /* Set text color to white */
-  font-weight: bold !important; /* Make text bold */
-  display: flex; /* Use flexbox for centering */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  text-align: center; /* Ensure the text is centered */
-  padding: 20px; /* Optional: Add some padding around the text */
+  margin: 0 !important;
+  padding: 12px !important;
+  height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, #28a745, #218838) !important;
+  color: white !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  border-radius: 5px 5px 0 0 !important;
+  border-bottom: none !important;
 }
 
-/* Additional style for the "Your Property Preview" text */
-.card-header p {
-  margin: 0; /* Remove default margins */
+.card-header i {
+  margin-right: 8px !important;
+}
+
+/* Remove duplicate card header styles */
+.col-4 > .card > .card-header {
+  font-size: 1.5rem !important;  /* Match the main card header size */
+}
+
+/* Card Container Alignment */
+.row {
+  display: flex !important;
+  align-items: flex-start !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Column spacing */
+.col-8, .col-4 {
+  padding: 0 15px !important;
+  margin: 0 !important;
+}
+
+/* Main card container */
+.col-8 > .card {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
+  background: white !important;
+}
+
+/* Preview card container */
+.col-4 > .card {
+  background: white !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 5px !important;
+  margin: 0 !important;
+  width: 100% !important;
 }
 
 .loading-spinner {
@@ -265,4 +306,280 @@ button.btn-animate.back:hover {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Preview Card Styles */
+.preview-container {
+  padding: 0 !important;
+  overflow: hidden !important;
+  background-color: #ffffff !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  margin: 0 auto !important;
+}
+
+.preview-container .card {
+  transform: none !important;
+  transition: none !important;
+  margin: 0 !important;
+  min-height: 400px !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background-color: #ffffff !important;
+}
+
+.preview-container .card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background-color: #ffffff !important;
+}
+
+.preview-container .card-img-wrapper {
+  transform: none !important;
+  transition: none !important;
+}
+
+.preview-container .card-img-wrapper:hover {
+  transform: none !important;
+}
+
+.preview-container .card-img-wrapper img {
+  transform: none !important;
+  transition: none !important;
+}
+
+.preview-container .card-img-wrapper:hover img {
+  transform: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+.preview-container app-property-card {
+  pointer-events: none !important;
+}
+
+/* Form styles - adjust spacing and sizes */
+.form-group {
+  margin-bottom: 0.4rem !important;  /* Reduced space between fields */
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  height: 45px !important;  /* Increased height */
+  font-size: 1.1rem !important;  /* Increased font size */
+  padding: 8px 12px !important;
+}
+
+/* Label styles */
+label {
+  margin-bottom: 0.2rem !important;
+  font-size: 1.1rem !important;  /* Increased font size */
+  color: #333 !important;
+  font-weight: 500 !important;
+}
+
+/* Button text sizes */
+.btn {
+  font-size: 1.1rem !important;
+}
+
+/* Heading and text styles */
+.fw-semibold {
+  font-size: 1.1rem !important;
+  margin-bottom: 0.3rem !important;
+}
+
+/* Tab content - adjust padding */
+.tab-content {
+  padding: 15px 10px !important;
+}
+
+/* Form container */
+form {
+  padding: 5px !important;
+}
+
+/* Button group spacing */
+.btn-group {
+  margin-bottom: 0.4rem !important;
+}
+
+/* Specific to first tab */
+tab[heading="Basic Info"] .form-group {
+  margin-bottom: 0.4rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.4rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 0.6rem !important;
+}
+
+/* Input group text size */
+.input-group-text {
+  font-size: 1.1rem !important;
+}
+
+/* Next/Back button styles - Fixed */
+.btn-animate.next, .btn-animate.back {
+  border-radius: 50px !important;
+  padding: 5px 20px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: all 0.3s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.btn-animate.next {
+  background-color: #28a745 !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-animate.next:hover:not(:disabled) {
+  background-color: #218838 !important;
+  transform: translateY(-2px);
+}
+
+.btn-animate.back {
+  background-color: #6c757d !important;
+  border: none !important;
+  color: white !important;
+}
+
+.btn-animate.back:hover:not(:disabled) {
+  background-color: #5a6268 !important;
+  transform: translateY(-2px);
+}
+
+.btn-animate:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Button container spacing */
+.text-center {
+  margin-top: 0.5rem !important;
+}
+
+/* Progress Bar Styling */
+.progress {
+  height: 8px !important;
+  border-radius: 50px !important;
+  background-color: #e9ecef !important;
+  margin: 1rem 15px !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1) !important;
+  width: calc(100% - 30px) !important;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #28a745, #218838) !important;
+  border-radius: 50px !important;
+  transition: width 0.3s ease-in-out !important;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2) !important;
+}
+
+/* Normalize text sizes across all tabs */
+.tab-panel {
+  font-size: 1rem !important;
+}
+
+/* First tab specific styles - match other tabs */
+tab[heading="Basic Info"] {
+  font-size: 1rem !important;
+}
+
+tab[heading="Basic Info"] .form-group label,
+tab[heading="Basic Info"] .form-control,
+tab[heading="Basic Info"] .btn,
+tab[heading="Basic Info"] .input-group-text {
+  font-size: 14px !important;
+}
+
+tab[heading="Basic Info"] h3,
+tab[heading="Basic Info"] h4 {
+  font-size: 16px !important;
+}
+
+/* Header text size consistency */
+.card-header {
+  font-size: 1.5rem !important;
+  padding: 15px !important;
+}
+
+/* Form group spacing consistency */
+.form-group {
+  margin-bottom: 1rem !important;
+}
+
+/* Button group styling consistency */
+.btn-group .btn {
+  font-size: 1rem !important;
+  padding: 5px 15px !important;
+}
+
+/* Preview card alignment */
+.preview-container {
+  margin: 0 !important;
+  height: 100% !important;
+}
+
+.col-4 > .card {
+  position: sticky !important;
+  top: 20px !important;
+  margin: 0 !important;
+}
+
+/* Main form container */
+.tab-container {
+  width: 100% !important;
+  max-width: 800px !important;
+}
+
+/* Preview Container */
+.preview-container {
+  background: white !important;
+  border-radius: 5px !important;
+  width: 100% !important;
+}
+
+/* Remove all fixed positioning from preview card */
+.col-4 > .card {
+  background: white !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 5px !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* Main card container */
+.col-8 > .card {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
+  background: white !important;
+}
+
+/* Remove any extra spacing from tabs container */
+.nav-tabs {
+  margin: 0 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Home Icon Style */
+.home-icon {
+  font-size: 1.8rem !important;
+  margin-right: 10px !important;
+  color: white !important;
+  vertical-align: middle !important;
 }

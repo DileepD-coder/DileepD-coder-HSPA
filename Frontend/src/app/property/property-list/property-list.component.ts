@@ -56,13 +56,13 @@ export class PropertyListComponent implements OnInit {
           BHK: property.BHK || 0,
           BuiltArea: property.BuiltArea || 0,
           City: property.City || '',
-          RTM: property.RTM || 0,
-          Address: property.Address || '',  // Add Address (with fallback if missing)
-          Landmark: property.Landmark || '',  // Add Landmark (with fallback if missing)
-          Floor: property.Floor || 0,  // Add Floor (with fallback if missing)
-          TotalFloors: property.TotalFloors || 0,  // Add TotalFloors (with fallback if missing)
-          Age: property.Age || 0,  // Add Age (with fallback if missing)
-          Description: property.Description || ''  // Add Description (with fallback if missing)
+          RTM: (property as any).RTM === 1 || (property as any).Posession === 'Ready to move' ? 1 : 0,
+          Address: property.Address || '',
+          Landmark: property.Landmark || '',
+          Floor: property.Floor || 0,
+          TotalFloors: property.TotalFloors || 0,
+          Age: property.Age || 0,
+          Description: property.Description || ''
         }));
   
         // Apply the filter based on the SellRent form control value

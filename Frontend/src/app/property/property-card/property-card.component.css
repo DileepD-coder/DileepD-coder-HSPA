@@ -1,64 +1,140 @@
 /* property-card.component.css */
 .card {
+  min-height: 400px;
+  background: #FFFFF0;
+  border: none;
   transform: scale(1);
   transition-duration: 50ms;
   transition-timing-function: ease-out;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
-  border: 2px solid #e4eff6; /* Changed border color to a blue shade */
-  padding: 10px; /* Added padding to the whole card */
-  position: relative; /* Ensure absolute positioning inside works properly */
+  margin: 0 auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .card-img-wrapper {
-  position: relative; /* Enables absolute positioning for child elements */
-  width: 100%;
-  height: 250px;
   overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 8px 8px 0 0;
 }
 
-.card:hover img {
-  transform: scale(1.1);
-  transition-duration: 50ms;
+.card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card-img-wrapper:hover img {
+  transform: scale(1.05);
+  transition-duration: 200ms;
   transition-timing-function: ease-out;
-  border: 2px solid #d4d4d4; 
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  opacity: 0.6;
+  opacity: 0.9;
+}
+
+.card-header {
+  height: 50px !important;
+  padding: 12px !important;
+  background: linear-gradient(135deg, #28a745, #218838) !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 20px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  border-radius: 5px 5px 0 0 !important;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .member-icons {
   position: absolute;
-  bottom: -10px; /* Start hidden below the image */
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
   z-index: 2;
-  opacity: 0; /* Hidden initially */
-  transition: opacity 0.3s ease, bottom 0.3s ease; /* Smooth transition */
+  opacity: 0;
+  transition: opacity 0.3s ease, bottom 0.3s ease;
 }
 
-/* Show icons when the card is hovered */
 .card:hover .member-icons {
-  bottom: 10px; /* Move up into position */
-  opacity: 1; /* Make it visible */
+  bottom: 10px;
+  opacity: 1;
 }
 
 .card-body {
-  padding: 20px; /* Increased padding inside the card body for more space */
-  text-align: left; /* Align text to the left */
-  border: 1px solid #a6a6a623; /* Light border added around the body for padding effect */
+  padding: 12px;
+  text-align: left;
+  background: #FFFFF0;
 }
 
-h1, h2, h3 {
-  margin: 5px 0;
-  white-space: normal; /* Allow text to wrap */
-  text-align: left; /* Align text to the left */
+h1.h5 {
+  color: #003366;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 1.3rem;
+}
+
+h2.h6 {
+  color: #003366;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+h4.text-success {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+h6 {
+  color: #003366;
+  margin: 6px 0;
+  font-size: 1rem;
+}
+
+.price-text {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+hr {
+  margin: 10px 0;
+  opacity: 0.2;
+}
+
+/* Default button color */
+.action-btn {
+  background-color: #f0f0f0; /* Light grey or neutral background */
+  color: #64a6e9; /* Deep Navy Blue for text */
+  border: 1px solid #e4eff6; /* Soft border color */
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Hover effect for the button */
+.action-btn:hover {
+  background-color: #64a8eb; /* Deep Navy Blue background */
+  color: #ffffff; /* White text color on hover */
+  border-color: #003366; /* Matching border color */
+}
+
+/* Active state color when clicked */
+.action-btn:active {
+  background-color: #002244; /* Darker navy background */
+  color: #ffffff; /* Keep text white */
 }

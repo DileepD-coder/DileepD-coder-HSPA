@@ -1,19 +1,21 @@
 import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common';
 import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { IPropertybase } from '../../models/IPropertybase';
-import { AlertfyService } from '../../Services/alertfy.service';  // Ensure correct path with case sensitivity
+import { AlertfyService } from '../../Services/alertfy.service';
 
 @Component({
   selector: 'app-add-property',
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     TabsModule,
     ButtonsModule,
@@ -25,43 +27,34 @@ import { AlertfyService } from '../../Services/alertfy.service';  // Ensure corr
 })
 export class AddPropertyComponent implements AfterViewInit {
   @Input() property: IPropertybase | null = null;
+  @ViewChild('formTabs') formTabs!: TabsetComponent;
 
-  // Fields for List Property card
-  selectedBhk: number | null = null;
+  addPropertyForm!: FormGroup;
   possessionDate: Date | undefined;
-  selectedPropertyType: string = '';
-  selectedFurnishingType: string = '';  // The selected furnishing type
-  selectedOption: string = '';
-  selectedCity: string = ''; // City selection
-  selectedBuiltArea: number | null = null; // Built Area selection
-
-  binding: string = '';  // Binding variable for "in Building/Society/Project" field
-
+  
+  // Fields for List Property card
+  propertyTypes: string[] = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment', 'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
+  furnishTypes: string[] = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
+  
   // Datepicker configuration
   bsConfig = {
-    dateInputFormat: 'MM/DD/YYYY',
+    dateInputFormat: 'DD-MM-YYYY',
+    containerClass: 'theme-green',
     showWeekNumbers: false,
-    containerClass: 'theme-green'
+    minDate: new Date()
   };
 
   progress: number = 0;
-  gatedCommunity: string = '';
-  readyToMove: string = '';
-  readyToMoveDate: string = '';
+  loading: boolean = false;
+  hideIcons: boolean = true;
 
-  @ViewChild('Form') addPropertyForm!: NgForm;
-  @ViewChild('formTabs') formTabs!: TabsetComponent;
-
-  propertyTypes: string[] = ['House', 'Villa', 'Condo', 'Cabin', 'Cottage', 'Apartment', 'Mansion', 'Penthouse', 'Farm', 'Bungalow'];
-  furnishTypes: string[] = ['Fully Furnished', 'Semi Furnished', 'Unfurnished'];
-
-  // The preview property – initialize with default values so it always conforms to IPropertybase.
+  // The preview property
   propertyview: IPropertybase = {
     Id: 0,
     SellRent: null,
     Name: '',
     PType: '',
-    FType: '',  // Furnishing type in preview
+    FType: '',
     Price: null,
     BHK: 0,
     BuiltArea: 0,
@@ -69,136 +62,168 @@ export class AddPropertyComponent implements AfterViewInit {
     RTM: 0,
     ImageUrl: '',
     Address: '',
-    Landmark:'',
-    Floor:0,
-    TotalFloors:0,
-    Age:0,
-    Description:'',
+    Landmark: '',
+    Floor: 0,
+    TotalFloors: 0,
+    Age: 0,
+    Description: '',
     Type: ''
   };
 
-  // Loading flag for preview
-  loading: boolean = false;
-  hideIcons: boolean = true;
-
-  constructor(private location: Location, private alertify: AlertfyService) { }
-
-  ngAfterViewInit() {
-    if (!this.addPropertyForm) {
-      console.warn('NgForm reference is not available in ngAfterViewInit');
-    }
+  constructor(
+    private fb: FormBuilder,
+    private location: Location,
+    private alertify: AlertfyService
+  ) {
+    this.initializeForm();
   }
 
-  // Update preview method after each change
+  private initializeForm() {
+    this.addPropertyForm = this.fb.group({
+      basicInfo: this.fb.group({
+        SellRent: [null, Validators.required],
+        BHK: [null, Validators.required],
+        PType: ['', Validators.required],
+        FType: ['', Validators.required],
+        Name: ['', [Validators.required, Validators.minLength(5)]],
+        City: ['', Validators.required]
+      }),
+      pricingInfo: this.fb.group({
+        Price: [null, [Validators.required, Validators.min(0)]],
+        Security: [null, [Validators.required, Validators.min(0)]],
+        Maintenance: [null, [Validators.required, Validators.min(0)]],
+        BuiltArea: [null, [Validators.required, Validators.min(0)]],
+        CarpetArea: [null, [Validators.required, Validators.min(0)]]
+      }),
+      addressInfo: this.fb.group({
+        Address: ['', Validators.required],
+        Landmark: ['', Validators.required],
+        Floor: [null, [Validators.required, Validators.min(1)]],
+        TotalFloors: [null, [Validators.required, Validators.min(1)]]
+      }),
+      otherInfo: this.fb.group({
+        RTM: [null, Validators.required],
+        PossessionDate: [null],
+        Age: [null, [Validators.required, Validators.min(0)]],
+        GatedCommunity: [null, Validators.required],
+        MainEntrance: ['', Validators.required],
+        Description: ['']
+      })
+    });
+
+    // Add conditional validation for possession date
+    this.addPropertyForm.get('otherInfo.RTM')?.valueChanges.subscribe(value => {
+      const possessionDateControl = this.addPropertyForm.get('otherInfo.PossessionDate');
+      if (value === 'no') {
+        possessionDateControl?.setValidators([Validators.required]);
+      } else {
+        possessionDateControl?.clearValidators();
+      }
+      possessionDateControl?.updateValueAndValidity();
+    });
+  }
+
+  ngAfterViewInit() {
+    // Subscribe to form value changes to update preview
+    this.addPropertyForm.valueChanges.subscribe(() => {
+      this.updatePreview();
+    });
+  }
+
   updatePreview(): void {
-    this.propertyview.Name = this.binding;
+    const basicInfo = this.addPropertyForm.get('basicInfo')?.value;
+    const pricingInfo = this.addPropertyForm.get('pricingInfo')?.value;
+    const addressInfo = this.addPropertyForm.get('addressInfo')?.value;
+    const otherInfo = this.addPropertyForm.get('otherInfo')?.value;
 
-    if (this.selectedBhk) {
-      this.propertyview.BHK = this.selectedBhk;
+    if (basicInfo) {
+      this.propertyview = {
+        ...this.propertyview,
+        ...basicInfo,
+        Price: pricingInfo?.Price,
+        BuiltArea: pricingInfo?.BuiltArea,
+        Address: addressInfo?.Address,
+        Landmark: addressInfo?.Landmark,
+        Floor: addressInfo?.Floor,
+        TotalFloors: addressInfo?.TotalFloors,
+        RTM: otherInfo?.RTM === 'yes' ? 1 : 0,
+        Age: otherInfo?.Age,
+        Description: otherInfo?.Description
+      };
     }
-
-    if (this.selectedPropertyType) {
-      this.propertyview.PType = this.selectedPropertyType;
-    }
-
-    if (this.selectedFurnishingType) {
-      this.propertyview.FType = this.selectedFurnishingType;  // Update furnishing type in the preview
-    }
-
-    if (this.selectedOption) {
-      this.propertyview.RTM = this.selectedOption === 'Ready to Move' ? 1 : 0;
-    }
-
-    if (this.selectedCity) {
-      this.propertyview.City = this.selectedCity;
-    }
-
-    if (this.selectedBuiltArea !== null) {
-      this.propertyview.BuiltArea = this.selectedBuiltArea;
-    }
-
     this.loading = false;
   }
 
-  // Method to update furnishing type
-  updateFurnishing(furnishing: string): void {
-    this.selectedFurnishingType = furnishing;
-    this.propertyview.FType = furnishing;  // Update propertyview's furnishing type
-    this.updatePreview();  // Ensure the preview is updated with the new furnishing type
+  onSubmit(): void {
+    if (this.addPropertyForm.invalid) {
+      this.alertify.error('Please fill out all required fields correctly!');
+      this.markFormGroupTouched(this.addPropertyForm);
+      return;
+    }
+
+    console.log('Form Data:', this.addPropertyForm.value);
+    this.alertify.success('Property added successfully!');
   }
 
-  onCityChange(city: string): void {
-    this.selectedCity = city;
-    this.updatePreview();
+  selectTab(tabId: number): void {
+    // Only validate the first tab (Basic Info)
+    if (tabId === 1) {  // When moving from first to second tab
+      const basicInfoGroup = this.addPropertyForm.get('basicInfo') as FormGroup;
+      
+      if (basicInfoGroup && basicInfoGroup.invalid) {
+        Object.values(basicInfoGroup.controls).forEach(control => {
+          control.markAsTouched();
+          control.updateValueAndValidity();
+        });
+        this.alertify.error('Please complete all required fields in Basic Info.');
+        return;
+      }
+    }
+    
+    // Allow navigation for all other tabs and update progress
+    if (this.formTabs?.tabs[tabId]) {
+      this.formTabs.tabs[tabId].active = true;
+      this.updateProgress(tabId);
+    }
   }
 
-  onBuiltAreaChange(area: number): void {
-    this.selectedBuiltArea = area;
-    this.updatePreview();
+  private getFormGroupForTab(tabId: number): FormGroup | null {
+    const formGroups = {
+      0: 'basicInfo',
+      1: 'pricingInfo',
+      2: 'addressInfo',
+      3: 'otherInfo'
+    };
+    
+    const groupName = formGroups[tabId as keyof typeof formGroups];
+    return groupName ? this.addPropertyForm.get(groupName) as FormGroup : null;
+  }
+
+  updateProgress(tabId: number): void {
+    // We have 5 tabs (0-4), so calculate progress as current tab + 1 / total tabs * 100
+    const totalTabs = 5; // Basic Info, Pricing & Area, Address, Other Details, Photos
+    this.progress = ((tabId + 1) / totalTabs) * 100;
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      } else {
+        control.markAsTouched();
+        control.updateValueAndValidity();
+      }
+    });
   }
 
   onFileChange(event: any) {
     if (event.target.files && event.target.files.length) {
       const files: FileList = event.target.files;
-      // Handle the selected files here
       console.log('Selected files:', files);
     }
   }
 
   goBack(): void {
     this.location.back();
-  }
-
-  onBhkSelect(bhk: number): void {
-    if (this.propertyview.BHK !== bhk) {  // Prevent unnecessary updates
-      this.selectedBhk = bhk;
-      this.propertyview.BHK = bhk;  // Update BHK only if it's different
-      this.updatePreview();  // Ensure preview is updated only once
-    }
-  }
-
-  onSubmit(Form: NgForm): void {
-    console.log('onSubmit called!');
-    console.log('SellRent:', this.propertyview.SellRent); 
-    if (!Form) {
-      console.error('Form reference is undefined.');
-      return;
-    }
-
-    if (Form.invalid) {
-      console.log('Form is invalid. Please check required fields.', Form.controls);
-      this.alertify.error('Please fill out all required fields!');
-      return;
-    }
-
-    console.log('Congrats! Form Submitted');
-    console.log('Form Data:', Form.value);
-    console.log('Property Type:', this.selectedPropertyType);
-    console.log('Furnishing Type:', this.selectedFurnishingType);
-    console.log('City:', this.selectedCity);
-    console.log('Built Area:', this.selectedBuiltArea);
-
-    if (Form.value.BasicInfo?.SellRent !== undefined) {
-      console.log('SellRent:', Form.value.BasicInfo.SellRent);
-    } else {
-      console.warn('SellRent is not defined in the form model.');
-    }
-
-    console.log('Possession Date:', this.possessionDate);
-
-    // Display success notification on successful form submission
-    this.alertify.success('Property added successfully!');
-  }
-
-  mainEntrance: string = '';
-
-  selectTab(tabId: number): void {
-    this.formTabs.tabs[tabId].active = true;
-    this.updateProgress(tabId);
-  }
-
-  updateProgress(tabId: number): void {
-    const totalTabs = this.formTabs.tabs.length;
-    this.progress = ((tabId + 1) / totalTabs) * 100;
   }
 }
