@@ -136,27 +136,44 @@
 
 /* Adding a border and better styling for the BHK buttons */
 .btn-group .btn {
-  border: 2px solid #28a745; /* Green border */
-  border-radius: 50px; /* Rounded corners */
-  padding: 3px 17px; /* More padding for better button size */
-  font-size: 14px; /* Slightly larger font size for better readability */
-  transition: all 0.3s ease; /* Smooth transition for hover effect */
+  border: 2px solid #28a745 !important;
+  border-radius: 8px !important;  /* Changed from 50px to 8px for rectangular look */
+  padding: 5px 15px !important;
+  font-size: 14px !important;
+  margin: 2px !important;
+  margin-right: 8px !important;
+  color: #000 !important;
+  background-color: transparent !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  height: 35px !important;
+  line-height: 1.5 !important;
 }
 
-/* Selected button state */
+/* Selected state for BHK buttons */
 .btn-group .btn.selected {
-  background-color: #28a745;
-  color: white;
-  border-color: #218838; /* Darker green when selected */
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+  box-shadow: 0px 2px 5px rgba(40, 167, 69, 0.3) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* Hover effect */
+/* Hover state for BHK buttons */
 .btn-group .btn:hover {
-  background-color: #218838;
-  color: white;
-  border-color: #218838;
-  cursor: pointer;
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0px 4px 8px rgba(40, 167, 69, 0.2) !important;
 }
+
+/* Remove margin-right from the last BHK button */
+.btn-group .btn:last-child {
+  margin-right: 0 !important;
+}
+
 /* Maintain green color on selection for Furnishing Type */
 .btn-success {
   background-color: #28a745;
@@ -305,6 +322,24 @@ button.btn-animate.back:hover {
   border-radius: 5px !important;
   margin: 0 !important;
   width: 100% !important;
+  margin-top: 20px !important; /* Added space above the preview card */
+}
+
+/* Preview card header */
+.col-4 > .card > .card-header {
+  margin-bottom: 15px !important; /* Added space below the header */
+  padding: 15px !important; /* Increased padding */
+  height: auto !important; /* Allow header to expand */
+  min-height: 60px !important; /* Minimum height for the header */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, #28a745, #218838) !important;
+  color: white !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  border-radius: 5px 5px 0 0 !important;
+  border-bottom: none !important;
 }
 
 .loading-spinner {
@@ -381,7 +416,7 @@ button.btn-animate.back:hover {
 
 /* Form styles - adjust spacing and sizes */
 .form-group {
-  margin-bottom: 0.4rem !important;  /* Reduced space between fields */
+  margin-bottom: 0 !important;
 }
 
 .form-control {
@@ -423,23 +458,20 @@ form {
 
 /* Button group spacing */
 .btn-group {
-  margin-bottom: 0.4rem !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
 }
 
 /* Specific to first tab */
 tab[heading="Basic Info"] .form-group {
-  margin-bottom: 0.4rem !important;
+  margin-bottom: 0 !important;
 }
 
-.mb-2 {
-  margin-bottom: 0.4rem !important;
+.mb-2, .mb-3 {
+  margin-bottom: 0 !important;
 }
 
-.mb-3 {
-  margin-bottom: 0.6rem !important;
-}
-
-/* Input group text size */
+/* Input group text size */ 
 .input-group-text {
   font-size: 1.1rem !important;
 }
@@ -633,46 +665,114 @@ tab[heading="Basic Info"] .btn-animate.next {
   font-size: 1.15rem !important;
 }
 
-/* Unified style for Sell/Rent, BHK, and Other Details buttons */
+/* Unified style for all buttons in button groups */
 .btn-group .btn,
-tab[heading="Basic Info"] .btn-group .btn,
-tab[heading="Other Details"] .btn-group .btn {
+.action-btn {
   border: 2px solid #28a745 !important;
-  border-radius: 50px !important; /* Changed to 50px for circular shape */
-  padding: 5px 20px !important;
+  border-radius: 50px !important;
+  padding: 5px 15px !important;
   font-size: 14px !important;
   margin: 2px !important;
+  margin-right: 8px !important;
   color: #000 !important;
   background-color: transparent !important;
   transition: all 0.3s ease !important;
   font-weight: 500 !important;
+  cursor: pointer !important;
+  height: 35px !important;
+  line-height: 1.5 !important;
 }
 
-/* Selected state for all group buttons */
+/* Selected state for all buttons */
 .btn-group .btn.selected,
-tab[heading="Basic Info"] .btn-group .btn.selected,
-tab[heading="Other Details"] .btn-group .btn.selected,
-.btn-group .btn.btn-success {
-  background-color: #28a745 !important;
-  color: #fff !important;
-  border-color: #28a745 !important;
-  box-shadow: 0px 2px 5px rgba(40, 167, 69, 0.3) !important;
-}
-
-/* Hover state for all group buttons */
-.btn-group .btn:hover,
-tab[heading="Basic Info"] .btn-group .btn:hover,
-tab[heading="Other Details"] .btn-group .btn:hover {
+.action-btn.selected {
   background-color: #28a745 !important;
   color: white !important;
   border-color: #28a745 !important;
-  cursor: pointer !important;
+  box-shadow: 0px 2px 5px rgba(40, 167, 69, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Hover state for all buttons */
+.btn-group .btn:hover,
+.action-btn:hover {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
   transform: translateY(-1px) !important;
   box-shadow: 0px 4px 8px rgba(40, 167, 69, 0.2) !important;
 }
 
+/* Remove margin-right from the last button in each group */
+.btn-group .btn:last-child,
+.action-btn:last-child {
+  margin-right: 0 !important;
+}
+
+/* Remove old button styles that might conflict */
+.btn-outline-secondary,
+.btn-outline-success,
+.btn-outline-danger,
+.move-btn,
+.gated-btn {
+  display: none !important;
+}
+
+/* Remove spacing from the Building/Society/Project field specifically */
+.form-group:has(label:contains("In Building/Society/Project")) {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Remove spacing from the Furnish buttons specifically */
+.form-group:has(.btn-group:has(.btn:contains("Furnish"))) {
+  margin-bottom: 0 !important;
+}
+
+/* Furnishing Type Buttons */
+.btn-outline-secondary {
+  display: inline-block !important;
+  border: 2px solid #28a745 !important;
+  color: #28a745 !important;
+  background-color: transparent !important;
+  border-radius: 50px !important;
+  padding: 5px 15px !important;
+  font-size: 14px !important;
+  margin: 2px !important;
+  margin-right: 8px !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  height: 35px !important;
+  line-height: 1.5 !important;
+}
+
+/* Selected state for furnishing buttons */
+.btn-outline-secondary.btn-success {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+  box-shadow: 0px 2px 5px rgba(40, 167, 69, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Hover state for furnishing buttons */
+.btn-outline-secondary:hover {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0px 4px 8px rgba(40, 167, 69, 0.2) !important;
+}
+
+/* Remove margin-right from the last furnishing button */
+.btn-outline-secondary:last-child {
+  margin-right: 0 !important;
+}
+
 /* Remove any conflicting styles */
 .action-btn {
-  border-radius: 50px !important;
-  padding: 5px 20px !important;
+  padding: 4px 8px;
+  border-radius: 5px !important;
+  padding: 5px 15px !important;
 }

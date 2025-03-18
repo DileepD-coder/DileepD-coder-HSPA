@@ -98,13 +98,13 @@ export class AddPropertyComponent implements AfterViewInit {
         Price: [null, [Validators.required, Validators.min(0)]],
         BuiltArea: [null, [Validators.required, Validators.min(0)]],
         CarpetArea: [null, [Validators.required, Validators.min(0)]]
-      }),
+      }, { updateOn: 'blur' }),
       addressInfo: this.fb.group({
         Address: ['', Validators.required],
         Landmark: ['', Validators.required],
         Floor: [null, [Validators.required, Validators.min(1)]],
         TotalFloors: [null, [Validators.required, Validators.min(1)]]
-      }),
+      }, { updateOn: 'blur' }),
       otherInfo: this.fb.group({
         RTM: [null, Validators.required],
         PossessionDate: [null],
@@ -112,7 +112,7 @@ export class AddPropertyComponent implements AfterViewInit {
         GatedCommunity: [null, Validators.required],
         MainEntrance: ['', Validators.required],
         Description: ['']
-      })
+      }, { updateOn: 'blur' })
     });
 
     // Add conditional validation for Age and PossessionDate based on RTM
@@ -223,20 +223,34 @@ export class AddPropertyComponent implements AfterViewInit {
     // Navigate to the appropriate page based on SellRent value
     const sellRent = this.propertySubmitted.SellRent;
     if (sellRent === 1) {
-      this.router.navigate(['/sell-property']);
-    } else {
+      this.router.navigate(['/buy']);
+    } else if (sellRent === 2) {
       this.router.navigate(['/rent-property']);
     }
   }
 
   selectTab(tabId: number): void {
-    const currentGroup = this.getFormGroupForTab(this.formTabs?.tabs.findIndex(t => t.active) ?? 0);
+    // Get the current form group
+    const currentTabIndex = this.formTabs?.tabs.findIndex(t => t.active) ?? 0;
+    const currentGroup = this.getFormGroupForTab(currentTabIndex);
+    
+    // If we're going back, don't validate
+    if (tabId < currentTabIndex) {
+      if (this.formTabs?.tabs[tabId]) {
+        this.formTabs.tabs[tabId].active = true;
+        this.updateProgress(tabId);
+      }
+      return;
+    }
+
+    // If we're going forward, validate the current tab
     if (currentGroup && currentGroup.invalid) {
       this.markFormGroupTouched(currentGroup);
       this.alertify.error('Please complete all required fields in the current tab.');
       return;
     }
     
+    // If validation passes, switch to the next tab
     if (this.formTabs?.tabs[tabId]) {
       this.formTabs.tabs[tabId].active = true;
       this.updateProgress(tabId);
@@ -267,7 +281,7 @@ export class AddPropertyComponent implements AfterViewInit {
         this.markFormGroupTouched(control);
       } else {
         control.markAsTouched();
-        control.updateValueAndValidity();
+        control.updateValueAndValidity({ emitEvent: false });
       }
     });
   }
@@ -281,5 +295,10 @@ export class AddPropertyComponent implements AfterViewInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  onFurnishSelect(furnish: string) {
+    this.addPropertyForm.get('otherInfo.furnish')?.setValue(furnish);
+    this.updatePreview();
   }
 }

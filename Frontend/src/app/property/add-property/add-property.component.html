@@ -46,10 +46,11 @@
                 </div>
               </div>
 
+              <!-- BHK -->
               <div class="mb-2">
                 <p class="fw-semibold mb-2">BHK</p>
                 <div class="btn-group" role="group">
-                  <button *ngFor="let bhk of [1, 2, 3, 4]" type="button" class="btn action-btn me-1"
+                  <button *ngFor="let bhk of [1, 2, 3, 4]" type="button" class="btn action-btn"
                     [ngClass]="{'selected': addPropertyForm.get('basicInfo.BHK')?.value === bhk}"
                     (click)="addPropertyForm.get('basicInfo.BHK')?.setValue(bhk)">
                     {{ bhk }}
@@ -73,15 +74,20 @@
                 </div>
               </div>
 
+              <!-- Furnishing Type -->
               <div class="form-group">
                 <label for="furnishingType" class="fw-semibold mb-2">Furnishing Type</label>
                 <br>
                 <div class="btn-group" role="group" aria-label="Furnishing Types">
-                  <button *ngFor="let furnish of furnishTypes" type="button" class="btn btn-outline-secondary"
-                    [ngClass]="{'btn-success': addPropertyForm.get('basicInfo.FType')?.value === furnish}"
-                    (click)="addPropertyForm.get('basicInfo.FType')?.setValue(furnish)">
-                    {{ furnish }}
-                  </button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('basicInfo.FType')?.value === 'Fully'}" 
+                    (click)="addPropertyForm.get('basicInfo.FType')?.setValue('Fully')">Fully</button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('basicInfo.FType')?.value === 'Semi'}" 
+                    (click)="addPropertyForm.get('basicInfo.FType')?.setValue('Semi')">Semi</button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('basicInfo.FType')?.value === 'Unfurnish'}" 
+                    (click)="addPropertyForm.get('basicInfo.FType')?.setValue('Unfurnish')">Unfurnish</button>
                 </div>
                 <div *ngIf="addPropertyForm.get('basicInfo.FType')?.touched && addPropertyForm.get('basicInfo.FType')?.invalid"
                   class="error-block">
@@ -243,13 +249,14 @@
             <tab heading="Other Details" formGroupName="otherInfo">
               <!-- Ready to Move -->
               <div class="form-group col-12 mb-2">
-                <label>✅ Ready to Move</label>
-                <div class="btn-group d-block">
-                  <button type="button" class="btn btn-outline-success move-btn"
-                    [ngClass]="{'btn-success': addPropertyForm.get('otherInfo.RTM')?.value === 'yes'}"
+                <label class="fw-semibold">✅ Ready to Move</label>
+                <br>
+                <div class="btn-group" role="group" aria-label="Ready to Move">
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.RTM')?.value === 'yes'}" 
                     (click)="addPropertyForm.get('otherInfo.RTM')?.setValue('yes')">Yes</button>
-                  <button type="button" class="btn btn-outline-danger move-btn"
-                    [ngClass]="{'btn-danger': addPropertyForm.get('otherInfo.RTM')?.value === 'no'}"
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.RTM')?.value === 'no'}" 
                     (click)="addPropertyForm.get('otherInfo.RTM')?.setValue('no')">No</button>
                 </div>
                 <div *ngIf="addPropertyForm.get('otherInfo.RTM')?.touched && addPropertyForm.get('otherInfo.RTM')?.invalid"
@@ -290,12 +297,13 @@
               <!-- Gated Community -->
               <div class="form-group col-12">
                 <label class="fw-semibold">🏘️ Gated Community</label>
-                <div class="btn-group d-block">
-                  <button type="button" class="btn btn-outline-success gated-btn"
-                    [ngClass]="{'btn-success': addPropertyForm.get('otherInfo.GatedCommunity')?.value === 'yes'}"
+                <br>
+                <div class="btn-group" role="group" aria-label="Gated Community">
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.GatedCommunity')?.value === 'yes'}" 
                     (click)="addPropertyForm.get('otherInfo.GatedCommunity')?.setValue('yes')">Yes</button>
-                  <button type="button" class="btn btn-outline-danger gated-btn"
-                    [ngClass]="{'btn-danger': addPropertyForm.get('otherInfo.GatedCommunity')?.value === 'no'}"
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.GatedCommunity')?.value === 'no'}" 
                     (click)="addPropertyForm.get('otherInfo.GatedCommunity')?.setValue('no')">No</button>
                 </div>
                 <div *ngIf="addPropertyForm.get('otherInfo.GatedCommunity')?.touched && addPropertyForm.get('otherInfo.GatedCommunity')?.invalid"
@@ -309,14 +317,22 @@
                 <label class="fw-semibold">🚪 Main Entrance</label>
                 <br>
                 <div class="btn-group" role="group" aria-label="Main Entrance">
-                  <button type="button" class="btn btn-outline-secondary"
-                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'East'}" (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('East')">East</button>
-                  <button type="button" class="btn btn-outline-secondary"
-                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'West'}" (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('West')">West</button>
-                  <button type="button" class="btn btn-outline-secondary"
-                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'North'}" (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('North')">North</button>
-                  <button type="button" class="btn btn-outline-secondary"
-                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'South'}" (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('South')">South</button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'East'}" 
+                    (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('East')">East</button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'West'}" 
+                    (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('West')">West</button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'North'}" 
+                    (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('North')">North</button>
+                  <button type="button" class="btn action-btn" 
+                    [ngClass]="{'selected': addPropertyForm.get('otherInfo.MainEntrance')?.value === 'South'}" 
+                    (click)="addPropertyForm.get('otherInfo.MainEntrance')?.setValue('South')">South</button>
+                </div>
+                <div *ngIf="addPropertyForm.get('otherInfo.MainEntrance')?.touched && addPropertyForm.get('otherInfo.MainEntrance')?.invalid"
+                  class="error-block">
+                  Please select the main entrance direction
                 </div>
               </div>
 
