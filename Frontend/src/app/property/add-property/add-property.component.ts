@@ -166,13 +166,57 @@ export class AddPropertyComponent implements AfterViewInit {
     this.loading = false;
   }
 
+  onSubmit() {
+    if (this.addPropertyForm.invalid) {
+      // Find the first invalid group
+      const groups = ['basicInfo', 'pricingInfo', 'addressInfo', 'otherInfo'];
+      for (let i = 0; i < groups.length; i++) {
+        const group = this.addPropertyForm.get(groups[i]);
+        if (group?.invalid) {
+          // Switch to the tab with invalid fields
+          this.selectTab(i);
+          this.markFormGroupTouched(group as FormGroup);
+          this.alertify.error('Please complete all required fields in ' + groups[i].replace('Info', ''));
+          return;
+        }
+      }
+    }
+    
+    // Map form values to property object
+    this.mapProperty();
+    
+    // Add property using housing service and handle navigation
+    const propertyObservable = this.housingService.addProperty(this.propertySubmitted);
+    if (propertyObservable) {
+      propertyObservable.subscribe({
+        next: (addedProperty: Property) => {
+          console.log('Property added successfully:', addedProperty);
+          this.alertify.success('Congrats, your property has been listed!');
+          
+          const sellRent = addedProperty.SellRent;
+          if (sellRent === 1) {
+            this.router.navigate(['/buy']);
+          } else if (sellRent === 2) {
+            this.router.navigate(['/rent-property']);
+          }
+        },
+        error: (error: Error) => {
+          console.error('Error adding property:', error);
+          this.alertify.error('There was an error adding your property. Please try again.');
+        }
+      });
+    } else {
+      this.alertify.error('Failed to add property. Please try again.');
+    }
+  }
+
   mapProperty(): void {
     const basicInfo = this.addPropertyForm.get('basicInfo')?.value;
     const pricingInfo = this.addPropertyForm.get('pricingInfo')?.value;
     const addressInfo = this.addPropertyForm.get('addressInfo')?.value;
     const otherInfo = this.addPropertyForm.get('otherInfo')?.value;
 
-    this.propertySubmitted.Id = 0;
+    this.propertySubmitted = new Property();
     this.propertySubmitted.SellRent = +basicInfo.SellRent;
     this.propertySubmitted.BHK = +basicInfo.BHK;
     this.propertySubmitted.PType = basicInfo.PType;
@@ -193,40 +237,6 @@ export class AddPropertyComponent implements AfterViewInit {
     this.propertySubmitted.MainEntrance = otherInfo.MainEntrance;
     this.propertySubmitted.Description = otherInfo.Description;
     this.propertySubmitted.PostedOn = new Date().toString();
-  }
-
-  onSubmit() {
-    if (this.addPropertyForm.invalid) {
-      // Find the first invalid group
-      const groups = ['basicInfo', 'pricingInfo', 'addressInfo', 'otherInfo'];
-      for (let i = 0; i < groups.length; i++) {
-        const group = this.addPropertyForm.get(groups[i]);
-        if (group?.invalid) {
-          // Switch to the tab with invalid fields
-          this.selectTab(i);
-          this.markFormGroupTouched(group as FormGroup);
-          this.alertify.error('Please complete all required fields in ' + groups[i].replace('Info', ''));
-          return;
-        }
-      }
-    }
-    
-    // Map form values to property object
-    this.mapProperty();
-    
-    // Add property using housing service
-    this.housingService.addProperty(this.propertySubmitted);
-    
-    console.log('Property to submit:', this.propertySubmitted);
-    this.alertify.success('Congrats, your property has been listed!');
-    
-    // Navigate to the appropriate page based on SellRent value
-    const sellRent = this.propertySubmitted.SellRent;
-    if (sellRent === 1) {
-      this.router.navigate(['/buy']);
-    } else if (sellRent === 2) {
-      this.router.navigate(['/rent-property']);
-    }
   }
 
   selectTab(tabId: number): void {

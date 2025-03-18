@@ -50,20 +50,30 @@ export class HousingService {
     );
   }
 
-  addProperty(property: Property) {
+  addProperty(property: Property): Observable<Property> {
     let properties = [];
-    
-    // Get existing properties from localStorage
     const localProperties = localStorage.getItem('properties');
     if (localProperties) {
       properties = JSON.parse(localProperties);
     }
 
-    // Add new property
-    property.Id = properties.length + 1;
-    properties.push(property);
-
-    // Save back to localStorage
-    localStorage.setItem('properties', JSON.stringify(properties));
+    // Get max ID from both local and JSON properties
+    return this.getJsonProperties().pipe(
+      map(jsonProps => {
+        const maxLocalId = properties.length > 0 ? Math.max(...properties.map((p: Property) => p.Id)) : 0;
+        const maxJsonId = jsonProps.length > 0 ? Math.max(...jsonProps.map((p: IPropertybase) => p.Id)) : 0;
+        const maxId = Math.max(maxLocalId, maxJsonId);
+        
+        property.Id = maxId + 1;
+        properties.push(property);
+        localStorage.setItem('properties', JSON.stringify(properties));
+        
+        return property;
+      }),
+      catchError(error => {
+        console.error('Error adding property:', error);
+        return of(property); // Return the property even if there's an error
+      })
+    );
   }
 }
