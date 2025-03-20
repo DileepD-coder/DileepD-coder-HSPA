@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { IPropertybase } from 'models/IPropertybase';
+import { IPropertybase } from '../models/IPropertybase';
 import { Property } from '../models/property';
 
 @Injectable({
@@ -29,6 +29,33 @@ export class HousingService {
         }
         
         return allProperties;
+      })
+    );
+  }
+
+  getProperty(id: number): Observable<Property> {
+    // First check local storage
+    const localProperties = localStorage.getItem('properties');
+    if (localProperties) {
+      const properties: Property[] = JSON.parse(localProperties);
+      const property = properties.find(p => p.Id === id);
+      if (property) {
+        return of(property);
+      }
+    }
+
+    // If not found in local storage, check JSON file
+    return this.http.get<Property[]>('data/properties.json').pipe(
+      map(properties => {
+        const property = properties.find(p => p.Id === id);
+        if (!property) {
+          throw new Error('Property not found');
+        }
+        return property;
+      }),
+      catchError(error => {
+        console.error('Error fetching property:', error);
+        throw error;
       })
     );
   }
