@@ -22,7 +22,7 @@ export class HousingService {
       map(([localProps, jsonProps]) => {
         // Combine both arrays
         let allProperties = [...jsonProps, ...localProps];
-        
+         
         // Filter by SellRent if specified
         if (sellRent !== undefined) {
           allProperties = allProperties.filter(item => item.SellRent === sellRent);

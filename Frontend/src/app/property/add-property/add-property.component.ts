@@ -187,27 +187,23 @@ export class AddPropertyComponent implements AfterViewInit {
     
     // Add property using housing service and handle navigation
     const propertyObservable = this.housingService.addProperty(this.propertySubmitted);
-    if (propertyObservable) {
-      propertyObservable.subscribe({
-        next: (addedProperty: Property) => {
-          console.log('Property added successfully:', addedProperty);
-          this.alertify.success('Congrats, your property has been listed!');
-          
-          const sellRent = addedProperty.SellRent;
-          if (sellRent === 1) {
-            this.router.navigate(['/buy']);
-          } else if (sellRent === 2) {
-            this.router.navigate(['/rent-property']);
-          }
-        },
-        error: (error: Error) => {
-          console.error('Error adding property:', error);
-          this.alertify.error('There was an error adding your property. Please try again.');
+    propertyObservable.subscribe({
+      next: (addedProperty: Property) => {
+        console.log('Property added successfully:', addedProperty);
+        this.alertify.success('Congrats, your property has been listed!');
+        
+        const sellRent = addedProperty.SellRent;
+        if (sellRent === 1) {
+          this.router.navigate(['/buy']);
+        } else if (sellRent === 2) {
+          this.router.navigate(['/rent-property']);
         }
-      });
-    } else {
-      this.alertify.error('Failed to add property. Please try again.');
-    }
+      },
+      error: (error: Error) => {
+        console.error('Error adding property:', error);
+        this.alertify.error('There was an error adding your property. Please try again.');
+      }
+    });
   }
 
   mapProperty(): void {
