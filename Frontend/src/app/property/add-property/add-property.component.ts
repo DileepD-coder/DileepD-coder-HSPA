@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { PropertyCardComponent } from '../property-card/property-card.component';
 import { IPropertybase } from '../../models/IPropertybase';
 import { AlertfyService } from '../../Services/alertfy.service';
@@ -23,6 +24,7 @@ import { HousingService } from '../../Services/housing.service';
     TabsModule,
     ButtonsModule,
     BsDatepickerModule,
+    ProgressbarModule,
     PropertyCardComponent
   ],
   templateUrl: './add-property.component.html',

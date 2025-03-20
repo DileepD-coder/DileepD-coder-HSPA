@@ -776,3 +776,37 @@ tab[heading="Basic Info"] .btn-animate.next {
   border-radius: 5px !important;
   padding: 5px 15px !important;
 }
+
+/* Progress Bar Styles */
+.progress-container {
+  padding: 0 15px;
+  margin-bottom: 20px;
+}
+
+.progress-bar-custom {
+  height: 4px !important;
+  border-radius: 2px !important;
+  overflow: hidden;
+  background-color: #e9ecef !important;
+}
+
+.progress-bar-custom .progress-bar {
+  background: linear-gradient(90deg, #28a745, #218838) !important;
+  transition: width 0.6s ease;
+  height: 4px !important;
+}
+
+/* Remove any conflicting progress bar styles */
+.progress {
+  height: 4px !important;
+  background-color: #e9ecef !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  border-radius: 2px !important;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #28a745, #218838) !important;
+  height: 4px !important;
+  box-shadow: none !important;
+}

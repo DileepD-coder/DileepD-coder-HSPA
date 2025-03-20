@@ -1,19 +1,152 @@
-<div>
-  <!-- Display Property ID -->
-  <div><strong>Property ID: {{ propertyId }}</strong></div>
+<!-- Main Container -->
+<div class="container mt-4">
+  <div class="row">
+    <!-- Property Image Section -->
+    <div class="col-md-4">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card_img_wrapper position-relative">
+          <img class="card-img-top rounded-top" [src]="'assets/Hou/' + property?.ImageUrl || 'assets/images/house_image.jpg'" alt="Property Image">
+          <div class="property-type-badge">
+            {{property?.SellRent === 1 ? 'For Sale' : 'For Rent'}}
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Navigation Buttons -->
+          <div class="btn-group w-100 mb-3">
+            <button class="btn btn-outline-primary" (click)="goToPrevProperty()" [disabled]="!hasPrevProperty()">
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <button class="btn btn-outline-success" (click)="goToNextProperty()" [disabled]="!hasNextProperty()">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="pagination-container">
+            <div class="pagination-info text-center mb-2">
+              Property {{currentIndex + 1}} of {{filteredProperties.length}}
+            </div>
+            <div class="pagination-numbers d-flex justify-content-center">
+              <span *ngFor="let p of filteredProperties; let i = index" 
+                    class="pagination-number" 
+                    [class.active]="i === currentIndex"
+                    (click)="navigateToProperty(p.Id)">
+                {{i + 1}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Spacing -->
-  <br/><br/>
+    <!-- Property Details Section -->
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-body">
+          <!-- Basic Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h2 class="text-primary fw-bold mb-2">{{property?.Name}}</h2>
+              <h4 class="text-success fw-bold mb-3">${{property?.Price | number:'1.0-2'}}</h4>
+              <div class="d-flex align-items-center text-muted mb-4">
+                <i class="fas fa-map-marker-alt me-2"></i>
+                <span>{{property?.BHK}} BHK {{property?.PType}} in {{property?.City}}</span>
+              </div>
+            </div>
+          </div>
 
-  <!-- Navigation Controls for Rent and Buy -->
-  <div class="navigation-container">
-    <!-- Prev Button (for Rent or Buy properties) -->
-    <button class="btn btn-secondary" (click)="goToPrevProperty()" [disabled]="!hasPrevProperty()">Prev</button>
+          <!-- Property Features -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="feature-card p-3 rounded">
+                <h5 class="text-primary fw-bold mb-3">
+                  <i class="fas fa-home me-2"></i>Property Features
+                </h5>
+                <ul class="list-unstyled">
+                  <li class="mb-2">
+                    <i class="fas fa-bed text-primary me-2"></i>
+                    <span>{{property?.BHK}} Bedrooms</span>
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-ruler-combined text-primary me-2"></i>
+                    <span>{{property?.BuiltArea}} Sq Ft</span>
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-building text-primary me-2"></i>
+                    <span>Floor {{property?.Floor}} of {{property?.TotalFloors}}</span>
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-calendar text-primary me-2"></i>
+                    <span>{{property?.Age}} Years Old</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="feature-card p-3 rounded">
+                <h5 class="text-primary fw-bold mb-3">
+                  <i class="fas fa-info-circle me-2"></i>Additional Details
+                </h5>
+                <ul class="list-unstyled">
+                  <li class="mb-2">
+                    <i class="fas fa-couch text-primary me-2"></i>
+                    <span>{{property?.FType}}</span>
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-check-circle text-primary me-2"></i>
+                    <span>{{property?.RTM === 1 ? 'Ready to Move' : 'Under Construction'}}</span>
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                    <span>{{property?.Landmark}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
-    <!-- Space between buttons and property ID -->
-    &nbsp;&nbsp;&nbsp;
+          <!-- Address Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="feature-card p-3 rounded">
+                <h5 class="text-primary fw-bold mb-3">
+                  <i class="fas fa-map me-2"></i>Address
+                </h5>
+                <p class="mb-0">{{property?.Address}}</p>
+              </div>
+            </div>
+          </div>
 
-    <!-- Next Button (for Rent or Buy properties) -->
-    <button class="btn btn-secondary" (click)="goToNextProperty()" [disabled]="!hasNextProperty()">Next</button>
+          <!-- Description -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="feature-card p-3 rounded">
+                <h5 class="text-primary fw-bold mb-3">
+                  <i class="fas fa-align-left me-2"></i>Description
+                </h5>
+                <p class="mb-0">{{property?.Description || 'No description available.'}}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary flex-grow-1">
+                  <i class="fas fa-heart me-2"></i>Like
+                </button>
+                <button class="btn btn-success flex-grow-1">
+                  <i class="fas fa-envelope me-2"></i>Message
+                </button>
+                <button class="btn btn-info flex-grow-1">
+                  <i class="fas fa-share me-2"></i>Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -10,10 +10,16 @@
         🏠 List Your Property
       </div>
 
-      <!-- Progress Bar (indicates form steps) -->
-      <div class="progress mt-3" style="height: 8px; border-radius: 50px;">
-        <div class="progress-bar" role="progressbar" [style.width.%]="progress"
-          style="background: linear-gradient(90deg, #28a745, #218838);"></div>
+      <!-- Progress Bar -->
+      <div class="progress-container mt-3">
+        <progressbar 
+          [max]="100" 
+          [value]="progress" 
+          type="success" 
+          [striped]="true" 
+          [animate]="true"
+          class="progress-bar-custom">
+        </progressbar>
       </div>
 
       <!-- Card Body (Form Content) -->
