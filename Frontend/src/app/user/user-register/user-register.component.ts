@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserService } from '../../Services/user-service';
 import { User } from '../../models/user';
 import { AlertfyService } from '../../Services/alertfy.service';
@@ -11,11 +13,13 @@ import { AlertfyService } from '../../Services/alertfy.service';
   templateUrl: './user-register.component.html',
   styleUrls: ['./user-register.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   providers: [UserService, AlertfyService]
 })
 export class UserRegisterComponent implements OnInit {
   registrationForm: FormGroup;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   user: User = {
     username: '',
     email: '',
@@ -27,7 +31,8 @@ export class UserRegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private alertify: AlertfyService
+    private alertify: AlertfyService,
+    private router: Router
   ) {
     this.registrationForm = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -40,6 +45,15 @@ export class UserRegisterComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  // Toggle password visibility
+  togglePasswordVisibility(field: 'password' | 'confirm') {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
+  }
 
   // Getter methods for form controls with non-null assertion
   get firstName(): AbstractControl {
@@ -106,8 +120,12 @@ export class UserRegisterComponent implements OnInit {
       };
 
       this.userService.addUser(this.user);
-      this.alertify.success('Registration successful!');
+      this.alertify.success('Registration successful! Please login.');
       this.registrationForm.reset();
+      // Redirect to login page after successful registration
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 500); // Reduced delay to 500ms for quicker redirection
     } else {
       this.alertify.error('Please complete the form with valid data');
       Object.keys(this.registrationForm.controls).forEach(key => {
