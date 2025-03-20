@@ -68,29 +68,116 @@
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
     z-index: -1;
+    overflow: hidden;
   }
   
   .bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+  }
+  
+  /* Add a semi-transparent overlay */
+  .video-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Add a semi-transparent overlay */
-  .video-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Adjust transparency here */
-    z-index: -1;
+    background: rgba(0, 0, 0, 0.5);
   }
   video {
     opacity: 0.3; /* Adjust the opacity value as needed */
+  }
+
+  /* Card Styles */
+  .card {
+    backdrop-filter: blur(10px);
+  }
+
+  /* Input Styles */
+  .input-group-text {
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #ced4da;
+  }
+
+  .form-control {
+    border-radius: 0 8px 8px 0;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #28a745;
+  }
+
+  /* Button Styles */
+  .btn-success {
+    background: linear-gradient(45deg, #28a745, #218838);
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-success:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+  }
+
+  .btn-success:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+
+  /* Checkbox Styles */
+  .form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+
+  /* Animation Classes */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .shake {
+    animation: shake 0.5s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+  }
+
+  /* Error Styles */
+  .text-danger {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 576px) {
+    .card {
+      margin: 15px;
+    }
+    
+    .container {
+      padding: 0;
+    }
   }

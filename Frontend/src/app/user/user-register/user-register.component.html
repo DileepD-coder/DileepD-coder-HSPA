@@ -1,69 +1,162 @@
-<div class="video-container">
-    <video autoplay loop muted>
-        <source src="assets/videos/registerpage.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+<!-- Background Video -->
+<div class="bg-video-container">
+  <video autoplay loop muted playsinline class="bg-video">
+    <source src="assets/videos/registerpage.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="video-overlay"></div>
 </div>
 
-<div class="row">
-    <div class="col-6 m-auto">
-        <div class="card m-auto shadow-none" style="border-radius: 15px;">
-            <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #007bff, #0056b3); border-radius: 15px 15px 0 0;">
-                <h4>Register</h4>
-            </div>
-            <div class="card-body">
-                <form (ngSubmit)="onSubmit()" [formGroup]="registrationForm">
-                    <div class="form-group col-12 mb-3">
-                        <label for="username" class="form-label">Name</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input type="text" class="form-control rounded-pill input-animate" id="username" formControlName="username" placeholder="Enter your name">
-                        </div>
-                        <div *ngIf="errorMessages['username']" class="text-danger">{{ errorMessages['username'] }}</div>
-                    </div>
-
-                    <div class="form-group col-12 mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            <input type="email" class="form-control rounded-pill input-animate" id="email" formControlName="email" placeholder="Enter your email">
-                        </div>
-                        <div *ngIf="errorMessages['email']" class="text-danger">{{ errorMessages['email']}}</div>
-                    </div>
-
-                    <div class="form-group col-12 mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            <input type="password" class="form-control rounded-pill input-animate" id="password" formControlName="password" placeholder="Enter your password">
-                        </div>
-                        <div *ngIf="errorMessages['password']" class="text-danger">{{ errorMessages['password']}}</div>
-                    </div>
-
-                    <div class="form-group col-12 mb-3">
-                        <label for="cpassword" class="form-label">Confirm Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            <input type="password" class="form-control rounded-pill input-animate" id="cpassword" formControlName="cpassword" placeholder="Confirm your password">
-                        </div>
-                        <div *ngIf="errorMessages['cpassword']" class="text-danger">{{ errorMessages['cpassword'] }}</div>
-                    </div>
-
-                    <div class="form-group col-12 mb-3">
-                        <label for="mobile" class="form-label">Mobile</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            <input type="tel" class="form-control rounded-pill input-animate" id="mobile" formControlName="mobile" placeholder="Enter your mobile number" maxlength="10">
-                        </div>
-                        <div *ngIf="errorMessages['mobile']" class="text-danger">{{ errorMessages['mobile'] }}</div>
-                    </div>
-
-                    <div class="form-group col-12 mb-3 text-center">
-                        <button type="submit" class="btn btn-primary shadow-sm px-4 py-2 rounded-pill btn-animate me-3">Save</button>
-                        <button type="reset" class="btn btn-secondary shadow-sm px-4 py-2 rounded-pill btn-animate">Cancel</button>
-                    </div>
-                </form>
-            </div>
+<!-- Register Card -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg rounded-lg border-0 p-4 animate-fade-in" 
+           style="background: rgba(255, 255, 255, 0.95);">
+        
+        <!-- Card Header -->
+        <div class="card-header text-center border-0 bg-transparent mb-4">
+          <i class="fas fa-user-plus fa-3x text-success mb-3"></i>
+          <h3 class="text-success mb-0">Create Account</h3>
+          <p class="text-muted">Join HSPA to find your dream home</p>
         </div>
+
+        <!-- Card Body -->
+        <div class="card-body px-4">
+          <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" [class.shake]="!registrationForm.valid">
+            
+            <!-- Name Fields Row -->
+            <div class="row mb-4">
+              <!-- First Name -->
+              <div class="col-md-6 mb-3 mb-md-0">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0">
+                    <i class="fas fa-user text-success"></i>
+                  </span>
+                  <input type="text" 
+                         formControlName="firstName" 
+                         class="form-control border-start-0 ps-0" 
+                         placeholder="First Name"
+                         [class.is-invalid]="isFieldInvalid('firstName')">
+                </div>
+                <small class="text-danger" *ngIf="isFieldInvalid('firstName')">
+                  Please provide first name
+                </small>
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0">
+                    <i class="fas fa-user text-success"></i>
+                  </span>
+                  <input type="text" 
+                         formControlName="lastName" 
+                         class="form-control border-start-0 ps-0" 
+                         placeholder="Last Name"
+                         [class.is-invalid]="isFieldInvalid('lastName')">
+                </div>
+                <small class="text-danger" *ngIf="isFieldInvalid('lastName')">
+                  Please provide last name
+                </small>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group mb-4">
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-envelope text-success"></i>
+                </span>
+                <input type="email" 
+                       formControlName="email" 
+                       class="form-control border-start-0 ps-0" 
+                       placeholder="Email"
+                       [class.is-invalid]="isFieldInvalid('email')">
+              </div>
+              <small class="text-danger" *ngIf="isFieldInvalid('email')">
+                <span *ngIf="email.errors?.['required']">Please provide email</span>
+                <span *ngIf="email.errors?.['email']">Please provide valid email</span>
+              </small>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group mb-4">
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-lock text-success"></i>
+                </span>
+                <input type="password" 
+                       formControlName="password" 
+                       class="form-control border-start-0 ps-0" 
+                       placeholder="Password"
+                       [class.is-invalid]="isFieldInvalid('password')">
+              </div>
+              <small class="text-danger" *ngIf="isFieldInvalid('password')">
+                <span *ngIf="password.errors?.['required']">Please provide password</span>
+                <span *ngIf="password.errors?.['minlength']">Password should be at least 8 characters</span>
+              </small>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group mb-4">
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-lock text-success"></i>
+                </span>
+                <input type="password" 
+                       formControlName="confirmPassword" 
+                       class="form-control border-start-0 ps-0" 
+                       placeholder="Confirm Password"
+                       [class.is-invalid]="isFieldInvalid('confirmPassword')">
+              </div>
+              <small class="text-danger" *ngIf="isFieldInvalid('confirmPassword')">
+                <span *ngIf="confirmPassword.errors?.['required']">Please confirm password</span>
+                <span *ngIf="confirmPassword.errors?.['notmatched']">Password does not match</span>
+              </small>
+            </div>
+
+            <!-- Mobile -->
+            <div class="form-group mb-4">
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-mobile-alt text-success"></i>
+                </span>
+                <input type="text" 
+                       formControlName="mobile" 
+                       class="form-control border-start-0 ps-0" 
+                       placeholder="Mobile"
+                       [class.is-invalid]="isFieldInvalid('mobile')">
+              </div>
+              <small class="text-danger" *ngIf="isFieldInvalid('mobile')">
+                Please provide mobile number
+              </small>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="form-check mb-4">
+              <input type="checkbox" class="form-check-input" id="terms">
+              <label class="form-check-label text-muted" for="terms">
+                I agree to the <a href="#" class="text-success">Terms & Conditions</a>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button [disabled]="!registrationForm.valid" 
+                    type="submit" 
+                    class="btn btn-success w-100 mb-3 py-2">
+              <i class="fas fa-user-plus me-2"></i>Register
+            </button>
+
+            <!-- Login Link -->
+            <div class="text-center mt-4">
+              <p class="mb-0 text-muted">Already have an account? 
+                <a routerLink="/login" class="text-success text-decoration-none">Login</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

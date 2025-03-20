@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../Services/user-service';
 import { AlertfyService } from '../../Services/alertfy.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../Services/auth.service';
 
 @Component({
   selector: 'app-user-login',
@@ -19,7 +20,8 @@ export class UserLoginComponent {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private alertify: AlertfyService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { 
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -32,6 +34,8 @@ export class UserLoginComponent {
       const { email, password } = this.loginForm.value;
       const isAuthenticated = this.userService.login(email, password);
       if (isAuthenticated) {
+        const username = localStorage.getItem('username');
+        this.authService.setUsername(username); // Update the username in AuthService
         console.log('Login successful:', this.loginForm.value);
         this.alertify.success('Login successful');
         this.router.navigate(['/']); // Redirect to homepage after login

@@ -4,4 +4,6 @@ export interface User {
   password: string;
   cpassword: string;
   mobile: string;
+  firstName?: string;
+  lastName?: string;
 }

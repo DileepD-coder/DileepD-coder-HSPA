@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { AlertfyService } from '../Services/alertfy.service'; // Corrected path
+import { AlertfyService } from '../Services/alertfy.service';
+import { AuthService } from '../Services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,13 +14,31 @@ import { AlertfyService } from '../Services/alertfy.service'; // Corrected path
   standalone: true,
   imports: [CommonModule, RouterModule, BsDropdownModule]
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit, OnDestroy {
   username: string | null = null;
+  private usernameSubscription: Subscription;
 
-  constructor(private router: Router, private alertify: AlertfyService) { }
+  constructor(
+    private router: Router, 
+    private alertify: AlertfyService,
+    private authService: AuthService
+  ) {
+    // Subscribe to username changes
+    this.usernameSubscription = this.authService.username$.subscribe(
+      username => this.username = username
+    );
+  }
 
   ngOnInit(): void {
+    // Initialize username from localStorage
     this.username = localStorage.getItem('username');
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscription when component is destroyed
+    if (this.usernameSubscription) {
+      this.usernameSubscription.unsubscribe();
+    }
   }
 
   loggedin(): boolean {
@@ -28,6 +48,7 @@ export class NavBarComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    this.authService.setUsername(null); // Clear username in AuthService
     this.alertify.success('You have been logged out successfully!');
     this.router.navigate(['/login']);
   }
