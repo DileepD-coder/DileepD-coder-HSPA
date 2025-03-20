@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
 import { IPropertybase } from '../../models/IPropertybase';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TabsModule],
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.css']
 })

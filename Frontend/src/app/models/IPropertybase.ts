@@ -17,4 +17,14 @@ export interface IPropertybase{
     Age:number;
     Description:string;
     Type : string; 
+    FloorNo?: number;
+    TotalFloor?: number;
+    AOP?: number;
+    Bathrooms?: number;
+    Posession?: string;
+    CarpetArea?: number;
+    MainEntrance?: string;
+    Security?: number;
+    Maintenance?: number;
+    PostedOn?: string;
 };
