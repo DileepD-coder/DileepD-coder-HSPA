@@ -1,6 +1,7 @@
 export interface IPropertybase{
     Id:number;
     SellRent:number|null;
+    SellOrBuy: string;
     Name:string;
     PType:string;
     FType:string;

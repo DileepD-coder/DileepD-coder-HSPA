@@ -32,49 +32,33 @@ export class PropertyListComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.url.subscribe(urlSegments => {
-      // Set the SellRent value based on the route, simplified
+      const sellRent = urlSegments[0]?.path === 'rent-property' ? 2 : 1;
       this.propertyForm.setValue({
-        SellRent: urlSegments[0]?.path === 'rent-property' ? 2 : 1,
+        SellRent: sellRent
       });
-      this.loadProperties();
+      this.loadProperties(sellRent);
     });
   }
 
-  loadProperties(): void {
-    this.housingService.getAllProperties().subscribe(
-      (data: IPropertybase[]) => {
-        // Modify the properties mapping to ensure all required fields are present
-        this.properties = data.map(property => ({
-          Id: property.Id,
-          SellRent: property.SellRent,
-          Name: property.Name,
-          PType: property.PType,
-          Type: property.PType || '',
-          Price: property.Price,
-          ImageUrl: property.ImageUrl,
-          FType: property.FType || '',
-          BHK: property.BHK || 0,
-          BuiltArea: property.BuiltArea || 0,
-          City: property.City || '',
-          RTM: (property as any).RTM === 1 || (property as any).Posession === 'Ready to move' ? 1 : 0,
-          Address: property.Address || '',
-          Landmark: property.Landmark || '',
-          Floor: property.Floor || 0,
-          TotalFloors: property.TotalFloors || 0,
-          Age: property.Age || 0,
-          Description: property.Description || ''
-        }));
-  
-        // Apply the filter based on the SellRent form control value
-        this.filteredProperties = this.properties.filter(
-          property => property.SellRent === this.propertyForm.get('SellRent')?.value
-        );
-  
-        console.log('Filtered Properties:', this.filteredProperties);
+  loadProperties(sellRent: number): void {
+    console.log('Loading properties for SellRent:', sellRent);
+    
+    this.housingService.getAllProperties(sellRent).subscribe({
+      next: (data: IPropertybase[]) => {
+        console.log('Received properties:', data);
+        
+        this.properties = data;
+        this.filteredProperties = this.properties;
+        
+        console.log('Properties loaded:', {
+          total: this.properties.length,
+          sellRent: sellRent,
+          propertyIds: this.properties.map(p => p.Id)
+        });
       },
-      error => {
+      error: error => {
         console.error('Error fetching properties:', error);
       }
-    );
+    });
   }
 }

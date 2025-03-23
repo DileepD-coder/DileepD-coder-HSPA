@@ -58,6 +58,7 @@ export class AddPropertyComponent implements AfterViewInit {
   propertyview: IPropertybase = {
     Id: 0,
     SellRent: null,
+    SellOrBuy: '',
     Name: '',
     PType: '',
     FType: '',

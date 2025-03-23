@@ -14,21 +14,61 @@ export class HousingService {
   constructor(private http: HttpClient) { }
 
   getAllProperties(sellRent?: number): Observable<IPropertybase[]> {
-    // Get properties from both sources and combine them
     return forkJoin([
-      this.getLocalProperties(),
-      this.getJsonProperties()
+      this.http.get<IPropertybase[]>('data/properties.json'),
+      this.getLocalProperties()
     ]).pipe(
-      map(([localProps, jsonProps]) => {
-        // Combine both arrays
-        let allProperties = [...jsonProps, ...localProps];
-         
+      map(([jsonProperties, localProperties]) => {
+        // Log initial properties from both sources
+        console.log('Properties before combining:', {
+          jsonProperties: jsonProperties.length,
+          localProperties: localProperties.length,
+          jsonIds: jsonProperties.map(p => p.Id),
+          localIds: localProperties.map(p => p.Id)
+        });
+
+        // Use a Map to ensure unique properties by Id
+        const propertyMap = new Map();
+        
+        // Add JSON properties first
+        jsonProperties.forEach(prop => {
+          propertyMap.set(prop.Id, prop);
+        });
+        
+        // Add local properties, overwriting JSON ones if they exist
+        localProperties.forEach(prop => {
+          propertyMap.set(prop.Id, prop);
+        });
+        
+        // Convert Map back to array
+        const uniqueProperties = Array.from(propertyMap.values());
+        
+        // Map properties and add SellOrBuy
+        const mappedProperties = uniqueProperties.map(property => ({
+          ...property,
+          SellOrBuy: property.SellRent === 1 ? 'Sell' : 'Rent'
+        }));
+
         // Filter by SellRent if specified
+        let finalProperties = mappedProperties;
         if (sellRent !== undefined) {
-          allProperties = allProperties.filter(item => item.SellRent === sellRent);
+          finalProperties = mappedProperties.filter(item => item.SellRent === sellRent);
         }
         
-        return allProperties;
+        // Sort by Id to ensure consistent order
+        const sortedProperties = finalProperties.sort((a, b) => a.Id - b.Id);
+        
+        console.log('Final properties:', {
+          sellRent: sellRent,
+          total: sortedProperties.length,
+          ids: sortedProperties.map(p => p.Id).join(', ')
+        });
+        
+        return sortedProperties;
+      }),
+      catchError(error => {
+        console.error('Error loading properties:', error);
+        return of([]);
       })
     );
   }
@@ -69,7 +109,18 @@ export class HousingService {
   private getLocalProperties(): Observable<Property[]> {
     const localProperties = localStorage.getItem('properties');
     if (localProperties) {
-      return of(JSON.parse(localProperties));
+      try {
+        const properties = JSON.parse(localProperties);
+        console.log('Local storage properties:', {
+          count: properties.length,
+          ids: properties.map((p: Property) => p.Id)
+        });
+        return of(properties);
+      } catch (error) {
+        console.error('Error parsing local storage properties:', error);
+        localStorage.removeItem('properties'); // Clear invalid data
+        return of([]);
+      }
     }
     return of([]);
   }

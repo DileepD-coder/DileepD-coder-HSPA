@@ -235,4 +235,49 @@
       <p>Property not found or loading...</p>
     </div>
   </div>
+
+  <!-- Add this before the closing tag of your main container -->
+  <div class="pagination-container mt-4" *ngIf="filteredProperties.length > 0">
+    <nav aria-label="Property navigation">
+      <ul class="pagination justify-content-center">
+        <!-- First page -->
+        <li class="page-item" [class.disabled]="currentIndex === 0">
+          <button class="page-link" (click)="goToFirstPage()" [disabled]="currentIndex === 0" aria-label="First">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+          </button>
+        </li>
+        
+        <!-- Previous page -->
+        <li class="page-item" [class.disabled]="currentIndex === 0">
+          <button class="page-link" (click)="goToPrevious()" [disabled]="currentIndex === 0" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+        
+        <!-- Page numbers -->
+        <ng-container *ngFor="let page of pages">
+          <li class="page-item" *ngIf="page !== -1" [class.active]="currentPage === page">
+            <button class="page-link" (click)="goToPage(page)" [disabled]="currentPage === page">{{page}}</button>
+          </li>
+          <li class="page-item disabled" *ngIf="page === -1">
+            <span class="page-link">...</span>
+          </li>
+        </ng-container>
+        
+        <!-- Next page -->
+        <li class="page-item" [class.disabled]="currentIndex === filteredProperties.length - 1">
+          <button class="page-link" (click)="goToNext()" [disabled]="currentIndex === filteredProperties.length - 1" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+        
+        <!-- Last page -->
+        <li class="page-item" [class.disabled]="currentIndex === filteredProperties.length - 1">
+          <button class="page-link" (click)="goToLastPage()" [disabled]="currentIndex === filteredProperties.length - 1" aria-label="Last">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>

@@ -2,11 +2,12 @@ import { IPropertybase } from './IPropertybase';
 
 export class Property implements IPropertybase {
     Id: number = 0;
-    SellRent: number = 1;
+    SellRent: number | null = null;
+    SellOrBuy: string = '';
     Name: string = '';
     PType: string = '';
     FType: string = '';
-    Price: number = 0;
+    Price: number | null = null;
     BHK: number = 0;
     BuiltArea: number = 0;
     CarpetArea?: number;
