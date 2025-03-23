@@ -167,20 +167,41 @@
             </tab>
 
             <!-- Photo Tab -->
-            <tab heading="Photo">
+            <tab heading="Photos">
               <div class="row mt-3">
                 <div class="col-12">
-                  <div class="photo-gallery">
-                    <div class="main-photo mb-3">
-                      <img [src]="property.ImageUrl ? 'assets/Hou/' + property.ImageUrl : 'assets/images/house_image.jpg'" 
-                           class="img-fluid rounded" 
-                           alt="Property Image">
-                    </div>
-                    <!-- Add more photos here when available -->
-                    <div class="text-center text-muted" *ngIf="!property.ImageUrl">
-                      <i class="fas fa-camera me-2"></i>
-                      No additional photos available
-                    </div>
+                  <!-- Main Carousel -->
+                  <div class="main-carousel mb-4">
+                    <carousel [interval]="myInterval" [(activeSlide)]="activeSlideIndex">
+                      <slide *ngFor="let slide of slides; let index=index">
+                        <img [src]="slide.image" [alt]="slide.text" class="d-block w-100" (dblclick)="openFullscreen(slide.image)">
+                        <div class="carousel-caption d-none d-md-block">
+                          <h4>{{slide.text}}</h4>
+                        </div>
+                      </slide>
+                    </carousel>
+                  </div>
+
+                  <!-- Fullscreen Modal -->
+                  <div class="fullscreen-modal" [class.active]="fullscreenImage">
+                    <div class="fullscreen-close" (click)="closeFullscreen()">×</div>
+                    <img [src]="fullscreenImage" *ngIf="fullscreenImage" alt="Fullscreen Image">
+                  </div>
+
+                  <!-- Thumbnail Carousel -->
+                  <div class="thumbnail-carousel">
+                    <carousel [itemsPerSlide]="itemsPerSlide"
+                            [singleSlideOffset]="singleSlideOffset"
+                            [interval]="0"
+                            [noWrap]="noWrap"
+                            class="thumbnail-slider">
+                      <slide *ngFor="let slide of slides; let index=index">
+                        <div class="thumbnail-container" (click)="activeSlideIndex = index">
+                          <img [src]="slide.image" [alt]="slide.text" class="thumbnail-img" 
+                               [class.active]="activeSlideIndex === index">
+                        </div>
+                      </slide>
+                    </carousel>
                   </div>
                 </div>
               </div>

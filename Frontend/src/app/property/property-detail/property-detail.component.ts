@@ -5,7 +5,8 @@ import { RouterModule } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
 import { IPropertybase } from '../../models/IPropertybase';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { GalleryModule, GalleryItem, ImageItem } from 'ng-gallery';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-property-detail',
@@ -14,7 +15,8 @@ import { GalleryModule, GalleryItem, ImageItem } from 'ng-gallery';
     CommonModule,
     RouterModule,
     TabsModule,
-    GalleryModule
+    CarouselModule,
+    FormsModule
   ],
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.css']
@@ -26,7 +28,15 @@ export class PropertyDetailComponent implements OnInit {
   properties: IPropertybase[] = [];
   currentIndex: number = 0;
   filteredProperties: IPropertybase[] = [];
-  galleryItems: GalleryItem[] = [];
+  
+  // Carousel properties
+  slides: any[] = [];
+  myInterval = 4000;
+  activeSlideIndex = 0;
+  itemsPerSlide = 3;
+  singleSlideOffset = true;
+  noWrap = false;
+  fullscreenImage: string | null = null;
 
   constructor(
     private router: Router,
@@ -50,8 +60,7 @@ export class PropertyDetailComponent implements OnInit {
         console.log('Loaded Property:', this.property);
         
         if (this.property && this.property.Id !== 0) {
-          this.galleryItems = this.getPropertyImages();
-          console.log('Gallery Items:', this.galleryItems);
+          this.loadPropertyImages();
         } else {
           console.error('Invalid property data received');
           this.router.navigate(['/']);
@@ -64,106 +73,76 @@ export class PropertyDetailComponent implements OnInit {
     });
   }
 
-  loadPropertyDetails(): void {
-    this.housingService.getAllProperties().subscribe({
-      next: (data: IPropertybase[]) => {
-        this.properties = data;
-        this.filterPropertiesByType();
-        this.setCurrentIndex();
-        this.property = this.filteredProperties[this.currentIndex];
-      },
-      error: (error) => {
-        console.error('Error loading property details:', error);
-      }
-    });
-  }
-
-  filterPropertiesByType(): void {
-    if (this.propertyType) {
-      this.filteredProperties = this.properties.filter(p => 
-        p.SellRent === (this.propertyType === 'rent' ? 2 : 1)
-      );
-    } else {
-      this.filteredProperties = this.properties;
-    }
-  }
-
-  setCurrentIndex(): void {
-    if (this.propertyId !== null) {
-      const propertyIndex = this.filteredProperties.findIndex(p => p.Id === this.propertyId);
-      this.currentIndex = propertyIndex >= 0 ? propertyIndex : 0;
-    }
-  }
-
-  goToPrevProperty(): void {
-    if (this.hasPrevProperty()) {
-      this.currentIndex--;
-      this.navigateToProperty(this.filteredProperties[this.currentIndex].Id);
-    }
-  }
-
-  goToNextProperty(): void {
-    if (this.hasNextProperty()) {
-      this.currentIndex++;
-      this.navigateToProperty(this.filteredProperties[this.currentIndex].Id);
-    }
-  }
-
-  hasPrevProperty(): boolean {
-    return this.currentIndex > 0;
-  }
-
-  hasNextProperty(): boolean {
-    return this.currentIndex < this.filteredProperties.length - 1;
-  }
-
-  navigateToProperty(propertyId: number): void {
-    this.router.navigate(['/property-detail', propertyId], {
-      queryParams: { type: this.propertyType }
-    });
-  }
-
-  getPropertyImages(): GalleryItem[] {
-    const images: GalleryItem[] = [];
-    
+  loadPropertyImages(): void {
     try {
       if (this.property) {
+        console.log('Loading images for property:', this.property.Id);
+        this.slides = [];
+        
         // Add main photo if exists
         if (this.property.ImageUrl) {
-          images.push(new ImageItem({
-            src: 'assets/Hou/' + this.property.ImageUrl,
-            thumb: 'assets/Hou/' + this.property.ImageUrl
-          }));
-        }
-
-        // Add additional photos if they exist
-        if (this.property.Photos && Array.isArray(this.property.Photos)) {
-          this.property.Photos.forEach(photo => {
-            if (photo) {
-              images.push(new ImageItem({
-                src: 'assets/Hou/' + photo,
-                thumb: 'assets/Hou/' + photo
-              }));
-            }
+          const mainImagePath = 'assets/Hou/' + this.property.ImageUrl;
+          console.log('Adding main image:', mainImagePath);
+          this.slides.push({
+            image: mainImagePath,
+            text: 'Main Property Image'
           });
         }
 
-        // If no images available, add a default image
-        if (images.length === 0) {
-          images.push(new ImageItem({
-            src: 'assets/images/house_image.jpg',
-            thumb: 'assets/images/house_image.jpg'
-          }));
+        // Add interior photos ONLY for properties 1-50 (demo properties)
+        if (this.property.Id && this.property.Id <= 50) {
+          const paddedNumber = this.property.Id.toString().padStart(2, '0');
+          
+          // Define image paths with exact folder names
+          const imagePaths = [
+            {
+              path: `assets/Interiors/living/Living-${paddedNumber}.jpg`,
+              text: 'Living Room'
+            },
+            {
+              path: `assets/Interiors/BedRoom/Bedroom-${paddedNumber}.jpg`,
+              text: 'Bedroom'
+            },
+            {
+              path: `assets/Interiors/Kitchen/Kitchen-${paddedNumber}.jpg`,
+              text: 'Kitchen'
+            },
+            {
+              path: `assets/Interiors/BathRoom/Bathroom-${paddedNumber}.jpg`,
+              text: 'Bathroom'
+            }
+          ];
+
+          // Add each image to slides
+          imagePaths.forEach(item => {
+            console.log('Adding image:', item.path);
+            this.slides.push({
+              image: item.path,
+              text: item.text
+            });
+          });
+
+          console.log('Total slides to be loaded:', this.slides.length);
         }
       }
     } catch (error) {
       console.error('Error processing property images:', error);
-      return [new ImageItem({
-        src: 'assets/images/house_image.jpg',
-        thumb: 'assets/images/house_image.jpg'
-      })];
+      this.slides = [{
+        image: 'assets/images/house_image.jpg',
+        text: 'Default Property Image'
+      }];
     }
+  }
 
-    return images;
+  openFullscreen(imagePath: string): void {
+    this.fullscreenImage = imagePath;
+    // Pause the carousel when in fullscreen
+    this.myInterval = 0;
+  }
+
+  closeFullscreen(): void {
+    this.fullscreenImage = null;
+    // Resume carousel autoplay when exiting fullscreen
+    this.myInterval = 4000;
   }
 }
