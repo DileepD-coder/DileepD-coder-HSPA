@@ -2,32 +2,38 @@ import { IPropertybase } from './IPropertybase';
 
 export class Property implements IPropertybase {
     Id: number = 0;
-    SellRent: number | null = null;
+    SellRent: number = 1;
     Name: string = '';
     PType: string = '';
     FType: string = '';
-    Price: number | null = null;
+    Price: number = 0;
     BHK: number = 0;
     BuiltArea: number = 0;
-    City: string = '';
-    RTM: number = 0;
+    CarpetArea?: number;
     Address: string = '';
+    Address2?: string;
+    City: string = '';
+    FloorNo?: number;
+    TotalFloor?: number;
+    RTM: number = 0;
+    AOP?: number;
+    MainEntrance?: string;
+    Security?: number;
+    GatedCommunity?: number;
+    Maintenance?: number;
+    PossessionDate?: string;
     ImageUrl: string = '';
-    Landmark: string = '';
+    Description: string = '';
+    PostedOn: string = '';
+    PostedBy: number = 0;
+    LastUpdate?: string;
+    Type: string = '';
     Floor: number = 0;
     TotalFloors: number = 0;
     Age: number = 0;
-    Description: string = '';
-    Type: string = '';
-
-    // Additional properties not in base interface
-    CarpetArea?: number;
-    Address2?: string;
-    Security?: number;
-    Maintenance?: number;
-    GatedCommunity?: string;
-    MainEntrance?: string;
-    PossessionDate?: string;
-    PostedOn?: string;
-    PostedBy?: number;
+    Landmark: string = '';
+    Bathrooms?: number;
+    Posession?: string;
+    Image?: string;
+    Photos?: string[];
 }

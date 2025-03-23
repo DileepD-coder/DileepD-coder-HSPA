@@ -5,11 +5,17 @@ import { RouterModule } from '@angular/router';
 import { HousingService } from '../../Services/housing.service';
 import { IPropertybase } from '../../models/IPropertybase';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { GalleryModule, GalleryItem, ImageItem } from 'ng-gallery';
 
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, TabsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    TabsModule,
+    GalleryModule
+  ],
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.css']
 })
@@ -20,6 +26,7 @@ export class PropertyDetailComponent implements OnInit {
   properties: IPropertybase[] = [];
   currentIndex: number = 0;
   filteredProperties: IPropertybase[] = [];
+  galleryItems: GalleryItem[] = [];
 
   constructor(
     private router: Router,
@@ -28,13 +35,31 @@ export class PropertyDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.propertyId = id ? +id : null;
-      this.propertyType = this.route.snapshot.queryParamMap.get('type');
+    // Get property ID from route
+    this.propertyId = Number(this.route.snapshot.params['id']);
+    this.propertyType = this.route.snapshot.queryParamMap.get('type');
+    
+    console.log('Property ID:', this.propertyId);
+    console.log('Property Type:', this.propertyType);
 
-      if (this.propertyId) {
-        this.loadPropertyDetails();
+    // Load property data
+    this.route.data.subscribe({
+      next: (data) => {
+        console.log('Route Data:', data);
+        this.property = data['property'];
+        console.log('Loaded Property:', this.property);
+        
+        if (this.property && this.property.Id !== 0) {
+          this.galleryItems = this.getPropertyImages();
+          console.log('Gallery Items:', this.galleryItems);
+        } else {
+          console.error('Invalid property data received');
+          this.router.navigate(['/']);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading property:', error);
+        this.router.navigate(['/']);
       }
     });
   }
@@ -96,5 +121,49 @@ export class PropertyDetailComponent implements OnInit {
     this.router.navigate(['/property-detail', propertyId], {
       queryParams: { type: this.propertyType }
     });
+  }
+
+  getPropertyImages(): GalleryItem[] {
+    const images: GalleryItem[] = [];
+    
+    try {
+      if (this.property) {
+        // Add main photo if exists
+        if (this.property.ImageUrl) {
+          images.push(new ImageItem({
+            src: 'assets/Hou/' + this.property.ImageUrl,
+            thumb: 'assets/Hou/' + this.property.ImageUrl
+          }));
+        }
+
+        // Add additional photos if they exist
+        if (this.property.Photos && Array.isArray(this.property.Photos)) {
+          this.property.Photos.forEach(photo => {
+            if (photo) {
+              images.push(new ImageItem({
+                src: 'assets/Hou/' + photo,
+                thumb: 'assets/Hou/' + photo
+              }));
+            }
+          });
+        }
+
+        // If no images available, add a default image
+        if (images.length === 0) {
+          images.push(new ImageItem({
+            src: 'assets/images/house_image.jpg',
+            thumb: 'assets/images/house_image.jpg'
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('Error processing property images:', error);
+      return [new ImageItem({
+        src: 'assets/images/house_image.jpg',
+        thumb: 'assets/images/house_image.jpg'
+      })];
+    }
+
+    return images;
   }
 }

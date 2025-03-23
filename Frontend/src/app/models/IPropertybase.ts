@@ -27,4 +27,6 @@ export interface IPropertybase{
     Security?: number;
     Maintenance?: number;
     PostedOn?: string;
+    Image?: string;
+    Photos?: string[];
 };

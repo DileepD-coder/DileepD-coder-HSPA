@@ -34,12 +34,15 @@ export class HousingService {
   }
 
   getProperty(id: number): Observable<Property> {
+    console.log('Getting property with ID:', id);
+    
     // First check local storage
     const localProperties = localStorage.getItem('properties');
     if (localProperties) {
       const properties: Property[] = JSON.parse(localProperties);
       const property = properties.find(p => p.Id === id);
       if (property) {
+        console.log('Found property in local storage:', property);
         return of(property);
       }
     }
@@ -47,10 +50,13 @@ export class HousingService {
     // If not found in local storage, check JSON file
     return this.http.get<Property[]>('data/properties.json').pipe(
       map(properties => {
+        console.log('All properties from JSON:', properties);
         const property = properties.find(p => p.Id === id);
         if (!property) {
+          console.error('Property not found in JSON file');
           throw new Error('Property not found');
         }
+        console.log('Found property in JSON:', property);
         return property;
       }),
       catchError(error => {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Property } from '../../../app/models/property';
 import { HousingService } from '../../../app/Services/housing.service';
 
@@ -18,13 +18,24 @@ export class PropertyDetailResolverService implements Resolve<Property> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): 
     Observable<Property> {
       const propId = route.params['id'];
+      console.log('Resolving property with ID:', propId);
+      
       return this.housingService.getProperty(+propId).pipe(
+        map(property => {
+          if (!property || property.Id === 0) {
+            console.error('Property not found');
+            this.router.navigate(['/']);
+            return new Property();
+          }
+          console.log('Resolved property:', property);
+          return property;
+        }),
         catchError(error => {
+          console.error('Error resolving property:', error);
           this.router.navigate(['/']);
-          // Create an empty property object instead of returning null
           return of(new Property());
         })
       );
   }
 }
-  
+       

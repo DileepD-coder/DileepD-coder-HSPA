@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IPropertybase } from '../../models/IPropertybase';
@@ -16,7 +16,7 @@ export class PropertyCardComponent {
   @Input() property!: IPropertybase;
   @Input() hideIcons: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
     console.log('Property:', this.property);
@@ -24,11 +24,12 @@ export class PropertyCardComponent {
   }
 
   navigateToProperty() {
-    // Change this line to check for Id instead of id
-    if (this.property && this.property.Id) {  // Use this.property.Id
-      console.log('Navigating to property with ID:', this.property.Id);  // Log the correct ID
+    if (this.property && this.property.Id) {
+      console.log('Navigating to property with ID:', this.property.Id);
+      const type = this.property.SellRent === 1 ? 'buy' : 'rent';
       this.router.navigate(['/property-detail', this.property.Id], { 
-        queryParams: { type: this.property.SellRent === 1 ? 'buy' : 'rent' }
+        queryParams: { type: type },
+        relativeTo: this.route
       });
     } else {
       console.error('Property is not defined or does not have an ID:', this.property);
